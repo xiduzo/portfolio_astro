@@ -28,7 +28,7 @@ const projects = (await getCollection("portfolio")).sort(
             <Image
               src={project.data.heroImage}
               alt={project.data.description}
-              aria-hidden="true"
+              hidden="true"
             />
             </div>
             <h2 class="lg:text-9xl text-5xl font-extrabold tracking-widest mb-4 mix-blend-multiply" style={{ color: project.data.headerColor }}>

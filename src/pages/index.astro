@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import FormattedDate from "../components/FormattedDate.astro";
+import Image from "../components/Image.astro";
 
 const projects = (await getCollection("portfolio")).sort(
   (a, b) => {
@@ -22,9 +23,9 @@ const projects = (await getCollection("portfolio")).sort(
             aria-label={`project: ${project.data.title}, ${project.data.description}`}
             
           >
-            <img
+            <Image
               class="lg:max-w-screen-md w-fit lg:absolute transition-all lg:left-40 lg:opacity-0 opacity-100 block -z-10 group-hover:opacity-100 group-hover:left-60 lg:-mt-32"
-              width={720}
+              width={640}
               height={360}
               src={project.data.heroImage}
               alt={project.data.description}

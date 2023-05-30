@@ -10,7 +10,7 @@ import vercel from "@astrojs/vercel/static";
 // https://astro.build/config
 export default defineConfig({
   site: "http://sanderboer.nl",
-  integrations: [mdx(), sitemap(), tailwind(), react(), astroImageTools()],
+  integrations: [mdx(), sitemap(), tailwind(), react(), astroImageTools],
   output: "static",
   outDir: "./.vercel/output/static",
   adapter: vercel({

@@ -31,7 +31,7 @@ export const ScrollingText: FC<Props> = ({
 
   return (
     <section
-      aria-hidden
+      aria-hidden="true"
       className="h-96 w-full uppercase -mt-20 flex items-end overflow-hidden"
       style={{ background }}
     >

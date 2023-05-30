@@ -20,7 +20,7 @@ const projects = (await getCollection("portfolio"))
             [...projects, ...projects].map((project, index) => (
                 <li class="snap-always snap-end relative shrink-0 w-[75vw] md:w-[60vw] lg:w-[35vw]" aria-hidden={index > projects.length - 1}>
                     <a href={`/portfolio/${project.slug}`} aria-label={`project: ${project.data.title},${project.data.description}`}>
-                        <img src={project.data.heroImage} alt={project.data.description} aria-hidden/>
+                        <img src={project.data.heroImage} alt={project.data.description} aria-hidden="true"/>
                         <div class="font-extrabold text-xl">{project.data.title} <span class="font-light description">{project.data.description}</span></div>
                     </a>
                 </li>

@@ -44,7 +44,21 @@ a {
 
 #markdown-content .container > p:has(em) {
   @apply grid;
-  grid-template-columns: 150px 1fr;
+  grid-template-columns: 200px 1fr;
+}
+
+@media screen and (max-width: 768px) {
+  #markdown-content .container > p:has(em) {
+    @apply grid-cols-1;
+  }
+
+  #markdown-content .container > p:has(em) em:first-child {
+    @apply text-3xl mb-4;
+  }
+
+  #markdown-content .container > p:not(:has(img)) {
+    @apply px-6;
+  }
 }
 
 #markdown-content .container > h2 {

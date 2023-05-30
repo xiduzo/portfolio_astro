@@ -16,13 +16,15 @@ How can an online platform positively stimulate cooperation and participation am
 _Outcome_
 Create an open platform where students and teachers can get clear but anonymous insights into team dynamics and performance over the track of their foundation year.
 
-![monsters grouped](/portfolio/athena/dashboard.png)
+**Gain quick insights into your performance**
+![Students dashboard of the Athena platform](/portfolio/athena/dashboard.png)
 
 ## Feedback
 
 Giving- or asking for feedback can be a tough task, especially for first-year students in new teams. Even though teachers are having weekly meetings with student teams frustrations mostly come at the end of the projects. Sometimes even as late as after receiving the grade of the project.
 
-![monsters grouped](/portfolio/athena/feedback.png)
+**Teachers insights into feedback**
+![Teachers insights into feedback](/portfolio/athena/feedback.png)
 
 _A contract_
 With Athena students of a project team are creating a contract at the start of the project with each other. This contract contains all indicators on which the students will give each other feedback upon.<br/><br/>
@@ -30,13 +32,14 @@ The indicators are divided into 4 competences; Attitude, accountability, knowled
 Project coordinators can set initial indicators which the students can select for their contract. Besides, Athena also allows each team to make their own indicators on which they think the whole team should act upon.<br/><br/>
 All students within a project team give weekly feedback to each other on the agreed upon indicators.
 
-![monsters grouped](/portfolio/athena/workload.png)
+**Insights into trello activities**
+![Scrum insights for team performance using trello as a backend](/portfolio/athena/workload.png)
 
 ## Anonymous
 
 As the purpose of Athena is to give more insight into team dynamics Athena is built to make sure students are giving honest feedback. Therefore, all feedback given within Athena is anonymized for both students and teachers. Athena only shows the outcome of the feedback per student but will never show who gave what feedback.
 
-![monsters grouped](/portfolio/athena/workload_2.png)
+![Detailed scrum insights from team members](/portfolio/athena/workload_2.png)
 
 _Performance_
 Besides feedback as an indicator in team dynamics performance and division of tasks are sometimes hard to see for project groups and teachers alike. <br/><br/>

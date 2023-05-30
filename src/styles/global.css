@@ -27,8 +27,18 @@ a {
   @apply font-bold text-3xl;
 }
 
+#portfolio-item ol,
 #portfolio-item p {
   @apply text-2xl mb-12 gap-x-16 max-w-4xl m-auto font-light;
+}
+
+#portfolio-item ol li {
+  @apply list-decimal list-outside mb-2;
+}
+
+#portfolio-item ol li::marker {
+  @apply text-gray-300;
+  font-family: "caveat";
 }
 
 #portfolio-item .container > p:has(em) {
@@ -57,6 +67,10 @@ a {
 #portfolio-item .container > p > strong:after {
   @apply block;
   content: url("/arrow.svg");
+}
+
+#portfolio-item .container p:nth-of-type(3n + 1) > strong:after {
+  @apply transform -scale-x-100;
 }
 
 #portfolio-item .container > p > em:first-child {

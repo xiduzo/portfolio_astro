@@ -8,7 +8,7 @@ backgroundColor: "#FFF"
 heroImage: "/portfolio/livestock/showreel.png"
 ---
 
-![icons](/portfolio/livestock/icons.png)
+![icons used in the livestock application](/portfolio/livestock/icons.png)
 
 _Problem_
 <span>
@@ -17,53 +17,53 @@ The technology that underpins Bitcoin is called blockchain, which initially bega
 <a href="https://networkcultures.org" target="_blank">The Institute of Network Cultures</a> is researching how cryptocurrency wallets can be designed to help more people understand the impact of blockchain technology. Their aim is to determine what constitutes good or bad wallet design.
 </span>
 
-![mind map](/portfolio/livestock/mindmap.png)
+![mind map research into blockchain and wallets](/portfolio/livestock/mindmap.png)
 
 _Challenge_
 The blockchain and cryptocurrencies can be complex and difficult to understand. Because of its global influence it's important to make them accessible for discussion and use.<br/> <br/>
 Potential users face many options for currencies, wallets, and services and require knowledge to avoid errors.
 
-![screens](/portfolio/livestock/screens.png)
+![A selection of screens of the livestock application](/portfolio/livestock/screens.png)
 
 _Outcome_
 By creating the research tool for the Institute of Network Cultures we facilitate a study on how cryptocurrency wallets can be designed to facilitate a broader understanding of the influence of blockchain technology and define what good or bad wallet design is.
 
-![screens](/portfolio/livestock/outcome.png)
+![Icons used in the livestock application](/portfolio/livestock/outcome.png)
 
 ## Wallets for dummies
 
 Individuals who own cryptocurrency can utilize digital wallets to access their funds. These applications streamline the process of purchasing digital currencies, but they may obscure the inner workings of blockchain technology. Who creates these wallets, and what motivates their development?
 
-![screens](/portfolio/livestock/wallets.png)
+![wallet screens in the livestock application](/portfolio/livestock/wallets.png)
 
 _Data collection_
 The research tool can monitor the actions of 2-5 participants in a 15-60 minute session, including trading strategies, wallet upgrades, and usage of miners. This data will help the Institute of Network Cultures to evaluate wallet designs.
 
-![screens](/portfolio/livestock/outcome_2.png)
+![icons representing functionalities inside the livestock application](/portfolio/livestock/outcome_2.png)
 
 _Learning through play_
 Livestock is a multiplayer research tool that utilizes the human brain's ability to subconsciously learn abstract and complex concepts. While it may appear to be another "Farmville"-style game, it's actually based on the blockchain technology that supports cryptocurrencies. <br/><br/>
 The tool adds abstract blockchain concepts as layers to the game and simulates the blockchain market through the farm in real-time multiplayer mode.
 
-![screens](/portfolio/livestock/progress.png)
+![screen progressing during development of the livestock application](/portfolio/livestock/progress.png)
 
 _Symbolism_
 In Livestock, core concepts of the blockchain are explained through symbolism. For example, Bitcoin, Ethereum and Dogecoin are replaced by wool, milk and bacon, while sheep, cow and pig represent hardware mining rigs. <br/><br/>
 To get started in the crypto world, gold is used to represent fiat currency, and farm animals symbolize mine power on the blockchain, with wool, milk and bacon representing their respective currencies.
 
-![screens](/portfolio/livestock/symbolism.png)
+![Using symbolism inside of the screens of the livestock application](/portfolio/livestock/symbolism.png)
 
-![screens](/portfolio/livestock/symbolism_test.png)
+![Paper prototyping symbolism for the livestock application](/portfolio/livestock/symbolism_test.png)
 
 _Graspable_
 As the LiveStock session progresses, increasingly complex blockchain concepts will be introduced, including Proof-of-Work algorithms, cryptocurrencies with varying elasticities, and soft- and hardware ledgers. Users can explore and experience these concepts and their choices will impact the outcome of the session.
 
-![screens](/portfolio/livestock/paper_prototype.png)
+![paper prototyping the flow of the livestock application](/portfolio/livestock/paper_prototype.png)
 
 _Competition_
 Healthy competition can spur creativity and encourage people to approach things from a different perspective. In Livestock, players can choose to store their products in either an open wallet (the barn) or a more secure, offline wallet (the vault). The vault is password-protected and impervious to theft (blockchain hacks).
 
-![screens](/portfolio/livestock/wireframes.png)
+![wireframes of the livestock application](/portfolio/livestock/wireframes.png)
 
 _Market volatility_
 <span>

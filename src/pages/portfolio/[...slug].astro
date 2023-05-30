@@ -1,9 +1,7 @@
 ---
 import { CollectionEntry, getCollection } from "astro:content";
 import MarkdownContent from "../../layouts/MarkdownContent.astro";
-import Image from "../../components/Image.astro";
-
-const components = {img: Image}
+import Image from '../../components/Image.astro'
 
 export async function getStaticPaths() {
   const projects = await getCollection("portfolio");
@@ -19,5 +17,5 @@ const { Content } = await project.render();
 ---
 
 <MarkdownContent {...project.data}>
-  <Content components={components} />
+  <Content components={{img: Image}} />
 </MarkdownContent>

@@ -1,17 +1,12 @@
 ---
-// https://jcbl.ws/astro-vercel-image-optimization
+// @ts-ignore
+import { Img } from "astro-imagetools/components";
+
 export interface Props extends astroHTML.JSX.ImgHTMLAttributes {
   src: string
   alt: string
-  quality?: number
-  width?: 640 | 750 | 828 | 1080 | 1200 // image sizes we generate in the config
 }
 
-const { src, alt, quality = 75, width = 828, ...rest } = Astro.props
-const optimizedURL =
-  import.meta.env.MODE === 'production' // this will only run in production
-    ? `/_vercel/image?url=${encodeURIComponent(src)}&w=${width}&q=${quality}`
-    : src
 ---
 
-<img loading="lazy" src={optimizedURL} alt={alt} {...rest} />
+<Img loading="lazy" breakpoints={{ count: 4, minWidth: 300, maxWidth: 1024 }} {...Astro.props} background="transparent" />

@@ -47,6 +47,11 @@ a {
   grid-template-columns: 200px 1fr;
 }
 
+img {
+  @apply w-screen;
+  background: none !important;
+}
+
 @media screen and (max-width: 768px) {
   #markdown-content .container > p:has(em) {
     @apply grid-cols-1;

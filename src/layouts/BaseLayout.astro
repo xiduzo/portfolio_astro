@@ -5,7 +5,7 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 // @ts-ignore
-import AnimatedCursor from "react-animated-cursor";
+// import AnimatedCursor from "react-animated-cursor";
 
 type Props = {
   title: string;
@@ -25,7 +25,7 @@ const { title, description } = Astro.props;
       class="transition left-0 bg-primary z-30 absolute p-3 m-3 -translate-y-16 focus:translate-y-0"
       href="#main-content">Jump to content</a
     >
-    <AnimatedCursor
+    <!-- <AnimatedCursor
       client:only
       showSystemCursor={false}
       trailingSpeed={6}
@@ -36,7 +36,7 @@ const { title, description } = Astro.props;
       outerScale={8}
       outerAlpha={0.2}
       clickables={["a", "button"]}
-    />
+    /> -->
     <Header />
     <main id="main-content">
       <slot />

@@ -3,13 +3,14 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
+import { astroImageTools } from "astro-imagetools";
 
 import vercel from "@astrojs/vercel/static";
 
 // https://astro.build/config
 export default defineConfig({
   site: "http://sanderboer.nl",
-  integrations: [mdx(), sitemap(), tailwind(), react()],
+  integrations: [mdx(), sitemap(), tailwind(), react(), astroImageTools()],
   output: "static",
   outDir: "./.vercel/output/static",
   adapter: vercel({

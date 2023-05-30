@@ -10,9 +10,7 @@ const { currentProject } = Astro.props
 
 const projects = (await getCollection("portfolio"))
 .filter((project) => project.data.title !== currentProject)
-.sort(
-  (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
-);
+.sort(() => Math.random() - 0.5);
 
 ---
 <section class="w-full py-32 bg-purple-300">

@@ -5,7 +5,8 @@ import FormattedDate from "../components/FormattedDate.astro";
 
 const projects = (await getCollection("portfolio")).sort(
   (a, b) => {
-    return a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+    console.log(new Date(a.data.pubDate).valueOf(), new Date(b.data.pubDate).valueOf())
+    return new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
   }
 );
 ---

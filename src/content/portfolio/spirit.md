@@ -1,7 +1,7 @@
 ---
 title: "Spirit"
 description: "Empower patients who suffer from Obsessive-Compulsive Disorder (OCD)"
-pubDate: "Jul 15 2019"
+pubDate: "Aug 08 2019"
 drawColor: "#7D8CA9"
 headerColor: "#F2A374"
 backgroundColor: "#FFF"

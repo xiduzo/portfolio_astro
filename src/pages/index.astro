@@ -4,12 +4,14 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 
 const projects = (await getCollection("portfolio")).sort(
-  (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+  (a, b) => {
+    return a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+  }
 );
 ---
 
 <BaseLayout title="Projects" description="Portfolio website Sander Boer">
-  <h1 class="hidden">Projects</h1>
+  <h1 class="sr-only">Projects</h1>
   <ol class="m-auto space-y-16 lg:space-y-72 mt-56 mb-72 container">
     {
       projects.map((project) => (

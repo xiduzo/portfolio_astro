@@ -6,10 +6,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { ScrollingText } from "../components/ScrollingText";
 import PageProgress from "../components/PageProgress.astro";
 import { PageTransition } from "../components/PageTransition";
+import OtherProjects from "../components/OtherProjects.astro";
 
 type Props = CollectionEntry<"portfolio">["data"];
 
 const { title, description, heroImage, headerColor } = Astro.props;
+
 ---
 
 <BaseLayout title={title} description={description}>
@@ -31,5 +33,6 @@ const { title, description, heroImage, headerColor } = Astro.props;
     </section>
   </article>
   <ScrollingText text="Other work" client:load direction="right" />
+  <OtherProjects currentProject={title} />
   <PageProgress color={headerColor} />
 </BaseLayout>

@@ -12,11 +12,11 @@ body {
 }
 
 a {
-  @apply underline underline-offset-1 focus:bg-yellow-400 p-2 focus:outline-none inline-block text-lg transition-all;
+  @apply focus:bg-yellow-400 p-2 focus:outline-none inline-block text-lg transition-all;
 }
 
 #portfolio-item p a {
-  @apply underline;
+  @apply underline underline-offset-1;
 }
 
 #portfolio-item .container > blockquote p {
@@ -49,12 +49,12 @@ a {
   left: calc(-50vw + 50%);
 }
 
-#portfolio-item .container > p strong {
+#portfolio-item .container > p > strong {
   @apply normal-case text-center w-full block mb-3;
   font-family: "caveat";
 }
 
-#portfolio-item .container > p strong:after {
+#portfolio-item .container > p > strong:after {
   @apply block;
   content: url("/arrow.svg");
 }
@@ -79,4 +79,8 @@ a {
 #portfolio-item .container > p:has(> a) a:focus:after,
 #portfolio-item .container > p:has(> a) a:hover:after {
   @apply translate-x-2;
+}
+
+footer {
+  background-color: var(--footer-color);
 }

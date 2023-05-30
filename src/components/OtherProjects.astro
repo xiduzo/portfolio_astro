@@ -1,0 +1,39 @@
+---
+import { getCollection } from "astro:content";
+
+type Props = {
+    currentProject: string
+}
+
+const { currentProject } = Astro.props
+
+
+const projects = (await getCollection("portfolio"))
+.filter((project) => project.data.title !== currentProject)
+.sort(
+  (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+);
+
+---
+<section class="w-full py-32 bg-purple-300">
+    <h2 class="sr-only">Other work</h2>
+    <ol class="w-full px-12 pb-8 flex gap-12 overflow-x-auto snap-x snap-mandatory scroll-px-12">
+        {
+            [...projects, ...projects].map((project, index) => (
+                <li class="snap-always snap-end relative shrink-0 w-[75vw] md:w-[60vw] lg:w-[35vw]" aria-hidden={index > projects.length - 1}>
+                    <a href={`/portfolio/${project.slug}`}>
+                        <img src={project.data.heroImage} alt={project.data.description} aria-hidden/>
+                        <div class="font-extrabold text-xl">{project.data.title} <span class="font-light description">{project.data.description}</span></div>
+                    </a>
+                </li>
+            ))
+        }
+    </ol>
+</section>
+
+<style>
+    .description::before {
+        @apply inline-block px-1;
+        content: "|";
+    }
+</style>

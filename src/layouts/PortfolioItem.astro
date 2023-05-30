@@ -1,0 +1,35 @@
+---
+import type { CollectionEntry } from "astro:content";
+import "@fontsource/space-grotesk";
+import "@fontsource/caveat";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { ScrollingText } from "../components/ScrollingText";
+import PageProgress from "../components/PageProgress.astro";
+import { PageTransition } from "../components/PageTransition";
+
+type Props = CollectionEntry<"portfolio">["data"];
+
+const { title, description, heroImage, headerColor } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <PageTransition background={headerColor} client:load />
+  <ScrollingText text={title} background={headerColor} client:load />
+  <article id="portfolio-item">
+    {
+      heroImage && (
+        <img class="w-full" aria-hidden src={heroImage} alt={description} />
+      )
+    }
+    <h1 class="invisible">{title}</h1>
+
+    <section class="mx-4 text-center font-extrabold mb-28">
+      <h2 class="text-7xl">{description}</h2>
+    </section>
+    <section class="container m-auto">
+      <slot />
+    </section>
+  </article>
+  <ScrollingText text="Other work" client:load direction="right" />
+  <PageProgress color={headerColor} />
+</BaseLayout>

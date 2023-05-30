@@ -1,0 +1,82 @@
+/*
+  The CSS in this style tag is based off of Bear Blog's default CSS.
+  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
+  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
+ */
+* {
+  @apply text-slate-900;
+}
+
+body {
+  font-family: "Space Grotesk", "Arial", "Helvetica", "sans-serif";
+}
+
+a {
+  @apply underline underline-offset-1 focus:bg-yellow-400 p-2 focus:outline-none inline-block text-lg transition-all;
+}
+
+#portfolio-item p a {
+  @apply underline;
+}
+
+#portfolio-item .container > blockquote p {
+  @apply grid-cols-1 max-w-lg m-auto;
+}
+
+#portfolio-item .container > blockquote p em {
+  @apply font-bold text-3xl;
+}
+
+#portfolio-item p {
+  @apply text-2xl mb-12 gap-x-16 max-w-4xl m-auto font-light;
+}
+
+#portfolio-item .container > p:has(em) {
+  @apply grid;
+  grid-template-columns: 150px 1fr;
+}
+
+#portfolio-item .container > h2 {
+  @apply text-3xl max-w-4xl m-auto mb-4 mt-20 font-extrabold;
+}
+
+#portfolio-item .container > p:has(img) {
+  @apply max-w-full my-48 relative;
+}
+
+#portfolio-item .container > p img {
+  @apply col-span-2 w-screen max-w-[100vw] relative;
+  left: calc(-50vw + 50%);
+}
+
+#portfolio-item .container > p strong {
+  @apply normal-case text-center w-full block mb-3;
+  font-family: "caveat";
+}
+
+#portfolio-item .container > p strong:after {
+  @apply block;
+  content: url("/arrow.svg");
+}
+
+#portfolio-item .container > p > em:first-child {
+  @apply uppercase text-lg not-italic font-bold;
+}
+
+#portfolio-item .container > p:has(> a) {
+  @apply text-center my-36;
+}
+
+#portfolio-item .container > p:has(> a) a {
+  @apply border-2 p-4 border-black hover:bg-yellow-300;
+}
+
+#portfolio-item .container > p:has(> a) a:after {
+  @apply ml-2 mr-1 inline-block transition-all;
+  content: "→";
+}
+
+#portfolio-item .container > p:has(> a) a:focus:after,
+#portfolio-item .container > p:has(> a) a:hover:after {
+  @apply translate-x-2;
+}

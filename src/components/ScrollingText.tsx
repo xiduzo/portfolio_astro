@@ -1,0 +1,57 @@
+import { motion } from "framer-motion";
+import { FC, useEffect, useState } from "react";
+
+export const ScrollingText: FC<Props> = ({
+  background,
+  text,
+  direction = "left",
+}) => {
+  const [offset, setOffset] = useState(0);
+  useEffect(() => {
+    const listener = () => {
+      if (direction === "right") {
+        const pxToBottom =
+          document.documentElement.scrollHeight -
+          window.pageYOffset -
+          window.innerHeight;
+        setOffset(-pxToBottom / 2);
+        return;
+      }
+
+      const scrollOffset =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop;
+      setOffset(-scrollOffset / 2);
+    };
+
+    document.addEventListener("scroll", listener);
+    document.addEventListener("touchMove", listener);
+  }, [direction]);
+
+  return (
+    <section
+      aria-hidden
+      className="h-96 w-full uppercase -mt-20 flex items-end overflow-hidden"
+      style={{ background }}
+    >
+      <motion.div
+        className="relative whitespace-nowrap text-8xl font-extrabold tracking-widest translate-y-9 space-x-12"
+        initial={{ opacity: 0, left: "0vw" }}
+        animate={{ opacity: 1, left: "-5vw" }}
+        transition={{ duration: 0.3, delay: 0.8 }}
+        style={{ marginLeft: offset + "px" }}
+      >
+        {Array.from({ length: 60 }).map((_, index) => (
+          <span key={index}>{text}</span>
+        ))}
+      </motion.div>
+    </section>
+  );
+};
+
+type Props = {
+  background?: string;
+  text: string;
+  direction?: "left" | "right";
+};

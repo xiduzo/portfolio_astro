@@ -1,0 +1,46 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+
+const projects = (await getCollection("portfolio")).sort(
+  (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout title="Projects" description="Portfolio website Sander Boer">
+  <h1 class="hidden">Projects</h1>
+  <ol class="m-auto space-y-16 lg:space-y-72 mt-56 mb-72 container">
+    {
+      projects.map((project) => (
+        <li>
+          <a
+            href={`/portfolio/${project.slug}/`}
+            class="flex lg:space-x-4 stroke-white group  lg:flex-row flex-col"
+            aria-label={`project: ${project.data.title}, ${project.data.description}`}
+          >
+            <img
+              class="lg:max-w-screen-md w-fit lg:absolute transition-all lg:left-40 lg:opacity-0 opacity-100 block -z-10 group-hover:opacity-100 group-hover:left-60 lg:-mt-32"
+              width={720}
+              height={360}
+              src={project.data.heroImage}
+              alt={project.data.description}
+              aria-hidden
+            />
+            <h2 class="lg:text-9xl text-5xl font-extrabold tracking-widest mb-4 mix-blend-soft-light">
+              {project.data.title}
+            </h2>
+            <section class="text-xl max-w-xs mix-blend-soft-light">
+              {project.data.description}
+              <FormattedDate
+                class="block opacity-60"
+                date={project.data.pubDate}
+                format={{ year: "numeric" }}
+              />
+            </section>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+</BaseLayout>

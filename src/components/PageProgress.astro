@@ -1,0 +1,49 @@
+---
+type Props = {
+  color: string;
+};
+
+const { color } = Astro.props;
+---
+
+<div
+  id="page-scroll-progress"
+  class="fixed bottom-0 h-4 z-10"
+  style={{ backgroundColor: color }}
+>
+</div>
+
+<script>
+  const listener = () => {
+    const scrollOffset =
+      window.pageYOffset ||
+      document.documentElement.scrollTop ||
+      document.body.scrollTop;
+
+    const pageHeight = Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.clientHeight,
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight
+    );
+
+    const scrollableContent = pageHeight - window.innerHeight;
+
+    const progress = (scrollOffset * 100) / scrollableContent;
+
+    document.documentElement.style.setProperty(
+      "--page-scroll-progress",
+      progress.toString() + "%"
+    );
+  };
+
+  document.addEventListener("scroll", listener);
+  document.addEventListener("touchMove", listener);
+</script>
+
+<style>
+  #page-scroll-progress {
+    width: var(--page-scroll-progress);
+  }
+</style>

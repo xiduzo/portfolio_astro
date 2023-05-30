@@ -1,0 +1,27 @@
+---
+import HeaderLink from "./HeaderLink.astro";
+---
+
+<header
+  class="container m-auto flex justify-between items-center overflow-hidden sticky top-0 h-14 mix-blend-soft-light z-20"
+>
+  <a href="/" class="group">
+    <h2
+      aria-label="portfolio sander boer"
+      class="text-4xl transition-all translate-y-6 group-hover:translate-y-0 group-focus:translate-y-0"
+    >
+      Sander
+    </h2>
+  </a>
+  <nav>
+    <HeaderLink href="/">Portfolio</HeaderLink>
+    <HeaderLink href="/blog">Blog</HeaderLink>
+    <HeaderLink href="/about">About</HeaderLink>
+    <HeaderLink href="https://twitter.com/astrodotbuild" target="_blank">
+      Twitter
+    </HeaderLink>
+    <HeaderLink href="https://github.com/withastro/astro" target="_blank">
+      GitHub
+    </HeaderLink>
+  </nav>
+</header>

@@ -1,6 +1,6 @@
 ---
 // @ts-ignore
-import { Img } from "astro-imagetools/components";
+// import { Img } from "astro-imagetools/components";
 
 export interface Props extends astroHTML.JSX.ImgHTMLAttributes {
   src: string
@@ -15,5 +15,6 @@ const { hidden, ...rest} = Astro.props
 ---
 
 <div aria-hidden={hidden}>
-  <Img loading="lazy" breakpoints={{ count: 4, minWidth: 300, maxWidth: 1024 }} {...rest} background="transparent" />
+  <!-- <Img loading="lazy" breakpoints={{ count: 4, minWidth: 300, maxWidth: 1024 }} {...rest} background="transparent" /> -->
+  <img loading="lazy" {...rest} />
 </div>

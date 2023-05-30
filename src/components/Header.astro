@@ -3,8 +3,9 @@ import HeaderLink from "./HeaderLink.astro";
 ---
 
 <header
-  class="container m-auto flex justify-between items-center overflow-hidden sticky top-0 h-14 mix-blend-soft-light z-20"
+  class="w-full overflow-hidden sticky top-0 h-14 backdrop-blur bg-white/50 z-20"
 >
+<section class="container m-auto flex justify-between items-center">
   <a href="/" class="group">
     <h2
       aria-label="portfolio sander boer"
@@ -15,13 +16,8 @@ import HeaderLink from "./HeaderLink.astro";
   </a>
   <nav>
     <HeaderLink href="/">Portfolio</HeaderLink>
-    <HeaderLink href="/blog">Blog</HeaderLink>
+    <!-- <HeaderLink href="/blog">Blog</HeaderLink> -->
     <HeaderLink href="/about">About</HeaderLink>
-    <HeaderLink href="https://twitter.com/astrodotbuild" target="_blank">
-      Twitter
-    </HeaderLink>
-    <HeaderLink href="https://github.com/withastro/astro" target="_blank">
-      GitHub
-    </HeaderLink>
   </nav>
+</section>
 </header>

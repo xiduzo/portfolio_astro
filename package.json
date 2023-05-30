@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build && node ./scripts/vercel-config.js",
+    "build": "astro build && node ./scripts/vercel-config.cjs",
     "preview": "astro preview",
     "astro": "astro"
   },

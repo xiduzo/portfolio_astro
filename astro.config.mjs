@@ -12,6 +12,7 @@ export default defineConfig({
   integrations: [mdx(), sitemap(), tailwind(), react()],
   output: "static",
   adapter: vercel({
+    imageService: true,
     imageConfig: {
       sizes: [320, 640, 1280],
     },

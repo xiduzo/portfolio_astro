@@ -11,6 +11,7 @@ export default defineConfig({
   site: "http://sanderboer.nl",
   integrations: [mdx(), sitemap(), tailwind(), react()],
   output: "static",
+  outDir: "./.vercel/output/static",
   adapter: vercel({
     imageConfig: {
       sizes: [320, 640, 1280],

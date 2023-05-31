@@ -21,7 +21,7 @@ As a cooperative of growers, RFH has centralized the supply of flowers and plant
 _Challenge_
 <span>
 RFH's old physical processes were built into many tools, making automation a key aspect of their digital transformation. This is evident in the digital interfaces and processes that still reflect the traditional "beneath the clock" auction method.<br/><br/>
-The challenge now is to modernize the real-time auction using the public cloud, while navigating a complex environment where <a href="https://amstelveenblog.nl/2021/02/20/protest-tegen-bloemenveiling" target="_blank">users resist change</a>
+The challenge now is to modernize the real-time auction using the public cloud, while navigating a complex environment where <a href="https://amstelveenblog.nl/2021/02/20/protest-tegen-bloemenveiling" target="_blank">users resist change</a>.
 </span>
 
 **Processes and tools to mimic the physical auction**
@@ -109,5 +109,5 @@ _Mentioned at_
 _References_
 <span>
 <a href="https://storybook.rfh-auction.com" target="_blank">VeileNext storybook</a><br/><br/>
-<a href="https://www.meetup.com/nl-NL/cypress-meetup-group-netherlands/events/277899235" target="_blank">Testing websockets with Cypress (Meetup)</a>
+<a href="https://www.meetup.com/nl-NL/cypress-meetup-group-netherlands/events/277899235" target="_blank">Testing websockets with Cypress</a>
 </span>

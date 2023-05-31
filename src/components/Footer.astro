@@ -1,5 +1,5 @@
 ---
-const today = new Date();
+const currentYear = new Date().getFullYear();
 ---
 
 <footer
@@ -10,7 +10,7 @@ const today = new Date();
       <a class="text-slate-100 focus:text-slate-800" href="/">Sander Boer</a>
     </li>
     <li class="text-slate-100 opacity-30 text-center">
-      &copy; {today.getFullYear()}
+      &copy; {currentYear}
     </li>
     <li class="text-center lg:text-end">
       <a

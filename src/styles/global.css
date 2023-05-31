@@ -48,6 +48,10 @@ a {
   grid-template-columns: 200px 1fr;
 }
 
+#markdown-content .container > p em > a {
+  @apply text-sm;
+}
+
 @media screen and (max-width: 768px) {
   #markdown-content .container > p:has(em) {
     @apply grid-cols-1;

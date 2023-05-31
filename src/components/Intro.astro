@@ -1,0 +1,116 @@
+<section
+  class="fixed inset-0 bg-slate-950 z-40 scroll p-10 transition-all"
+  id="wrapper"
+>
+  <div class="space-y-3 flex flex-col text-2xl" id="content">
+    <!-- Content will be filled with JS -->
+  </div>
+</section>
+
+<script>
+  const body = document.querySelector("body");
+  const content = document.getElementById("content");
+  const wrapper = document.getElementById("wrapper");
+  let isIntroDone = false;
+
+  const timeOfDay = (): string => {
+    const time = new Date().getHours();
+
+    if (time < 6 || time >= 20) return "evening";
+    else if (time >= 12) return "afternoon";
+    else if (time >= 6) return "morning";
+
+    return "day to you";
+  };
+
+  const isTouchDevice = () => {
+    return (
+      "ontouchstart" in window ||
+      navigator.maxTouchPoints > 0 ||
+      (navigator as any).msMaxTouchPoints > 0
+    );
+  };
+
+  const texts = [
+    "Oh hi there...",
+    "",
+    `Good ${timeOfDay()}`,
+    "",
+    "My name is sander,",
+    "A passionate developer with a creative mind™",
+    "",
+    "",
+    isTouchDevice()
+      ? "Touch <code>here</code> to continue"
+      : "Press <code>[any key]</code> to continue",
+  ];
+
+  texts.forEach((text, index) => {
+    const textWrapper = document.createElement("div");
+    textWrapper.classList.add(
+      "grid",
+      "grid-cols-2",
+      "gap-3",
+      "grid-cols-[1fr,10fr]"
+    );
+
+    const status = document.createElement("span");
+    status.innerHTML = "Ok";
+    status.classList.add(
+      "text-green-600",
+      "font-extrabold",
+      "px-4",
+      "uppercase"
+    );
+    status.ariaHidden = "true";
+
+    const textContent = document.createElement("div");
+    textContent.classList.add("text-slate-50");
+    textContent.innerHTML = text;
+
+    textWrapper.appendChild(status);
+    textWrapper.appendChild(textContent);
+
+    setTimeout(() => {
+      content?.appendChild(textWrapper);
+      if (index === texts.length - 1) isIntroDone = true;
+    }, (500 + Math.random() * 100) * (index + 1));
+
+    const closeIntro = () => {
+      if (!isIntroDone) return;
+
+      // Scroll to top
+      // Just in case the user scrolled down
+      window.scrollTo(0, 0);
+
+      wrapper?.classList.add("opacity-0", "scale-0");
+      setTimeout(() => {
+        wrapper?.remove();
+      }, 500);
+    };
+
+    document.addEventListener("keydown", closeIntro);
+    body?.addEventListener("click", closeIntro);
+  });
+</script>
+
+<style is:inline>
+  div > span,
+  div > code {
+    font-family: "Courier New", Courier, monospace;
+  }
+
+  div > code,
+  div > span::before,
+  div > span::after {
+    color: white;
+  }
+
+  div > span::before {
+    content: "[\00a0\00a0";
+  }
+
+  div > span::after {
+    content: "\00a0\00a0]";
+  }
+</style>

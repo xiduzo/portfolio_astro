@@ -23,17 +23,20 @@
     if (state.scale) elem.style.setProperty("--scale", state.scale);
   };
 
-  const cursor = document.querySelector("#custom-cursor");
-  let onElement: null | Element = null;
+  const cursor = document.querySelector("#custom-cursor") as HTMLElement;
+  let onElement: Element | null = null;
+  let prevEvent: MouseEvent | null = null;
 
-  const createState = (e: MouseEvent): State => {
+  const createState = (e: MouseEvent | Event): State => {
     const defaultState: State = {
-      x: e.clientX,
-      y: e.clientY,
+      x: e instanceof MouseEvent ? e.clientX : prevEvent?.clientX ?? 0,
+      y: e instanceof MouseEvent ? e.clientY : prevEvent?.clientY ?? 0,
       width: 56,
       height: 56,
       radius: "100px",
     };
+
+    if (e instanceof MouseEvent) prevEvent = e;
 
     const computedState: Partial<State> = {};
 
@@ -54,10 +57,13 @@
     };
   };
 
-  document.addEventListener("mousemove", (e) => {
+  const updateState = (e: MouseEvent | Event) => {
     const state = createState(e);
-    updateProperties(cursor as HTMLElement, state);
-  });
+    updateProperties(cursor, state);
+  };
+
+  document.addEventListener("mousemove", updateState);
+  document.addEventListener("scroll", updateState);
 
   document.querySelectorAll("a, button").forEach((elem) => {
     elem.addEventListener("mouseenter", () => (onElement = elem));

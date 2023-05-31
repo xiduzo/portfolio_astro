@@ -3,44 +3,51 @@ const today = new Date();
 ---
 
 <footer
-  class="fixed inset-0 -z-10 bg-slate-900 flex flex-col justify-between p-12 container max-w-full"
+  class="fixed inset-0 -z-10 bg-slate-950 flex flex-col justify-between p-12 container max-w-full"
 >
   <ul class="grid lg:grid-cols-3 space-y-8 lg:space-y-0">
-    <li class="text-slate-100 hover:text-slate-800 text-center lg:text-start">
-      <a href="/">Sander Boer</a>
+    <li class="text-center lg:text-start">
+      <a
+        class="text-slate-100 focus:text-slate-800 hover:text-slate-800"
+        href="/">Sander Boer</a
+      >
     </li>
     <li class="text-slate-100 opacity-30 text-center">
       &copy; {today.getFullYear()}
     </li>
-    <li class="text-slate-100 hover:text-slate-800 text-center lg:text-end">
-      <a href="https://github.com/xiduzo" target="_blank">What I'm up to</a>
+    <li class="text-center lg:text-end">
+      <a
+        class="text-slate-100 focus:text-slate-800 hover:text-slate-800"
+        href="https://github.com/xiduzo"
+        target="_blank">What I'm up to</a
+      >
     </li>
   </ul>
   <div class="text-center">
     <a
       href="mailto:mail@sanderboer.nl?subject=Let's have a chat!&body=Hi, I'd like to have a chat with you,"
-      class="text-slate-100 hover:text-slate-800 text-9xl font-extrabold"
+      class="text-slate-100 focus:text-slate-800 hover:text-slate-800 text-9xl font-extrabold"
       >Let's have a chat</a
     >
   </div>
   <ul class="grid lg:grid-cols-3 space-y-8 lg:space-y-0">
     <li class="text-center lg:text-start">
       <a
-        class="text-slate-100 hover:text-slate-800"
+        class="text-slate-100 focus:text-slate-800 hover:text-slate-800"
         target="_blank"
         href="tel:+31636548880">Call me</a
       >
     </li>
     <li class="text-center">
       <a
-        class="text-slate-100 hover:text-slate-800"
+        class="text-slate-100 focus:text-slate-800 hover:text-slate-800"
         target="_blank"
         href="mailto:mail@sanderboer.nl">Mail me</a
       >
     </li>
     <li class="text-center lg:text-end">
       <a
-        class="text-slate-100 hover:text-slate-800"
+        class="text-slate-100 focus:text-slate-800 hover:text-slate-800"
         target="_blank"
         href="https://www.linkedin.com/in/sander-boer-653110a5"
         >Connect with me</a

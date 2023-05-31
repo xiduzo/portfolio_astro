@@ -113,7 +113,3 @@ a {
 #markdown-content .container > p:has(> a) a:hover:after {
   @apply translate-x-2;
 }
-
-footer {
-  background-color: var(--footer-color);
-}

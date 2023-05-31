@@ -4,17 +4,16 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import Image from "../components/Image.astro";
 
-
-const projects = (await getCollection("portfolio")).sort(
-  (a, b) => {
-    return new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
-  }
-);
+const projects = (await getCollection("portfolio")).sort((a, b) => {
+  return (
+    new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
+  );
+});
 ---
 
 <BaseLayout title="Projects" description="Portfolio website Sander Boer">
   <h1 class="sr-only">Projects</h1>
-  <ol class="m-auto space-y-16 lg:space-y-72 mt-56 mb-72 container">
+  <ol class="m-auto space-y-16 lg:space-y-72 pt-56 pb-72 container -mt-16">
     {
       projects.map((project) => (
         <li>
@@ -22,16 +21,18 @@ const projects = (await getCollection("portfolio")).sort(
             href={`/portfolio/${project.slug}/`}
             class="flex lg:space-x-4 stroke-white group lg:flex-row flex-col"
             aria-label={`project: ${project.data.title}, ${project.data.description}`}
-            
           >
-          <div  class="lg:max-w-screen-md w-fit lg:absolute transition-all lg:left-40 lg:opacity-0 opacity-100 block -z-10 group-hover:opacity-100 group-hover:left-60 lg:-mt-32">
-            <Image
-              src={project.data.heroImage}
-              alt={project.data.description}
-              hidden="true"
-            />
+            <div class="lg:max-w-screen-md w-fit lg:absolute transition-all lg:left-40 lg:opacity-0 opacity-100 block group-hover:opacity-100 group-hover:left-60 lg:-mt-32">
+              <Image
+                src={project.data.heroImage}
+                alt={project.data.description}
+                hidden="true"
+              />
             </div>
-            <h2 class="lg:text-9xl text-5xl font-extrabold tracking-widest mb-4 mix-blend-multiply" style={{ color: project.data.headerColor }}>
+            <h2
+              class="lg:text-9xl text-5xl font-extrabold tracking-widest mb-4 mix-blend-multiply"
+              style={{ color: project.data.headerColor }}
+            >
               {project.data.title}
             </h2>
             <section class="text-xl max-w-xs group-hover:opacity-10 transition-all">

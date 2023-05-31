@@ -32,4 +32,4 @@ Collaborating with individuals from diverse backgrounds to achieve a shared obje
 While my focus predominantly lies in the realm of technology, my true strengths lie in the intersection of UX and development. I recognize the value of actively participating in both disciplines, allowing me to enhance my strengths of both.
 </span>
 
-<a href="mailto:mail@sanderboer.nl?subject=Let's connect!&body=Hi, I'd like to connect with you," style="cursor: none;">Let's connect</a>
+<a href="mailto:mail@sanderboer.nl?subject=Let's connect!&body=Hi, I'd like to connect with you,">Let's connect</a>

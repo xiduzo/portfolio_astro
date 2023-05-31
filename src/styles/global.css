@@ -12,12 +12,12 @@ body {
   font-family: "Space Grotesk", "Arial", "Helvetica", "sans-serif";
 }
 
-body #markdown-content {
+main {
   @apply bg-slate-100;
 }
 
 a {
-  @apply hover:bg-yellow-100 focus:bg-yellow-400 p-4 md:p-2 focus:outline-none inline-block text-lg transition-all;
+  @apply hover:bg-yellow-50 focus:bg-yellow-400 p-4 md:p-2 focus:outline-none inline-block text-lg transition-all;
 }
 
 #markdown-content .container > p a {

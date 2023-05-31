@@ -20,10 +20,6 @@ a {
   @apply hover:bg-yellow-50 focus:bg-yellow-400 p-4 md:p-2 focus:outline-none inline-block text-lg transition-all;
 }
 
-#markdown-content .container > p a {
-  @apply p-0 text-2xl underline underline-offset-1;
-}
-
 #markdown-content .container > blockquote p {
   @apply grid-cols-1 max-w-lg m-auto;
 }
@@ -34,7 +30,7 @@ a {
 
 #markdown-content ol,
 #markdown-content p {
-  @apply text-2xl mb-36 gap-x-16 max-w-4xl m-auto font-light;
+  @apply text-3xl mb-36 gap-x-16 max-w-4xl m-auto font-light;
 }
 
 #markdown-content ol li {
@@ -66,7 +62,7 @@ a {
 }
 
 #markdown-content .container > h2 {
-  @apply text-3xl max-w-4xl m-auto mb-4 mt-20 font-extrabold;
+  @apply text-4xl max-w-4xl m-auto mb-4 mt-20 font-extrabold;
 }
 
 #markdown-content .container > p:has(img) {
@@ -79,7 +75,7 @@ a {
 }
 
 #markdown-content .container > p > strong {
-  @apply normal-case text-center w-full block mb-3;
+  @apply normal-case text-center w-full block mb-3 text-2xl;
   font-family: "caveat";
 }
 
@@ -100,8 +96,14 @@ a {
   @apply text-center my-36;
 }
 
+#markdown-content .container > p a {
+  @apply p-0 text-4xl underline underline-offset-1;
+  font-family: "caveat";
+}
+
 #markdown-content .container > p:has(> a) a {
-  @apply border-2 p-4 border-black hover:bg-yellow-300;
+  @apply border-2 p-4 border-black hover:bg-yellow-300 text-2xl;
+  font-family: "Space Grotesk", "Arial", "Helvetica", "sans-serif";
 }
 
 #markdown-content .container > p:has(> a) a:after {

@@ -1,16 +1,5 @@
 ---
-export interface Props extends astroHTML.JSX.ImgHTMLAttributes {
-  src: string;
-  alt: string;
-  /**
-   * aria-hidden attribute
-   */
-  hidden?: boolean | "false" | "true";
-}
-
-const { hidden, ...rest } = Astro.props;
+export interface Props extends astroHTML.JSX.ImgHTMLAttributes {}
 ---
 
-<div aria-hidden={hidden}>
-  <img loading="lazy" width={1920} height={1080} {...rest} />
-</div>
+<img loading="lazy" width={1920} height={1080} {...Astro.props} />

@@ -26,7 +26,7 @@ const projects = (await getCollection("portfolio")).sort((a, b) => {
               <Image
                 src={project.data.heroImage}
                 alt={project.data.description}
-                hidden="true"
+                aria-hidden="true"
               />
             </div>
             <h2

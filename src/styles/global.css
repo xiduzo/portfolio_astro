@@ -5,6 +5,7 @@
  */
 * {
   @apply text-slate-900;
+  font-display: "swap";
 }
 
 body {

@@ -108,6 +108,6 @@ _Mentioned at_
 
 _References_
 <span>
-<a href="https://storybook.rfh-auction.com" target="_blank">VeileNext storybook</a><br/>
+<a href="https://storybook.rfh-auction.com" target="_blank">VeileNext storybook</a><br/><br/>
 <a href="https://www.meetup.com/nl-NL/cypress-meetup-group-netherlands/events/277899235" target="_blank">Testing websockets with Cypress (Meetup)</a>
 </span>

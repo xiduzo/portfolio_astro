@@ -85,13 +85,13 @@ _Mentioned at_
 
 _In collaboration with_
 <span>
-<a href="https://lenaheinrich.de" target="_blank">Lena Heinrich</a><br/>
-<a href="https://chantalramzy.com" target="_blank">Chantal Ramzy</a><br/>
+<a href="https://lenaheinrich.de" target="_blank">Lena Heinrich</a><br/><br/>
+<a href="https://chantalramzy.com" target="_blank">Chantal Ramzy</a><br/><br/>
 <a href="https://bkantar.com" target="_blank">Buğra Kantar</a>
 </span>
 
 _References_
 <span>
-<a href="https://github.com/xiduzo/blockchainserver" target="_blank">Code (server)</a><br/>
+<a href="https://github.com/xiduzo/blockchainserver" target="_blank">Code (server)</a><br/><br/>
 <a href="https://github.com/xiduzo/blockchaingame" target="_blank">Code (app)</a>
 </span>

@@ -26,6 +26,7 @@ const projects = (await getCollection("portfolio"))
           aria-hidden={index > projects.length - 1}
         >
           <a
+            class="h-full"
             href={`/portfolio/${project.slug}`}
             aria-label={`project: ${project.data.title},${project.data.description}`}
           >

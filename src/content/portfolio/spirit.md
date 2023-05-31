@@ -72,7 +72,7 @@ _Invited to_
 
 _In collaboration with_
 <span>
-<a href="https://carmenscherbaum.myportfolio.com" target="_blank">Carmen Scherbaum</a><br/>
+<a href="https://carmenscherbaum.myportfolio.com" target="_blank">Carmen Scherbaum</a><br/><br/>
 <a href="https://clinical-neuropsychology.de/steffen-moritz" target="_blank">Prof. Dr. Steffen Moritz</a>
 </span>
 

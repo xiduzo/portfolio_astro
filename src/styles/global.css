@@ -97,13 +97,11 @@ a {
 }
 
 #markdown-content .container > p a {
-  @apply p-0 text-4xl underline underline-offset-1;
-  font-family: "caveat";
+  @apply p-0 text-3xl underline underline-offset-1;
 }
 
 #markdown-content .container > p:has(> a) a {
   @apply border-2 p-4 border-black hover:bg-yellow-300 text-2xl;
-  font-family: "Space Grotesk", "Arial", "Helvetica", "sans-serif";
 }
 
 #markdown-content .container > p:has(> a) a:after {

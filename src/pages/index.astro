@@ -37,7 +37,7 @@ const projects = (await getCollection("portfolio")).sort((a, b) => {
             >
               {project.data.title}
             </h2>
-            <section class="text-xl max-w-xs group-hover:opacity-10 transition-all">
+            <section class="text-xl max-w-xs lg:group-hover:opacity-10 transition-all">
               {project.data.description}
               <FormattedDate
                 class="block opacity-60"

@@ -1,5 +1,5 @@
 <section
-  class="fixed inset-0 bg-slate-950 z-40 scroll p-10 transition-all"
+  class="fixed inset-0 bg-slate-950 z-40 scroll p-10 transition-all hidden"
   id="wrapper"
 >
   <div class="space-y-3 flex flex-col text-2xl" id="content">
@@ -12,6 +12,42 @@
   const content = document.getElementById("content");
   const wrapper = document.getElementById("wrapper");
   let isIntroDone = false;
+
+  const closeIntro = () => {
+    if (!isIntroDone) return;
+
+    // Scroll to top
+    // Just in case the user scrolled down
+    window.scrollTo(0, 0);
+
+    wrapper?.classList.add("opacity-0", "scale-0");
+    localStorage.setItem("lastVisit", new Date().toString());
+
+    setTimeout(() => {
+      wrapper?.remove();
+    }, 500);
+  };
+
+  document.addEventListener("keydown", closeIntro);
+  body?.addEventListener("click", closeIntro);
+
+  const lastVisit = localStorage.getItem("lastVisit");
+
+  if (lastVisit) {
+    const date1 = new Date(lastVisit).valueOf();
+    const date2 = new Date().valueOf();
+    const timeDifference = Math.abs(date2 - date1);
+    const differenceInHours = Math.ceil(timeDifference / (1000 * 60 * 60));
+
+    if (differenceInHours < 6) {
+      isIntroDone = true;
+      closeIntro();
+    } else {
+      wrapper?.classList.remove("hidden");
+    }
+  } else {
+    wrapper?.classList.remove("hidden");
+  }
 
   const timeOfDay = (): string => {
     const time = new Date().getHours();
@@ -75,22 +111,6 @@
       content?.appendChild(textWrapper);
       if (index === texts.length - 1) isIntroDone = true;
     }, (500 + Math.random() * 100) * (index + 1));
-
-    const closeIntro = () => {
-      if (!isIntroDone) return;
-
-      // Scroll to top
-      // Just in case the user scrolled down
-      window.scrollTo(0, 0);
-
-      wrapper?.classList.add("opacity-0", "scale-0");
-      setTimeout(() => {
-        wrapper?.remove();
-      }, 500);
-    };
-
-    document.addEventListener("keydown", closeIntro);
-    body?.addEventListener("click", closeIntro);
   });
 </script>
 

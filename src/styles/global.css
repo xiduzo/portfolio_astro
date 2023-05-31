@@ -35,7 +35,7 @@ a {
 
 #markdown-content ol,
 #markdown-content p {
-  @apply text-3xl mb-36 gap-x-16 max-w-4xl m-auto font-light;
+  @apply text-2xl md:text-3xl mb-36 gap-x-16 max-w-4xl m-auto font-light;
 }
 
 #markdown-content ol li {
@@ -106,7 +106,7 @@ a {
 }
 
 #markdown-content .container > p a {
-  @apply p-3 -m-3 text-3xl underline underline-offset-1;
+  @apply p-3 -m-3 text-2xl md:text-3xl underline underline-offset-1;
 }
 
 #markdown-content .container > p:has(> a) a {

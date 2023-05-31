@@ -1,5 +1,5 @@
 <section
-  class="fixed inset-0 bg-slate-950 z-40 scroll p-10 transition-all hidden"
+  class="fixed inset-0 bg-slate-950 z-40 scroll p-2 md:p-10 transition-all hidden"
   id="wrapper"
 >
   <div class="space-y-3 flex flex-col text-2xl" id="content">
@@ -86,7 +86,8 @@
     textWrapper.classList.add(
       "grid",
       "grid-cols-2",
-      "gap-3",
+      "md:gap-3",
+      "gap-1",
       "grid-cols-[1fr,10fr]"
     );
 
@@ -95,7 +96,8 @@
     status.classList.add(
       "text-green-600",
       "font-extrabold",
-      "px-4",
+      "px-2",
+      "md:px-4",
       "uppercase"
     );
     status.ariaHidden = "true";

@@ -40,7 +40,6 @@ import HeaderLink from "./HeaderLink.astro";
   const header = document.querySelector("header") as HTMLElement;
 
   menu?.addEventListener("click", () => {
-    console.log(menu.checked);
     if (menu.checked) {
       header.classList.add("h-[100vh]");
     } else {

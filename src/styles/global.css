@@ -5,7 +5,7 @@
  */
 * {
   @apply text-slate-900;
-  font-display: "swap";
+  font-display: "fallback";
 }
 
 body {
@@ -18,7 +18,7 @@ main {
 }
 
 a {
-  @apply hover:bg-yellow-50 focus:bg-yellow-400 p-4 md:p-2 focus:outline-none inline-block text-lg transition-all;
+  @apply focus:bg-yellow-400 p-6 md:p-4 focus:outline-none inline-block text-lg transition-all;
 }
 
 #markdown-content .container > blockquote p {
@@ -98,11 +98,11 @@ a {
 }
 
 #markdown-content .container > p a {
-  @apply p-0 text-3xl underline underline-offset-1;
+  @apply p-3 -m-3 text-3xl underline underline-offset-1;
 }
 
 #markdown-content .container > p:has(> a) a {
-  @apply border-2 p-4 border-black hover:bg-yellow-300 text-2xl;
+  @apply p-4 text-2xl;
 }
 
 #markdown-content .container > p:has(> a) a:after {

@@ -1,0 +1,110 @@
+---
+// credits: https://codepen.io/electerious/pen/ZwKrmZ
+---
+
+<div id="custom-cursor"></div>
+
+<script>
+  type State = {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    radius: string;
+    scale?: string;
+  };
+
+  const updateProperties = (elem: HTMLElement, state: State) => {
+    elem.style.setProperty("--x", `${state.x}px`);
+    elem.style.setProperty("--y", `${state.y}px`);
+    elem.style.setProperty("--width", `${state.width}px`);
+    elem.style.setProperty("--height", `${state.height}px`);
+    elem.style.setProperty("--radius", state.radius);
+    if (state.scale) elem.style.setProperty("--scale", state.scale);
+  };
+
+  const cursor = document.querySelector("#custom-cursor");
+  let onElement: null | Element = null;
+
+  const createState = (e: MouseEvent): State => {
+    const defaultState: State = {
+      x: e.clientX,
+      y: e.clientY,
+      width: 56,
+      height: 56,
+      radius: "100px",
+    };
+
+    const computedState: Partial<State> = {};
+
+    if (onElement != null) {
+      const { top, left, width, height } = onElement.getBoundingClientRect();
+      const radius = window.getComputedStyle(onElement).borderTopLeftRadius;
+
+      computedState.x = left + width / 2;
+      computedState.y = top + height / 2;
+      computedState.width = width;
+      computedState.height = height;
+      computedState.radius = radius;
+    }
+
+    return {
+      ...defaultState,
+      ...computedState,
+    };
+  };
+
+  document.addEventListener("mousemove", (e) => {
+    const state = createState(e);
+    updateProperties(cursor as HTMLElement, state);
+  });
+
+  document.querySelectorAll("a, button").forEach((elem) => {
+    elem.addEventListener("mouseenter", () => (onElement = elem));
+    elem.addEventListener("mouseleave", () => (onElement = null));
+  });
+</script>
+
+<style>
+  body {
+    @apply cursor-none;
+    cursor: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body:not(body:hover) #custom-cursor::after {
+    @apply opacity-0 scale-0;
+  }
+
+  #custom-cursor {
+    @apply fixed top-0 left-0 transform-gpu duration-100 ease-in-out z-50 pointer-events-none;
+    display: none;
+    width: var(--width);
+    height: var(--height);
+    transform: translate(
+      calc(var(--x) - var(--width) / 2),
+      calc(var(--y) - var(--height) / 2)
+    );
+    transition-timing-function: cubic-bezier(0.25, 0.25, 0.42, 1);
+    transition-property: width, height, transform;
+    will-change: transform;
+  }
+
+  @media (pointer: fine) {
+    #custom-cursor {
+      @apply block;
+    }
+  }
+
+  #custom-cursor::after {
+    @apply absolute inset-0 border-8 border-yellow-400;
+    content: "";
+    border-radius: var(--radius);
+    opacity: var(--scale);
+    transform: scale(var(--scale));
+    transition: 0.3s cubic-bezier(0.25, 0.25, 0.42, 1) opacity,
+      0.3s cubic-bezier(0.25, 0.25, 0.42, 1) transform,
+      0.1s cubic-bezier(0.25, 0.25, 0.42, 1) border-radius;
+  }
+</style>

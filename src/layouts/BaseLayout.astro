@@ -4,8 +4,7 @@ import "@fontsource/caveat";
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-// @ts-ignore
-// import AnimatedCursor from "react-animated-cursor";
+import Cursor from "../components/Cursor.astro";
 
 type Props = {
   title: string;
@@ -21,22 +20,11 @@ const { title, description } = Astro.props;
     <BaseHead title={title} description={description} />
   </head>
   <body class="scroll-smooth">
+    <Cursor />
     <a
       class="transition left-0 bg-primary z-30 absolute p-3 m-3 -translate-y-16 focus:translate-y-0"
       href="#main-content">Jump to content</a
     >
-    <!-- <AnimatedCursor
-      client:only
-      showSystemCursor={false}
-      trailingSpeed={6}
-      innerSize={12}
-      innerScale={0.6}
-      color="193, 11, 111"
-      outerSize={8}
-      outerScale={8}
-      outerAlpha={0.2}
-      clickables={["a", "button"]}
-    /> -->
     <Header />
     <main id="main-content" class="z-10 mb-[100vh] shadow-xl">
       <slot />

@@ -22,7 +22,7 @@ const projects = (await getCollection("portfolio")).sort((a, b) => {
             class="flex lg:space-x-4 stroke-white group lg:flex-row flex-col"
             aria-label={`project: ${project.data.title}, ${project.data.description}`}
           >
-            <div class="lg:max-w-screen-md w-fit lg:absolute transition-all lg:left-40 lg:opacity-0 opacity-100 block group-hover:opacity-100 group-hover:left-60 lg:-mt-32">
+            <div class="pointer-events-none lg:max-w-screen-md w-fit lg:absolute transition-all lg:left-40 lg:opacity-0 opacity-100 block group-hover:opacity-100 group-hover:left-60 lg:-mt-32">
               <Image
                 src={project.data.heroImage}
                 alt={project.data.description}

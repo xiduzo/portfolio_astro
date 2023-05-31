@@ -3,15 +3,15 @@
 // import { Img } from "astro-imagetools/components";
 
 export interface Props extends astroHTML.JSX.ImgHTMLAttributes {
-  src: string
-  alt: string
+  src: string;
+  alt: string;
   /**
    * aria-hidden attribute
    */
-  hidden?: boolean | "false" | "true"
+  hidden?: boolean | "false" | "true";
 }
 
-const { hidden, ...rest} = Astro.props
+const { hidden, ...rest } = Astro.props;
 ---
 
 <div aria-hidden={hidden}>

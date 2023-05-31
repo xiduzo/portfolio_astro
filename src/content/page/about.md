@@ -2,7 +2,7 @@
 title: "Sander Boer"
 description: "A passionate developer with a creative mind"
 pubDate: "Mar 21 2017"
-headerColor: "#4BB39A"
+headerColor: "#DC8817"
 backgroundColor: "#FFF"
 heroImage: "/page/about/sander.jpg"
 ---

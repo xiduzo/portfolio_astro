@@ -3,25 +3,42 @@ const today = new Date();
 ---
 
 <footer
-  class="bg-purple-300 h-[30vh] flex flex-col lg:flex-row justify-between items-start lg:items-end p-12 py-72 lg:py-12 container max-w-full"
+  class="fixed inset-0 -z-10 bg-slate-900 flex flex-col justify-between p-12 container max-w-full"
 >
-  <section class="-rotate-90 -ml-5 lg:mb-9">
-    &copy; {today.getFullYear()}, <span class="block">Sander Boer</span>
-  </section>
-  <ul
-    class="flex flex-col space-y-4 mt-10 lg:mt-0 lg:space-y-0 lg:flex-row lg:space-x-12"
-  >
-    <li>
-      <a rel="noreferrer" target="_blank" href="tel:+31636548880">Call me</a>
+  <ul class="grid lg:grid-cols-3 space-y-8 lg:space-y-0">
+    <li class="text-slate-100 hover:text-slate-800 text-center lg:text-start">
+      <a href="/">Sander Boer</a>
     </li>
-    <li>
-      <a rel="noreferrer" target="_blank" href="mailto:mail@sanderboer.nl"
-        >Mail me</a
+    <li class="text-slate-100 opacity-30 text-center">
+      &copy; {today.getFullYear()}
+    </li>
+    <li class="text-slate-100 hover:text-slate-800 text-center lg:text-end">
+      <a href="https://github.com/xiduzo" target="_blank">What I'm up to</a>
+    </li>
+  </ul>
+  <div class="text-center">
+    <a class="text-slate-100 hover:text-slate-800 text-9xl font-extrabold"
+      >Let's have a chat</a
+    >
+  </div>
+  <ul class="grid lg:grid-cols-3 space-y-8 lg:space-y-0">
+    <li class="text-center lg:text-start">
+      <a
+        class="text-slate-100 hover:text-slate-800"
+        target="_blank"
+        href="tel:+31636548880">Call me</a
       >
     </li>
-    <li>
+    <li class="text-center">
       <a
-        rel="noreferrer"
+        class="text-slate-100 hover:text-slate-800"
+        target="_blank"
+        href="mailto:mail@sanderboer.nl">Mail me</a
+      >
+    </li>
+    <li class="text-center lg:text-end">
+      <a
+        class="text-slate-100 hover:text-slate-800"
         target="_blank"
         href="https://www.linkedin.com/in/sander-boer-653110a5"
         >Connect with me</a

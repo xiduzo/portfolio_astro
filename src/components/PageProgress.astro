@@ -20,21 +20,28 @@ const { color } = Astro.props;
       document.documentElement.scrollTop ||
       document.body.scrollTop;
 
-    const pageHeight = Math.max(
-      document.body.scrollHeight,
-      document.body.offsetHeight,
-      document.documentElement.clientHeight,
-      document.documentElement.scrollHeight,
-      document.documentElement.offsetHeight
-    );
+    const main = document.querySelector("main");
+    const aside = document.querySelector("aside");
 
-    const scrollableContent = pageHeight - window.innerHeight;
+    if (!main) return;
+    if (!aside) return;
+
+    const scrollableContent =
+      main.clientHeight - aside.clientHeight - window.innerHeight;
 
     const progress = (scrollOffset * 100) / scrollableContent;
 
     document.documentElement.style.setProperty(
       "--page-scroll-progress",
       progress.toString() + "%"
+    );
+
+    const opacity =
+      aside.offsetTop - aside.clientHeight - 200 > window.scrollY ? 1 : 0;
+
+    document.documentElement.style.setProperty(
+      "--page-scroll-progress-opacity",
+      opacity.toString()
     );
   };
 
@@ -45,5 +52,6 @@ const { color } = Astro.props;
 <style>
   #page-scroll-progress {
     width: var(--page-scroll-progress);
+    opacity: var(--page-scroll-progress-opacity);
   }
 </style>

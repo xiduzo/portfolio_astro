@@ -36,6 +36,7 @@ Spirit is suitable to be applied for self-treatment or, preferably, under the au
 
 By implementing gamification techniques we empower patients to improve their life by helping them to understand the benefits of following the Exposure Response Prevention (ERP) therapy in a playful way.
 
+**Some badge designs**
 ![badges representing the gamified experience in the spirit application](/portfolio/spirit/badges.png)
 
 _Narrative_
@@ -61,6 +62,7 @@ Setting a long term goal will remind the patient of their intrinsic motivation f
 
 <a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about your work,">Tell me more</a>
 
+**Presenting Spirit at the Games for Health conference**
 ![Presenting the spirit application at the Games for Health - Europe conference together with Carmen Scherbaum](/portfolio/spirit/games_for_health.png)
 
 _Invited to_

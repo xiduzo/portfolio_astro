@@ -45,6 +45,7 @@ _Learning through play_
 Livestock is a multiplayer research tool that utilizes the human brain's ability to subconsciously learn abstract and complex concepts. While it may appear to be another "Farmville"-style game, it's actually based on the blockchain technology that supports cryptocurrencies. <br/><br/>
 The tool adds abstract blockchain concepts as layers to the game and simulates the blockchain market through the farm in real-time multiplayer mode.
 
+**Snapshots of the design process**
 ![screen progressing during development of the livestock application](/portfolio/livestock/progress.png)
 
 _Symbolism_
@@ -53,12 +54,15 @@ To get started in the crypto world, gold is used to represent fiat currency, and
 
 ![Using symbolism inside of the screens of the livestock application](/portfolio/livestock/symbolism.png)
 
-![Paper prototyping symbolism for the livestock application](/portfolio/livestock/symbolism_test.png)
 
 _Graspable_
 As the LiveStock session progresses, increasingly complex blockchain concepts will be introduced, including Proof-of-Work algorithms, cryptocurrencies with varying elasticities, and soft- and hardware ledgers. Users can explore and experience these concepts and their choices will impact the outcome of the session.
 
+**User testing with a paper prototype**
 ![paper prototyping the flow of the livestock application](/portfolio/livestock/paper_prototype.png)
+
+**Some symbolisms started to emerge during the paper prototype**
+![Paper prototyping symbolism for the livestock application](/portfolio/livestock/symbolism_test.png)
 
 _Competition_
 Healthy competition can spur creativity and encourage people to approach things from a different perspective. In Livestock, players can choose to store their products in either an open wallet (the barn) or a more secure, offline wallet (the vault). The vault is password-protected and impervious to theft (blockchain hacks).

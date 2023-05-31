@@ -22,7 +22,7 @@ export const ScrollingText: FC<Props> = ({
         window.pageYOffset ||
         document.documentElement.scrollTop ||
         document.body.scrollTop;
-      setOffset(-scrollOffset / 2);
+      setOffset(-scrollOffset * 1.5);
     };
 
     document.addEventListener("scroll", listener);
@@ -32,11 +32,11 @@ export const ScrollingText: FC<Props> = ({
   return (
     <section
       aria-hidden="true"
-      className="h-96 w-full uppercase -mt-20 flex items-end overflow-hidden"
+      className="h-96 w-full uppercase -mt-20 flex items-end overflow-hidden bg-slate-100"
       style={{ background }}
     >
       <motion.div
-        className="relative whitespace-nowrap text-8xl font-extrabold tracking-widest translate-y-9 space-x-12"
+        className="relative whitespace-nowrap text-9xl translate-y-10 lg:text-[256px] font-extrabold tracking-widest lg:translate-y-28 space-x-32"
         initial={{ opacity: 0, left: "0vw" }}
         animate={{ opacity: 1, left: "-5vw" }}
         transition={{ duration: 0.3, delay: 0.8 }}

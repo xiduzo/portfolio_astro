@@ -53,14 +53,15 @@ Spirit is making use of playful design to make mood tracking more accessible and
 ![all monsters representing the Cognitive Behavioral Therapy (CBT) worksheet levels of the ladder](/portfolio/spirit/monsters_grouped.png)
 
 _Quantified self_
-By giving insights into performed exercises patients will be guided into performing their exercises on a regular basis. The patients will be able to see the effect of their Exposure Response Prevention (ERP) treatment progress outside of the sessions with their therapist. All exercises will be kept in a local diary for the patient to reflect upon and gain insight into their progress over time. Entries can be shared with the therapist if the patient desires so.
+By giving insights into performed exercises patients will be guided into performing their exercises on a regular basis. The patients will be able to see the effect of their Exposure Response Prevention (ERP) treatment progress outside of the sessions with their therapist.<br/><br/>
+All exercises will be kept in a local diary for the patient to reflect upon and gain insight into their progress over time. Entries can be shared with the therapist if the patient desires so.
 
 ![choosing different moods during an Exposure Response Prevention (ERP) exercise in the spirit application](/portfolio/spirit/fear_levels.png)
 
 _Goals & nudges_
 Setting a long term goal will remind the patient of their intrinsic motivation for doing their exercises. Besides this Spirit provides short term goals in the form of badges which can be earned by doing your exercises on a regular basis, nudging you to achieve your long term personal goal.
 
-<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about your work,">Tell me more</a>
+<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about your work," aria-label="Send me an email to I can tell you more">Tell me more</a>
 
 **Presenting Spirit at the Games for Health conference**
 ![Presenting the spirit application at the Games for Health - Europe conference together with Carmen Scherbaum](/portfolio/spirit/games_for_health.png)

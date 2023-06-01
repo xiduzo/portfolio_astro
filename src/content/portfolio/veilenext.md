@@ -74,7 +74,7 @@ _2. Websockets_
 The current systems use UDP/multi-cast to broadcast messages to all active buyers. Although this technology is proven, there are some issues that require the system to send messages multiple times to ensure that all clients receive the correct data. To replace UDP messaging, any new technology must meet two requirements:<br/><br/>
 a) Ensure that all clients receive real-time updates<br/>
 b) Provide an average maximum latency of 90ms from anywhere in the world<br/><br/>
-After researching various technologies and their implementations, we determined that the <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/websockets?view=aspnetcore-6.0" target="_blank">.NET implementation</a> was the most appropriate solution for our
+After researching various technologies and their implementations, we determined that the <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/websockets?view=aspnetcore-6.0" target="_blank">.NET implementation</a> was the most appropriate solution for our needs.
 </span>
 
 _3. Continuous Integration / Continuous Delivery (CI/CD)_
@@ -99,7 +99,7 @@ To improve accessibility, we have developed a new system that utilizes a browser
 
 The project is still under active development and is envisioned to be tested late 2022
 
-<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about your work,">Tell me more</a>
+<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about your work," aria-label="Send me an email to I can tell you more">Tell me more</a>
 
 _Mentioned at_
 <span>

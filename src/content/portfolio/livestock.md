@@ -56,13 +56,13 @@ To get started in the crypto world, gold is used to represent fiat currency, and
 
 
 _Graspable_
-As the LiveStock session progresses, increasingly complex blockchain concepts will be introduced, including Proof-of-Work algorithms, cryptocurrencies with varying elasticities, and soft- and hardware ledgers. Users can explore and experience these concepts and their choices will impact the outcome of the session.
+As the LiveStock session progresses, increasingly complex blockchain concepts will be introduced, including Proof-of-Work algorithms, cryptocurrencies with varying volatilities, and soft- and hardware ledgers. Users can explore and experience these concepts and their choices will impact the outcome of the session.
 
 **User testing with a paper prototype**
 ![paper prototyping the flow of the livestock application](/portfolio/livestock/paper_prototype.png)
 
 **Some symbolisms started to emerge during the paper prototype**
-![Paper prototyping symbolism for the livestock application](/portfolio/livestock/symbolism_test.png)
+![Symbolisms which appeared during the paper prototyping process](/portfolio/livestock/symbolism_test.png)
 
 _Competition_
 Healthy competition can spur creativity and encourage people to approach things from a different perspective. In Livestock, players can choose to store their products in either an open wallet (the barn) or a more secure, offline wallet (the vault). The vault is password-protected and impervious to theft (blockchain hacks).
@@ -76,7 +76,7 @@ LiveStock <a href="https://github.com/xiduzo/blockchaingame/blob/debdb89793332c2
 Users can trade commodities or use animals to produce them, with the aim of identifying good and bad wallet design strategies.
 </span>
 
-<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about your work,">Tell me more</a>
+<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about your work," aria-label="Send me an email to I can tell you more">Tell me more</a>
 
 _Mentioned at_
 <span>

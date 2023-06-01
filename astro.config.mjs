@@ -16,7 +16,13 @@ export default defineConfig({
     sitemap(),
     tailwind(),
     react(),
-    compress(),
+    compress({
+      css: true,
+      html: true,
+      js: true,
+      svg: true,
+      img: false,
+    }),
     image({
       serviceEntryPoint: '@astrojs/image/sharp',
     }),

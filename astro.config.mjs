@@ -30,6 +30,8 @@ export default defineConfig({
   output: "static",
   outDir: "./.vercel/output/static",
   adapter: vercel({
+    analytics: true,
+    imageService: true,
     imageConfig: {
       sizes: [320, 640, 1280]
     }

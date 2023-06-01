@@ -36,7 +36,7 @@ export const ScrollingText: FC<Props> = ({
       style={{ background }}
     >
       <motion.div
-        className="relative whitespace-nowrap text-9xl translate-y-10 lg:text-[256px] font-extrabold tracking-widest lg:translate-y-28 space-x-32"
+        className="relative whitespace-nowrap text-9xl translate-y-10 lg:text-[256px] font-extrabold tracking-widest lg:translate-y-20 space-x-32"
         initial={{ opacity: 0, left: "0vw" }}
         animate={{ opacity: 1, left: "-5vw" }}
         transition={{ duration: 0.3, delay: 0.8 }}

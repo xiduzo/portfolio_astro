@@ -1,6 +1,8 @@
 ---
 import "@fontsource/space-grotesk";
 import "@fontsource/caveat";
+import { Analytics } from "@vercel/analytics/react";
+
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
@@ -21,8 +23,9 @@ const { title, description } = Astro.props;
   </head>
   <body class="scroll-smooth">
     <Cursor />
+    <Analytics />
     <a
-      class="absolute left-0 z-30 p-3 m-3 transition bg-primary -translate-y-16 focus:translate-y-0"
+      class="absolute left-0 z-30 p-3 m-3 transition -translate-y-16 bg-primary focus:translate-y-0"
       href="#main-content">Jump to content</a
     >
     <Header />

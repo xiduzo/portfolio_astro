@@ -9,11 +9,7 @@ export interface Props extends HTMLAttributes<"time"> {
 const { date, format, ...props } = Astro.props;
 ---
 
-<time
-  datetime={new Date(date).toISOString()}
-  aria-label={new Date(date).toLocaleDateString()}
-  {...props}
->
+<time datetime={new Date(date).toISOString()} {...props}>
   {
     new Date(date).toLocaleDateString(
       "en-us",

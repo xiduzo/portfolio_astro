@@ -1,11 +1,11 @@
 ---
-export interface Props extends astroHTML.JSX.ImgHTMLAttributes {}
+import { Image } from "astro:assets";
+
+export interface Props {
+  src: string;
+  alt: string;
+}
+const { src, alt } = Astro.props;
 ---
 
-<img
-  loading="lazy"
-  decoding="async"
-  width={1920}
-  height={1080}
-  {...Astro.props}
-/>
+<Image src={src} alt={alt} width={1920} height={1080} />

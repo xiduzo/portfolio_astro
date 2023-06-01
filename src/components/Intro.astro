@@ -12,10 +12,13 @@
   const content = document.getElementById("content");
   const wrapper = document.getElementById("wrapper");
   let isIntroDone = false;
+  let hasSeenIntro = false;
 
   const closeIntro = () => {
     if (!isIntroDone) return;
+    if (hasSeenIntro) return;
 
+    hasSeenIntro = true;
     // Scroll to top
     // Just in case the user scrolled down
     window.scrollTo(0, 0);
@@ -42,6 +45,7 @@
     if (differenceInHours > 6) {
       wrapper?.classList.remove("hidden");
     } else {
+      hasSeenIntro = true;
       wrapper?.remove();
     }
   } else {

@@ -8,7 +8,8 @@ backgroundColor: "#FFF"
 heroImage: "/portfolio/spirit/showreel.png"
 ---
 
-> _"A monster in my mind"_ <br /> Obsessive-compulsive disorder has had a profound impact on my life, muffling my school grades, discontinuing my social life and even forcing me to drop out of university <br/><br/> - OCD patient
+> _A monster in my mind_ Obsessive-compulsive disorder has had a profound impact on my life, muffling my school grades, discontinuing my social life and even forcing me to drop out of university
+> <cite>OCD patient</cite>
 
 ![visualization of monsters which can occupy the patients mind](/portfolio/spirit/monsters.png)
 
@@ -25,7 +26,8 @@ How can we engage patients following the Cognitive Behavioral Therapy (CBT) in a
 ![sketches of the paper spirit prototype](/portfolio/spirit/sketch.png)
 
 _Outcome_
-Empowering patients to do their exposure exercises on a regular basis. Making mood tracking more accessible and engaging through gamification and playful design, creating a safe and comfortable environment for patients to do their exercises.<br/> <br/>
+Empowering patients to do their exposure exercises on a regular basis. Making mood tracking more accessible and engaging through gamification and playful design, creating a safe and comfortable environment for patients to do their exercises.
+<br/><br/>
 Spirit is suitable to be applied for self-treatment or, preferably, under the auspices of an expert therapist.
 
 ![a selection of app screens of the spirit application](/portfolio/spirit/screens.png)
@@ -40,9 +42,13 @@ By implementing gamification techniques we empower patients to improve their lif
 ![badges representing the gamified experience in the spirit application](/portfolio/spirit/badges.png)
 
 _Narrative_
-<span>Spirit emphasizes patients' compulsions as the monsters they sometimes feel in their minds. By completing exposure exercises the monsters will shrink into unharmful babies which can be controlled by the patient.<br/><br/>
-For the basis of the narrative within Spirit, we make use of the <a href="https://www.psychologytools.com/resource/avoidance-hierarchy" target="_blank">Avoidance hierarchy</a>. The avoidance hierarchy is a Cognitive Behavioral Therapy (CBT) worksheet that represents a fear or avoidance hierarchy that helps patients to plan exposure tasks.<br/><br/>
-Each level in this ladder will be externalized by a different monster in Spirit to represent their problematic obsessive thoughts and compulsive behaviors.</span>
+<span>
+    Spirit emphasizes patients' compulsions as the monsters they sometimes feel in their minds. By completing exposure exercises the monsters will shrink into unharmful babies which can be controlled by the patient
+    <br/><br/>
+    For the basis of the narrative within Spirit, we make use of the <a href="https://www.psychologytools.com/resource/avoidance-hierarchy" target="_blank">Avoidance hierarchy</a>. The avoidance hierarchy is a Cognitive Behavioral Therapy (CBT) worksheet that represents a fear or avoidance hierarchy that helps patients to plan exposure tasks.
+    <br/><br/>
+    Each level in this ladder will be externalized by a different monster in Spirit to represent their problematic obsessive thoughts and compulsive behaviors.
+</span>
 
 ![testing the user-flow of the spirit application](/portfolio/spirit/user_flow.png)
 
@@ -61,23 +67,25 @@ All exercises will be kept in a local diary for the patient to reflect upon and 
 _Goals & nudges_
 Setting a long term goal will remind the patient of their intrinsic motivation for doing their exercises. Besides this Spirit provides short term goals in the form of badges which can be earned by doing your exercises on a regular basis, nudging you to achieve your long term personal goal.
 
-<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about your work," aria-label="Send me an email to I can tell you more">Tell me more</a>
+<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about Spirit," aria-label="Send me an email to I can tell you more">I'd like to know more</a>
 
 **Presenting Spirit at the Games for Health conference**
 ![Presenting the spirit application at the Games for Health - Europe conference together with Carmen Scherbaum](/portfolio/spirit/games_for_health.png)
 
+<hr />
+
 _Invited to_
 <span>
-<a href="https://web.archive.org/web/20220526214733/https://www.gamesforhealtheurope.org/speaker/sander-boer" target="_blank">Games for health Europe</a>
+    <a href="https://web.archive.org/web/20220526214733/https://www.gamesforhealtheurope.org/speaker/sander-boer" target="_blank">Games for health Europe</a>
 </span>
 
 _In collaboration with_
 <span>
-<a href="https://carmenscherbaum.myportfolio.com" target="_blank">Carmen Scherbaum</a><br/><br/>
-<a href="https://clinical-neuropsychology.de/steffen-moritz" target="_blank">Prof. Dr. Steffen Moritz</a>
+    <a href="https://carmenscherbaum.myportfolio.com" target="_blank">Carmen Scherbaum</a><br/><br/>
+    <a href="https://clinical-neuropsychology.de/steffen-moritz" target="_blank">Prof. Dr. Steffen Moritz</a>
 </span>
 
 _References_
 <span>
-<a href="https://github.com/xiduzo/ocdTreatmentApp" target="_blank">Code</a>
+    <a href="https://github.com/xiduzo/ocdTreatmentApp" target="_blank">Code</a>
 </span>

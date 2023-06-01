@@ -28,8 +28,10 @@ Giving- or asking for feedback can be a tough task, especially for first-year st
 
 _A contract_
 With Athena students of a project team are creating a contract at the start of the project with each other. This contract contains all indicators on which the students will give each other feedback upon.<br/><br/>
-The indicators are divided into 4 competences; Attitude, accountability, knowledge development and functioning within the group.<br/><br/>
-Project coordinators can set initial indicators which the students can select for their contract. Besides, Athena also allows each team to make their own indicators on which they think the whole team should act upon.<br/><br/>
+The indicators are divided into 4 competences; Attitude, accountability, knowledge development and functioning within the group.
+<br/><br/>
+Project coordinators can set initial indicators which the students can select for their contract. Besides, Athena also allows each team to make their own indicators on which they think the whole team should act upon.
+<br/><br/>
 All students within a project team give weekly feedback to each other on the agreed upon indicators.
 
 **Insights into trello activities**
@@ -45,10 +47,12 @@ _Performance_
 Besides feedback as an indicator in team dynamics performance and division of tasks are sometimes hard to see for project groups and teachers alike. <br/><br/>
 Some teachers of CMD are using a scrum like approach with their project teams in order to follow the progress of a project. Athena has the option to connect any project group to a trello board if a teacher would like to.
 
-<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about your work," aria-label="Send me an email to I can tell you more">Tell me more</a>
+<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about Athena," aria-label="Send me an email to I can tell you more">I'd like to know more</a>
+
+<hr />
 
 _References_
 <span>
-<a href="https://github.com/xiduzo/afstudeerproject_backend" target="_blank">Code (server)</a><br/><br/>
-<a href="https://github.com/xiduzo/afstudeerproject" target="_blank">Code (app)</a>
+    <a href="https://github.com/xiduzo/afstudeerproject_backend" target="_blank">Code (server)</a><br/><br/>
+    <a href="https://github.com/xiduzo/afstudeerproject" target="_blank">Code (app)</a>
 </span>

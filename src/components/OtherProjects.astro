@@ -20,11 +20,8 @@ const projects = (await getCollection("portfolio"))
     class="flex w-full gap-2 px-12 pb-8 overflow-x-auto md:gap-12 snap-x snap-mandatory scroll-px-12"
   >
     {
-      [...projects, ...projects].map((project, index) => (
-        <li
-          class="snap-always snap-center md:snap-end relative shrink-0 w-[75vw] md:w-[60vw] lg:w-[35vw]"
-          aria-hidden={index > projects.length - 1}
-        >
+      projects.map((project, index) => (
+        <li class="snap-always snap-center md:snap-end relative shrink-0 w-[75vw] md:w-[60vw] lg:w-[35vw]">
           <a
             class="h-full"
             href={`/portfolio/${project.slug}`}

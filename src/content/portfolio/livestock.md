@@ -12,9 +12,10 @@ heroImage: "/portfolio/livestock/showreel.png"
 
 _Problem_
 <span>
-Can we simplify the concept of blockchain so that it's accessible to everyone? Bitcoin emerged in 2009 when the global financial crisis had left a profound impact on society.<br/><br/>
-The technology that underpins Bitcoin is called blockchain, which initially began as a way to offer an alternative to the traditional financial system. However, blockchain has gradually been adopted by the financial sector.<br/><br/>
-<a href="https://networkcultures.org" target="_blank">The Institute of Network Cultures</a> is researching how cryptocurrency wallets can be designed to help more people understand the impact of blockchain technology. Their aim is to determine what constitutes good or bad wallet design.
+    Can we simplify the concept of blockchain so that it's accessible to everyone? Bitcoin emerged in 2009 when the global financial crisis had left a profound impact on society.<br/><br/>
+    The technology that underpins Bitcoin is called blockchain, which initially began as a way to offer an alternative to the traditional financial system. However, blockchain has gradually been adopted by the financial sector.
+    <br/><br/>
+    <a href="https://networkcultures.org" target="_blank">The Institute of Network Cultures</a> is researching how cryptocurrency wallets can be designed to help more people understand the impact of blockchain technology. Their aim is to determine what constitutes good or bad wallet design.
 </span>
 
 ![mind map research into blockchain and wallets](/portfolio/livestock/mindmap.png)
@@ -71,27 +72,31 @@ Healthy competition can spur creativity and encourage people to approach things 
 
 _Market volatility_
 <span>
-LiveStock <a href="https://github.com/xiduzo/blockchaingame/blob/debdb89793332c27b2ae9a508c9bd14d905c0d9e/src/app/routes/room/room.controller.js#L287" target="_blank">generates</a> a new market for each session to increase unpredictability. With wool being stable and inexpensive, and bacon being expensive and unstable.<br/><br/>
-<em>Who doesn't want that sweet ol' bacon right?</em><br/><br/>
-Users can trade commodities or use animals to produce them, with the aim of identifying good and bad wallet design strategies.
+    LiveStock <a href="https://github.com/xiduzo/blockchaingame/blob/debdb89793332c27b2ae9a508c9bd14d905c0d9e/src/app/routes/room/room.controller.js#L287" target="_blank">generates</a> a new market for each session to increase unpredictability. With wool being stable and inexpensive, and bacon being expensive and unstable.
+    <br/><br/>
+    <em>Who doesn't want that sweet ol' bacon right?</em>
+    <br/><br/>
+    Users can trade commodities or use animals to produce them, with the aim of identifying good and bad wallet design strategies.
 </span>
 
-<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about your work," aria-label="Send me an email to I can tell you more">Tell me more</a>
+<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about LiveStock," aria-label="Send me an email to I can tell you more">I'd like to know more</a>
+
+<hr />
 
 _Mentioned at_
 <span>
-<a href="https://networkcultures.org/moneylab/2018/06/04/students-design-blockchain-wallet-game" target="_blank">Institute of network cultures</a>
+    <a href="https://networkcultures.org/moneylab/2018/06/04/students-design-blockchain-wallet-game" target="_blank">Institute of network cultures</a>
 </span>
 
 _In collaboration with_
 <span>
-<a href="https://lenaheinrich.de" target="_blank">Lena Heinrich</a><br/><br/>
-<a href="https://chantalramzy.com" target="_blank">Chantal Ramzy</a><br/><br/>
-<a href="https://bkantar.com" target="_blank">Buğra Kantar</a>
+    <a href="https://lenaheinrich.de" target="_blank">Lena Heinrich</a><br/><br/>
+    <a href="https://chantalramzy.com" target="_blank">Chantal Ramzy</a><br/><br/>
+    <a href="https://bkantar.com" target="_blank">Buğra Kantar</a>
 </span>
 
 _References_
 <span>
-<a href="https://github.com/xiduzo/blockchainserver" target="_blank">Code (server)</a><br/><br/>
-<a href="https://github.com/xiduzo/blockchaingame" target="_blank">Code (app)</a>
+    <a href="https://github.com/xiduzo/blockchainserver" target="_blank">Code (server)</a><br/><br/>
+    <a href="https://github.com/xiduzo/blockchaingame" target="_blank">Code (app)</a>
 </span>

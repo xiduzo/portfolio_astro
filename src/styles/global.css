@@ -19,9 +19,21 @@ a {
 img {
   @apply w-full;
 }
+#markdown-content .container > hr {
+  @apply mb-32;
+}
 
 #markdown-content .container > blockquote {
   @apply px-6 md:px-0;
+}
+
+#markdown-content .container > blockquote cite {
+  @apply block mt-4 text-2xl italic;
+}
+
+#markdown-content .container > blockquote cite:before {
+  @apply mr-2;
+  content: "—";
 }
 
 #markdown-content .container > blockquote p {
@@ -29,7 +41,7 @@ img {
 }
 
 #markdown-content .container > blockquote p em {
-  @apply font-bold md:text-3xl;
+  @apply block mb-3 not-italic font-bold md:text-3xl;
 }
 
 #markdown-content ol,
@@ -101,7 +113,7 @@ img {
 }
 
 #markdown-content .container > p:has(> a) {
-  @apply text-center my-36;
+  @apply text-center my-52;
 }
 
 #markdown-content .container > p a {

@@ -15,16 +15,16 @@ const projects = (await getCollection("portfolio")).sort((a, b) => {
 <BaseLayout title="Projects" description="Portfolio website Sander Boer">
   <Intro />
   <h1 class="sr-only">Projects</h1>
-  <ol class="m-auto space-y-16 lg:space-y-72 pt-56 pb-72 container -mt-16">
+  <ol class="container pt-56 m-auto -mt-16 space-y-16 lg:space-y-72 pb-72">
     {
       projects.map((project) => (
         <li>
           <a
             href={`/portfolio/${project.slug}/`}
-            class="flex lg:space-x-4 stroke-white group lg:flex-row flex-col"
+            class="flex flex-col lg:space-x-4 stroke-white group lg:flex-row"
             aria-label={`project: ${project.data.title}, ${project.data.description}`}
           >
-            <div class="pointer-events-none lg:max-w-screen-md w-fit lg:absolute transition-all lg:left-40 lg:opacity-0 opacity-100 block group-hover:opacity-100 group-hover:left-60 lg:-mt-32">
+            <div class="block opacity-100 pointer-events-none lg:max-w-screen-md w-fit lg:absolute transition-all lg:left-40 lg:opacity-0 group-hover:opacity-100 group-hover:left-60 lg:-mt-32">
               <Image
                 src={project.data.heroImage}
                 alt={project.data.description}
@@ -32,12 +32,12 @@ const projects = (await getCollection("portfolio")).sort((a, b) => {
               />
             </div>
             <h2
-              class="lg:text-9xl text-5xl font-extrabold tracking-widest mb-4 mix-blend-multiply"
+              class="mb-4 text-5xl font-extrabold tracking-widest lg:text-9xl mix-blend-multiply"
               style={{ color: project.data.headerColor }}
             >
               {project.data.title}
             </h2>
-            <section class="text-xl max-w-xs lg:group-hover:opacity-10 transition-all">
+            <section class="max-w-xs text-xl lg:group-hover:opacity-10 transition-all">
               {project.data.description}
               <FormattedDate
                 class="block opacity-60"

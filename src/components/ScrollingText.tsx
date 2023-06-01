@@ -32,7 +32,7 @@ export const ScrollingText: FC<Props> = ({
   return (
     <section
       aria-hidden="true"
-      className="h-96 w-full uppercase -mt-20 flex items-end overflow-hidden bg-slate-100"
+      className="flex items-end w-full -mt-20 overflow-hidden uppercase h-96 bg-slate-100"
       style={{ background }}
     >
       <motion.div

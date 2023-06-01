@@ -17,7 +17,7 @@ const projects = (await getCollection("portfolio"))
 <aside class="w-full py-32" style={{ background }}>
   <h2 class="sr-only">My work</h2>
   <ol
-    class="w-full px-12 pb-8 flex gap-2 md:gap-12 overflow-x-auto snap-x snap-mandatory scroll-px-12"
+    class="flex w-full px-12 pb-8 overflow-x-auto gap-2 md:gap-12 snap-x snap-mandatory scroll-px-12"
   >
     {
       [...projects, ...projects].map((project, index) => (
@@ -35,7 +35,7 @@ const projects = (await getCollection("portfolio"))
               alt={project.data.description}
               aria-hidden="true"
             />
-            <div class="font-extrabold text-xl">
+            <div class="text-xl font-extrabold">
               {project.data.title}{" "}
               <span class="font-light description">
                 {project.data.description}

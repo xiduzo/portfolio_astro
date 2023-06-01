@@ -16,6 +16,10 @@ a {
   @apply inline-block p-6 text-lg transition-all focus:bg-yellow-400 md:p-4 focus:outline-none;
 }
 
+a[target="_blank"]:hover {
+  @apply cursor-alias;
+}
+
 img {
   @apply w-full;
 }

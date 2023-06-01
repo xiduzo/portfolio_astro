@@ -20,7 +20,8 @@ const { title, description, heroImage, headerColor } = Astro.props;
   <article id="markdown-content">
     <Image
       aria-hidden="true"
-      loading="eager"
+      width={1920}
+      height={1080}
       src={heroImage}
       alt={description}
     />

@@ -8,6 +8,8 @@ import compress from "astro-compress";
 
 import image from "@astrojs/image";
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://www.sanderboer.nl/",
@@ -33,10 +35,10 @@ export default defineConfig({
    assets: true // required for vercel adapter; imageService: true
   },
   adapter: vercel({
-    analytics: true,
-    imageService: true,
+    analytics: isProduction,
+    imageService: isProduction,
     imageConfig: {
-      sizes: [320, 640, 1280]
+      sizes: [320, 640, 1280, 1920]
     }
   })
 });

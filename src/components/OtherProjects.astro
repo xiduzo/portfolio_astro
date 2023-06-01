@@ -17,7 +17,7 @@ const projects = (await getCollection("portfolio"))
 <aside class="w-full py-32" style={{ background }}>
   <h2 class="sr-only">My work</h2>
   <ol
-    class="flex w-full px-12 pb-8 overflow-x-auto gap-2 md:gap-12 snap-x snap-mandatory scroll-px-12"
+    class="flex w-full gap-2 px-12 pb-8 overflow-x-auto md:gap-12 snap-x snap-mandatory scroll-px-12"
   >
     {
       [...projects, ...projects].map((project, index) => (
@@ -31,6 +31,8 @@ const projects = (await getCollection("portfolio"))
             aria-label={`project: ${project.data.title},${project.data.description}`}
           >
             <Image
+              width={320}
+              height={240}
               src={project.data.heroImage}
               alt={project.data.description}
               aria-hidden="true"

@@ -4,8 +4,11 @@ import { Image } from "astro:assets";
 export interface Props {
   src: string;
   alt: string;
+  width: number;
+  height: number;
 }
-const { src, alt } = Astro.props;
+
+console.log(Astro.props.src);
 ---
 
-<Image src={src} alt={alt} width={1920} height={1080} />
+<Image {...Astro.props} />

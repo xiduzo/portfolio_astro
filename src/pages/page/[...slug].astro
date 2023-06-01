@@ -1,5 +1,5 @@
 ---
-import { CollectionEntry, getCollection } from "astro:content";
+import { type CollectionEntry, getCollection } from "astro:content";
 import MarkdownContent from "../../layouts/MarkdownContent.astro";
 import Image from "../../components/Image.astro";
 
@@ -10,6 +10,7 @@ export async function getStaticPaths() {
     props: page,
   }));
 }
+
 type Props = CollectionEntry<"page">;
 
 const page = Astro.props;

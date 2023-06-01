@@ -13,7 +13,11 @@ main {
 }
 
 a {
-  @apply focus:bg-yellow-400 p-6 md:p-4 focus:outline-none inline-block text-lg transition-all;
+  @apply inline-block p-6 text-lg transition-all focus:bg-yellow-400 md:p-4 focus:outline-none;
+}
+
+img {
+  @apply w-full;
 }
 
 #markdown-content .container > blockquote {
@@ -21,7 +25,7 @@ a {
 }
 
 #markdown-content .container > blockquote p {
-  @apply grid-cols-1 max-w-lg m-auto;
+  @apply max-w-lg grid-cols-1 m-auto;
 }
 
 #markdown-content .container > blockquote p em {
@@ -30,15 +34,15 @@ a {
 
 #markdown-content ol,
 #markdown-content p {
-  @apply text-2xl md:text-3xl mb-36 gap-x-16 max-w-4xl m-auto font-light;
+  @apply max-w-4xl m-auto text-2xl font-light md:text-3xl mb-36 gap-x-16;
 }
 
 #markdown-content ol li {
-  @apply list-decimal list-outside mb-2;
+  @apply mb-2 list-decimal list-outside;
 }
 
 #markdown-content ol li::marker {
-  @apply text-gray-300 text-4xl;
+  @apply text-4xl text-gray-300;
   font-family: "caveat";
 }
 
@@ -57,7 +61,7 @@ a {
   }
 
   #markdown-content .container > p:has(em) em:first-child {
-    @apply text-2xl mb-4;
+    @apply mb-4 text-2xl;
   }
 
   #markdown-content .container > p:not(:has(img)) {
@@ -66,11 +70,11 @@ a {
 }
 
 #markdown-content .container > h2 {
-  @apply text-4xl max-w-4xl m-auto mb-4 mt-20 px-6 md:px-0 font-extrabold;
+  @apply max-w-4xl px-6 m-auto mt-20 mb-4 text-4xl font-extrabold md:px-0;
 }
 
 #markdown-content .container > p:has(img) {
-  @apply max-w-full my-48 relative;
+  @apply relative max-w-full my-48;
 }
 
 #markdown-content .container > p img {
@@ -79,7 +83,7 @@ a {
 }
 
 #markdown-content .container > p > strong {
-  @apply normal-case text-center w-full block mb-3 text-2xl;
+  @apply block w-full mb-3 text-2xl text-center normal-case;
   font-family: "caveat";
 }
 
@@ -93,7 +97,7 @@ a {
 }
 
 #markdown-content .container > p > em:first-child {
-  @apply uppercase text-lg not-italic font-bold;
+  @apply text-lg not-italic font-bold uppercase;
 }
 
 #markdown-content .container > p:has(> a) {
@@ -101,7 +105,7 @@ a {
 }
 
 #markdown-content .container > p a {
-  @apply p-3 -m-3 text-2xl md:text-3xl underline underline-offset-1;
+  @apply p-3 -m-3 text-2xl underline md:text-3xl underline-offset-1;
 }
 
 #markdown-content .container > p:has(> a) a {
@@ -109,7 +113,7 @@ a {
 }
 
 #markdown-content .container > p:has(> a) a:after {
-  @apply ml-2 mr-1 inline-block transition-all;
+  @apply inline-block ml-2 mr-1 transition-all;
   content: "→";
 }
 

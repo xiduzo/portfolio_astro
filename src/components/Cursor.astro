@@ -13,14 +13,6 @@
     radius: string;
   };
 
-  const updateProperties = (elem: HTMLElement, state: State) => {
-    elem.style.setProperty("--x", `${state.x}px`);
-    elem.style.setProperty("--y", `${state.y}px`);
-    elem.style.setProperty("--width", `${state.width}px`);
-    elem.style.setProperty("--height", `${state.height}px`);
-    elem.style.setProperty("--radius", state.radius);
-  };
-
   const cursor = document.querySelector("#custom-cursor") as HTMLElement;
   let onElement: Element | null = null;
   let prevEvent: MouseEvent | null = null;
@@ -56,6 +48,14 @@
       ...defaultState,
       ...computedState,
     };
+  };
+
+  const updateProperties = (elem: HTMLElement, state: State) => {
+    elem.style.setProperty("--x", `${state.x}px`);
+    elem.style.setProperty("--y", `${state.y}px`);
+    elem.style.setProperty("--width", `${state.width}px`);
+    elem.style.setProperty("--height", `${state.height}px`);
+    elem.style.setProperty("--radius", state.radius);
   };
 
   const updateState = (e: MouseEvent | Event) => {

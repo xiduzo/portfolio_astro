@@ -39,11 +39,10 @@
     const timeDifference = Math.abs(date2 - date1);
     const differenceInHours = Math.ceil(timeDifference / (1000 * 60 * 60));
 
-    if (differenceInHours < 6) {
-      isIntroDone = true;
-      closeIntro();
-    } else {
+    if (differenceInHours > 6) {
       wrapper?.classList.remove("hidden");
+    } else {
+      wrapper?.remove();
     }
   } else {
     wrapper?.classList.remove("hidden");

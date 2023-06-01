@@ -67,7 +67,7 @@ All exercises will be kept in a local diary for the patient to reflect upon and 
 _Goals & nudges_
 Setting a long term goal will remind the patient of their intrinsic motivation for doing their exercises. Besides this Spirit provides short term goals in the form of badges which can be earned by doing your exercises on a regular basis, nudging you to achieve your long term personal goal.
 
-<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about Spirit," aria-label="Send me an email to I can tell you more">I'd like to know more</a>
+<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about Spirit," aria-label="Send me an email to I can tell you more" target="_blank">I'd like to know more</a>
 
 **Presenting Spirit at the Games for Health conference**
 ![Presenting the spirit application at the Games for Health - Europe conference together with Carmen Scherbaum](/portfolio/spirit/games_for_health.png)

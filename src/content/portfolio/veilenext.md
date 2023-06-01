@@ -110,7 +110,7 @@ To improve accessibility, we have developed a new system that utilizes a browser
 
 The project is still under active development and is envisioned to be tested late 2022
 
-<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about VeileNext," aria-label="Send me an email to I can tell you more">I'd like to know more</a>
+<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about VeileNext," aria-label="Send me an email to I can tell you more" target="_blank">I'd like to know more</a>
 
 <hr />
 

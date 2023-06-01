@@ -97,7 +97,7 @@ img {
 }
 
 #markdown-content .container > p > em:first-child {
-  @apply text-lg not-italic font-bold uppercase;
+  @apply text-lg not-italic font-bold uppercase text-start;
 }
 
 #markdown-content .container > p:has(> a) {

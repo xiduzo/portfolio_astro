@@ -10,6 +10,8 @@ export async function getStaticPaths() {
     props: project,
   }));
 }
+
+export const components = { img: Image };
 type Props = CollectionEntry<"portfolio">;
 
 const project = Astro.props;

@@ -10,7 +10,7 @@ import image from "@astrojs/image";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "http://sanderboer.nl",
+  site: "https://www.sanderboer.nl/",
   integrations: [
     mdx(),
     sitemap(),
@@ -29,6 +29,9 @@ export default defineConfig({
   ],
   output: "static",
   outDir: "./.vercel/output/static",
+  experimental: {
+   assets: true // required for vercel adapter; imageService: true
+  },
   adapter: vercel({
     analytics: true,
     imageService: true,

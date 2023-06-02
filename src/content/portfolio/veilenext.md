@@ -108,7 +108,9 @@ To improve accessibility, we have developed a new system that utilizes a browser
 **Exploratory design to spark conversations**
 ![Exploratory design of the auctioneer interface to spark conversations](/portfolio/veilenext/exploration.png)
 
-The project is still under active development and is currently in the <a href="https://www.royalfloraholland.com/en/campaign/on-site-auctioning-eelde" target="_blank">pilot phase</a> with a small group of growers and buyers.
+<span>
+    The project is still under active development and is currently in the <a href="https://www.royalfloraholland.com/en/campaign/on-site-auctioning-eelde" target="_blank">pilot phase</a> with a small group of growers and buyers.
+</span>
 
 <a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about VeileNext," aria-label="Send me an email to I can tell you more" target="_blank">I'd like to know more</a>
 

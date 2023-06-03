@@ -27,6 +27,10 @@ img {
   @apply mb-32;
 }
 
+#markdown-content .container pre {
+  @apply max-w-4xl m-auto mb-36 p-4;
+}
+
 #markdown-content .container > blockquote {
   @apply px-6 md:px-0;
 }
@@ -44,7 +48,7 @@ img {
   @apply max-w-lg grid-cols-1 m-auto;
 }
 
-#markdown-content .container > blockquote p em {
+#markdown-content .container > blockquote p > em {
   @apply block mb-3 not-italic font-bold md:text-3xl;
 }
 
@@ -62,7 +66,7 @@ img {
   font-family: "caveat";
 }
 
-#markdown-content .container > p:has(em) {
+#markdown-content .container > p:has(> em) {
   @apply grid;
   grid-template-columns: 200px 1fr;
 }
@@ -78,6 +82,10 @@ img {
 
   #markdown-content .container > p:has(em) em:first-child {
     @apply mb-4 text-2xl;
+  }
+
+  #markdown-content .container > p:has(em) > em > a {
+    @apply text-2xl;
   }
 
   #markdown-content .container > p:not(:has(img)) {
@@ -98,6 +106,10 @@ img {
   left: calc(-50vw + 50%);
 }
 
+#markdown-content .container > p:has(> strong):not(:has(> img)) {
+  @apply mb-0;
+}
+
 #markdown-content .container > p > strong {
   @apply block w-full mb-3 text-2xl text-center normal-case;
   font-family: "caveat";
@@ -114,6 +126,10 @@ img {
 
 #markdown-content .container > p > em:first-child {
   @apply text-lg not-italic font-bold uppercase text-start;
+}
+
+#markdown-content .container > p > em > a {
+  @apply text-lg;
 }
 
 #markdown-content .container > p:has(> a) {

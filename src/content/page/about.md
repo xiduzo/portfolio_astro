@@ -24,8 +24,13 @@ _Creative technologist_
     With a firm grasp on the principles of (digital) design<sup class="text-sm">\*</sup> and a deep understanding of programming<sup class="text-sm">\*\*</sup>, I strive to bring innovative ideas to life that embodies the <a href="https://en.wikipedia.org/wiki/Form_follows_function#:~:text=Form%20follows%20function%20is%20a,its%20intended%20function%20or%20purpose." target="_blank">form follows function</a> mantra.
     <br/><br/>
     <span class="text-sm">
-        <sup>\*</sup> <em>With a bachelor's degree in <a href="https://www.cmd-amsterdam.nl" target="_blank">Communication and Multimedia design</a> and a master's degree in <a href="https://www.masterdigitaldesign.com/alumni/sander-boer" target="_blank">Digital Design</a> </em><br/><br/>
-        <sup>\*\*</sup> <em>With 15+ years of software development experience</em><br/><br/>
+        <sup>*</sup>
+        <em>
+            With a bachelor's degree in <a href="https://www.cmd-amsterdam.nl" target="_blank">Communication and Multimedia design</a> and a master's degree in <a href="https://www.masterdigitaldesign.com/alumni/sander-boer" target="_blank">Digital Design</a>
+        </em>
+        <br/><br/>
+        <sup>\*\*</sup>
+        <em>With 15+ years of software development experience</em>
     </span>
 </span>
 

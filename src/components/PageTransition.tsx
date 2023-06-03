@@ -7,16 +7,17 @@ export const PageTransition: FC<Props> = ({ background }) => {
   useEffect(() => {
     setTimeout(() => {
       setEntryAnimation(false);
-    }, 600);
+    }, 350);
   }, []);
 
   return (
     <AnimatePresence>
       {entryAnimation && (
-        <section className="fixed top-0 bottom-0 z-40 w-full">
+        <section className="fixed top-0 bottom-0 z-20 w-full">
           <motion.div
             className="fixed top-0 bottom-0 w-full bg-white"
-            initial={{ opacity: 1 }}
+            initial={{ opacity: 1, bottom: 0 }}
+            animate={{ bottom: "100vh" }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2, delay: 0.1 }}
           />

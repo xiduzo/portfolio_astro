@@ -36,8 +36,9 @@ const { color } = Astro.props;
       progress.toString() + "%"
     );
 
-    const opacity =
-      aside.offsetTop - aside.clientHeight - 200 > window.scrollY ? 1 : 0;
+    const asideRect = aside.getBoundingClientRect();
+    // We add 64 because of the `-translate-y-16` in the base layout
+    const opacity = asideRect.top - window.innerHeight + 64 > 0 ? 1 : 0;
 
     document.documentElement.style.setProperty(
       "--page-scroll-progress-opacity",

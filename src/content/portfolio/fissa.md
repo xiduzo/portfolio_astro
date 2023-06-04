@@ -249,6 +249,147 @@ class NativeToast extends Toaster {
 }
 ```
 
+By playing around with animal-eomjis as copy we try to lighten the mood of Fissa and bring some extra joy to the experience.
+<br/><br/>
+Besides, it was a fun exercise to find the right animal for the different states of Fissa.
+
+**A few examples of the use of emojis in Fissa**
+![A few examples on how emojis are used in Fissa. For example, when skipping a song you will see the text "ssssssssssssskipping song" with the emoji of a snake](/portfolio/fissa/emojis_in_screens.png)
+
+## The Fissa never stops.
+What is more annoying than being at a party, finally having the courage to show your moves and then the musics stops.
+<br/><br/>
+This should never happen, the Fissa never stops.
+<br/><br/>
+Whenever the queue is about to get empty, Fissa will add recommended tracks. These will be semi-random tracks, utilizing the <span><a href="https://developer.spotify.com/documentation/web-api/reference/get-recommendations" target="_blank">Spotify recommendations</a></span>, but most importantly they will be based on the tracks which gained the most votes.
+
+```typescript
+class FissaService {
+    // ...
+
+    playNextTrack = async () => {
+        // ...
+
+        if (nextTracks.length <= TRACKS_BEFORE_ADDING_RECOMMENDATIONS) {
+            const withPositiveScore = tracks.filter(({ totalScore }) => totalScore > 0);
+            const tracksToMap = withPositiveScore.length ? withPositiveScore : tracks;
+
+            const trackIds = tracksToMap
+                .map(({ trackId }) => trackId)
+                .sort(randomSort)
+                .slice(0, TRACKS_BEFORE_ADDING_RECOMMENDATIONS);
+
+            try {
+                await this.trackService.addRecommendedTracks(pin, trackIds, access_token!);
+            } catch (e) {
+                logger.error(`${fissa.pin}, failed adding recommended tracks`, e);
+            }
+        }
+    }
+}
+```
+
+**The playlist is democratic, votes determine the queue**
+![The more votes a song has, the sooner it will be played on the Fissa](/portfolio/fissa/voting.png)
+
+_Determine the song index_
+As the Fissa is a collaborative playlist, users determine the order of the songs. This is done by voting on the songs. This proved to be the most challenging part of the project.
+<br/><br/>
+Initially we just stored the index of the songs directly into the database. This way we put an unique index on the track for data integrity, and we could easily sort the tracks by their index.
+
+**Initial modal of a song within Fissa**
+```prisma
+model Track {
+    index  Int @db.SmallInt
+    trackId String @map("track_id") @db.VarChar(22)
+
+    fissa Fissa @relation(fields: [pin], references: [pin], onDelete: Cascade)
+    pin String @db.VarChar(4)
+    
+    @@id([pin, trackId])
+    @@unique([pin, index])
+    @@map("tracks")
+}
+```
+
+Easy peasy, lemon squeezy right? Well, not quite. This approach has a few drawbacks:
+
+1. Whenever we add a song to the Fissa, we up-vote the track. Who doesn't want to up-vote their own track, right? However, this means whenever a track is added we needed to re-calculate the index of all the tracks below the current track as their order might have been changed.
+2. Users can up- and down-vote track at any time. This means that the index of the tracks is constantly changing. This is not a problem in itself, but it can interfere with any ongoing re-calculations of the indexes.
+
+Besides this, Fissa is hosted serverless on <span><a href="https://vercel.com/" target="_blank">vercel</a></span>. As nobody pays for their pet-project in this day-and-age, we only have 10 seconds to perform any operation. Recalculating and updating indexes of Fissas with 50+ songs proved to be not possible. Event with the latest <span><a href="https://www.prisma.io/blog/prisma-and-serverless-73hbgKnZ6t" target="_blank">9x improvements</a></span> in prisma serverless cold starts.
+<br/><br/>
+Finally, due to the uniqueness of the data-modal we needed to update the indexes twice. Once to clear out the new index, and once to update the index of the track which was moved.
+
+Eventually we settled on inferring the position of a track based on its' score. The score is updated each time a user votes on a track. The score is cleared whenever the song is being played.
+
+**Storing the score in the database**
+```prisma
+model Track {
+    trackId String @map("track_id") @db.VarChar(22)
+
+    fissa Fissa @relation(fields: [pin], references: [pin], onDelete: Cascade)
+    pin String @db.VarChar(4)
+
+    votes Vote[]
+    score Int @db.SmallInt @default(0) // Value used for ordering tracks in a fissa
+
+    @@unique([pin, trackId])
+    @@map("tracks")
+}
+```
+
+**THE algorithm**
+```typescript
+const sortTrack = (a: { time: Date; trackId: string }, b: { time: Date; trackId: string }) => {
+  const aTime = a.time.getTime();
+  const bTime = b.time.getTime();
+
+  if (aTime === bTime) return a.trackId.localeCompare(b.trackId);
+
+  return aTime - bTime;
+};
+
+export const sortFissaTracksOrder = <T extends SortableTrack>(
+  tracks?: T[],
+  activeTrackId?: string | null,
+) => {
+  if (!tracks) return [];
+
+  let sortedTracks: T[] = [];
+
+  const playedTracks = tracks.filter(
+    ({ hasBeenPlayed, trackId }) => hasBeenPlayed && trackId !== activeTrackId,
+  );
+  const unplayedTracks = tracks.filter(
+    ({ hasBeenPlayed, trackId }) => !hasBeenPlayed && trackId !== activeTrackId,
+  );
+  const activeTrack = tracks.find(({ trackId }) => trackId === activeTrackId);
+
+  const sortedPlayedTracks = playedTracks.sort((a, b) => {
+    return sortTrack({ ...a, time: a.lastUpdateAt }, { ...b, time: b.lastUpdateAt });
+  });
+
+  const sortedUnplayedTracks = unplayedTracks.sort((a, b) => {
+    if (a.score === b.score) {
+      return sortTrack({ ...a, time: a.createdAt }, { ...b, time: b.createdAt });
+    }
+
+    return b.score - a.score;
+  });
+
+  sortedTracks = sortedTracks.concat(sortedPlayedTracks);
+  if (activeTrack) sortedTracks.push(activeTrack);
+  sortedTracks = sortedTracks.concat(sortedUnplayedTracks);
+
+  return sortedTracks;
+};
+```
+
+Phew, you made it all the way through the though end. That last part was code heavy. Here, have a 🍪.
+<br/><br/>
+Code can be scary right, but it's also fun.
+
 <a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about Fissa," aria-label="Send me an email to I can tell you more" target="_blank">I'd like to know more</a>
 
 <hr />

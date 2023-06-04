@@ -41,4 +41,27 @@ Collaborating with individuals from diverse backgrounds to achieve a shared obje
 <br/><br/>
 While my focus predominantly lies in the realm of technology, my true strengths lie in the intersection of UX and development. I recognize the value of actively participating in both disciplines, allowing me to enhance my strengths of both.
 
+<hr/>
+
 <a href="mailto:mail@sanderboer.nl?subject=Let's connect!&body=Hi, I'd like to connect with you," target="_blank">Let's connect</a>
+
+<hr/>
+
+## Who is sander _really_
+Next to coding I enjoy to cook and eat. I am fan of the Italian and Mexican kitchen but whenever there is flavour, I'm in!
+<br/><br/>
+I like (to be in) nature and am your go-to-guy to entertain/annoy the dog/cat at any party!
+
+![Three pictures of Sander. 1. with a dought machine, 2. in nature and 3. with a dog](/page/about/me_1.png)
+
+From time to time I try to experiment with random technologies like AR/VR, 3d printing and micro-controllers.
+
+You can always challenge me for a game but be aware, I am in it to win it.
+
+![sander playing games](/page/about/games.png)
+
+If the sun is out, I'd love to join you for a beer (or tequila).
+
+![sander drinking beers at various places](/page/about/beer.png)
+
+<a href="mailto:mail@sanderboer.nl?subject=Let's connect!&body=Hi, I'd like to connect with you," target="_blank">Let's get that beer</a>

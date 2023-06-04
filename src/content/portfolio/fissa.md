@@ -321,7 +321,10 @@ Besides this, Fissa is hosted serverless on <span><a href="https://vercel.com/" 
 <br/><br/>
 Finally, due to the uniqueness of the data-modal we needed to update the indexes twice. Once to clear out the new index, and once to update the index of the track which was moved.
 
+_The path of least resistance_
 Eventually we settled on inferring the position of a track based on its' score. The score is updated each time a user votes on a track. The score is cleared whenever the song is being played.
+<br/><br/>
+By using the logic which was already in Fissa, we could actually remove a lot of code and make the whole process a lot more stable.
 
 **Storing the score in the database**
 ```prisma

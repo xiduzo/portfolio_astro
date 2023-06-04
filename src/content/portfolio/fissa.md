@@ -29,7 +29,8 @@ Before starting the project we set some ground rules:
 
 1. Fissa should be available on both iOS and Android
 2. No onboarding! Like jokes, apps lose their charm when you have to explain them
-3. Have some fun, this is not work
+3. A fissa never stops, there is always music playing
+4. Have some fun, this is not work
 
 ![Screens exploring the visual style of fissa](/portfolio/fissa/design_exploration.png)
 
@@ -64,7 +65,7 @@ _The great reset_
 <span>
     No, not <a href="https://www.weforum.org/great-reset/" target="_blank">that one</a>.
     <br/><br/>
-    Working with TypeScript has been a real game-changer and I would never go without, neither should any sane person. However, even TypeScript still has it's quirks.
+    Working with TypeScript (for the past 5 years) has been a real game-changer and I would never go without, neither should any sane person. However, even TypeScript still has it's quirks.
     <br /><br />
     Luckily, our TypeScript wizard <a href="https://www.youtube.com/@mattpocockuk" target="_blank">Matt Pocock</a> released an awesome tool right when we started with Fissa; <a href="https://github.com/total-typescript/ts-reset" target="_blank">ts-reset</a>.
 </span>
@@ -77,7 +78,7 @@ import "@total-typescript/ts-reset";
 const filteredArray = [1, 2, undefined].filter(Boolean); // number[]
 ```
 
-**It's a fissa, everybody will get their own experience**
+**It's a fissa, but within our boundaries**
 ![The different color pallettes Fissa has](/portfolio/fissa/colors.png)
 
 ## A colorful Fissa
@@ -95,7 +96,6 @@ _Tailwind_
 // Tailwind config.js
 
 const pinkey = {
-  name: 'pinkey',
   100: "#FFCAF7",
   500: "#FF5FE5",
   900: "#150423",
@@ -120,12 +120,10 @@ const config = {
 };
 ```
 
-This gave some great extension methods which we could use like the `text-theme-900` or `bg-theme-500`. Perfect, <span class="italic">strik erom</span> right? Nope, since we are using <span><a href="https://www.nativewind.dev/" target="_blank">NativeWind</a></span> this does not work well.
-<br/><br/>
-Instead we are are just exporting and importing the theme and set the `style` property of the components we want to use it with.
+For <span><a href="https://www.nativewind.dev/" target="_blank">NativeWind</a></span>, the tailwind helper for React Native, this does not work out-of-the-box well and we do need to expose the <span><a href="https://www.nativewind.dev/guides/theme-values" target="_blank">runtime variables</a></span> to use the dynamic theme.
 
 
-**Configure the themes**
+**Exposing the runtime variable**
 ```typescript
 // Tailwind config.js
 
@@ -136,6 +134,7 @@ const theme = themes[Math.floor(Math.random() * themes.length)];
 module.exports.theme = theme;
 ```
 
+**Using the runtime variable in React Native**
 ```tsx
 // Component.tsx
 
@@ -149,19 +148,116 @@ const Component = () => {
 }
 ```
 
-![screens displaying the different color palettes being used inside of the app](/portfolio/fissa/promotion_screens.png)
+![screens displaying the different color palettes being used inside of the app](/portfolio/fissa/colors_in_app.png)
 
+## Less = more
+Milan and myself are both big fans of Spotify and we recognize its strength. They focus on one thing, and they do it very well; explore and discover music. 
+<br/><br/>
+While building Fissa, Spotify introduced the <span><a href="https://support.spotify.com/us/article/remote-group-session/" target="_blank">remote group session</a></span>. However, this is always a hidden feature, changes constantly and does not seem to have any focus from Spotify.
+<br/><br/>
+Although we want to keep users fully engaged in Fissa, we would never be able to do the exploration of music as well as Spotify does. Therefore we put our focus on managing a collaborative playlist and utilize Spotify for the rest.
+<br/><br/>
+Do one thing, and do it well.
 
+**Explorations on how we could add songs to a fissa via Spotify**
+![three different explorations of how we could add songs to a fissa](/portfolio/fissa/add_songs.png)
 
-_2. Less = more_
-lorum ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+_Free with limits_
+<span>
+    Spotify provides us with an <a href="https://developer.spotify.com/documentation/web-api" target="_blank">awesome API</a>. Unfortunately, and understandably, it is <a href="https://developer.spotify.com/documentation/web-api/concepts/rate-limits" target="_blank">rate limited</a>.
+    <br/><br/>
+    Users need to be signed in to their Spotify account to use Fissa, therefore we can utilize the unlimited API calls from personal accounts. Everything which is not related to the Fissa itself, like searching for songs, is done via the Fissa app and stored using <a href="https://github.com/pmndrs/zustand" target="_blank">zustand</a>.
+    <br/><br/>
+    This reduces the load on Fissa's servers and simultaneously also allows us to host more Fissas without hitting Spotify's usage restrictions. Win-Win.
+<span>
 
-_3. Beyond the functionalities_
-lorum ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+**Code for getting the songs information of the Fissa**
+```typescript
+export const useTracks = (trackIds?: string[]) => {
+  const { addTracks, tracks, spotify } = useSpotifyStore();
+
+  const cachedTrackIds = useMemo(() => tracks.map(({ id }) => id), [trackIds, tracks]);
+
+  const uncachedTrackIds = useMemo(() => {
+    return trackIds?.filter((trackId) => !cachedTrackIds.includes(trackId)) ?? [];
+  }, [trackIds, cachedTrackIds]);
+
+  const requestedTracks = useMemo(() => {
+    return (
+      trackIds?.map((trackId) => tracks.find(({ id }) => id === trackId)).filter(Boolean) ?? []
+    );
+  }, [trackIds, tracks]);
+
+  useMemo(async () => {
+    const promises = splitInChunks(uncachedTrackIds).map(async (chunk) => {
+      const { tracks } = await spotify.getTracks(chunk);
+      return tracks;
+    });
+
+    const tracks = (await Promise.all(promises)).flat();
+
+    if (tracks.length) addTracks(tracks);
+  }, [uncachedTrackIds, addTracks, spotify]);
+
+  return requestedTracks;
+};
+```
+
+<hr />
+
+<a href="https://github.com/xiduzo/t3-fissa/blob/main/packages/utils/stores/spotifyStore.ts#L36" target="_blank">See the full implementation</a>
+
+<hr />
+
+## Beyond the app
+Of course any app needs to work, what's the point of having a non-functioning app. Besides playing tracks at a party we wanted Fissa to be a fun experience, both for the users and for us creating Fissa.
+
+**Some playful error message icons**
+```typescript
+export class Toaster {
+  protected defaultIcon(type: ToastType) {
+    switch (type) {
+      case "error":
+        return "🦀";
+      case "info":
+        return "🦉";
+      case "warning":
+        return "🦑";
+      case "success":
+      default:
+        return "🐕";
+    }
+  }
+}
+```
+
+**React Native implementation of the Toaster**
+```typescript
+class NativeToast extends Toaster {
+  protected show({ type = "success", message, duration, icon }: ToasterProps) {
+    const text2 = icon ?? this.defaultIcon(type);
+    const visibilityTime = duration ?? ToastAndroid.SHORT;
+
+    switch (Platform.OS) {
+      case "ios":
+      case "macos":
+        return Toast.show({ type, text1: message, text2, visibilityTime });
+      case "android":
+        return ToastAndroid.show(message, visibilityTime);
+    }
+  }
+}
+```
 
 <a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about Fissa," aria-label="Send me an email to I can tell you more" target="_blank">I'd like to know more</a>
 
 <hr />
+
+_Experience fissa_
+<span>
+    <a href="https://apps.apple.com/nl/app/fissa-houseparty/id1632218985" target="_blank">App store</a><br/><br/>
+    <a href="https://play.google.com/store/apps/details?id=com.fissa" target="_blank">Play store</a>
+</span>
 
 _In collaboration with_
 <span>

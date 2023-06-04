@@ -28,7 +28,7 @@ img {
 }
 
 #markdown-content .container pre {
-  @apply max-w-4xl m-auto mb-36 p-4;
+  @apply max-w-5xl m-auto mb-36 py-4 px-6 shadow-xl rounded-3xl;
 }
 
 #markdown-content .container > blockquote {

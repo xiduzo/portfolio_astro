@@ -7,8 +7,6 @@ export interface Props {
   width?: number;
   height?: number;
 }
-
-console.log(Astro.props.src);
 ---
 
 <Image width={1920} height={1080} {...Astro.props} />

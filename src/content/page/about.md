@@ -14,6 +14,8 @@ _Who am I_
     <br/><br/>
     This is where my interest for programming arose as I had to figure out how to host a server, create a database or even change the game code to make it work as I wanted it to work.
     <br/><br/>
+    Checkout my awesome <a href="https://otland.net/threads/bombsquad-9-6.187509" target="_blank">bomb squad mod</a>.
+    <br/><br/>
     The process of unraveling complex systems has become a driving force behind my pursuit of the digital domain, ever since the day I first wrote the classic `hello world` program.
 </span>
 
@@ -54,7 +56,15 @@ I like (to be in) nature and am your go-to-guy to entertain/annoy the dog/cat at
 
 ![Three pictures of Sander. 1. with a dought machine, 2. in nature and 3. with a dog](/page/about/me_1.png)
 
-From time to time I try to experiment with random technologies like AR/VR, 3d printing and micro-controllers.
+From time to time I try to experiment with random technologies like 3d printing, Augmented- and Virtual-Reality and micro-controllers.
+
+![Pictures of sander working with 3d-printing, Augmented- and Virtual-Reality and micro-controllers](/page/about/technologies.png)
+
+Sharing = caring.
+<br/><br/>
+I like to share my knowledge and experience with others. I do this by <span><a href="https://docs.google.com/presentation/d/16IS66caD_78nlevIkSzTQUb54KVkHEzJMG_Kw08B8pY/edit?usp=sharing" target="_blank">giving workshops</a></span>, <span><a href="https://www.masterdigitaldesign.com/staff/sander-boer" target="_blank">mentoring students</a></span> and trying to be an active member of the <span><a href="https://stackoverflow.com/users/4655177/xiduzo" target="_blank">developer community</a></span>.
+
+![3 pictures of sander sharing knowledge in various ways](/page/about/sharing.png)
 
 You can always challenge me for a game but be aware, I am in it to win it.
 

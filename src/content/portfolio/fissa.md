@@ -292,9 +292,11 @@ class FissaService {
 **The playlist is democratic, votes determine the queue**
 ![The more votes a song has, the sooner it will be played on the Fissa](/portfolio/fissa/voting.png)
 
-_Determine the song index_
+_Determining the next song_
 As the Fissa is a collaborative playlist, users determine the order of the songs. This is done by voting on the songs. This proved to be the most challenging part of the project.
 <br/><br/>
+Strap-on your seatbelt, the next part will contain a lot of nerd info.
+
 Initially we just stored the index of the songs directly into the database. This way we put an unique index on the track for data integrity, and we could easily sort the tracks by their index.
 
 **Initial modal of a song within Fissa**
@@ -314,15 +316,153 @@ model Track {
 
 Easy peasy, lemon squeezy right? Well, not quite. This approach has a few drawbacks:
 
-1. Whenever we add a song to the Fissa, we up-vote the track. Who doesn't want to up-vote their own track, right? However, this means whenever a track is added we needed to re-calculate the index of all the tracks below the current track as their order might have been changed.
-2. Users can up- and down-vote track at any time. This means that the index of the tracks is constantly changing. This is not a problem in itself, but it can interfere with any ongoing re-calculations of the indexes.
+1. Whenever we add a song to the Fissa, we up-vote the track. Who doesn't want to up-vote their own track, right? However, this means whenever a track is added we needed to re-calculate the indexes of all the tracks below the current track as their order might have been changed.
+2. Users can up- and down-vote track at any time. This means that the indexes of the tracks are constantly changing. This is not a problem in itself, but it can interfere with any ongoing re-calculations of the indexes.
+3. Due to the uniqueness of the index, we needed to update the indexes twice. Once to clear out the new index, and once to update the index of the track which was moved.
 
-Besides this, Fissa is hosted serverless on <span><a href="https://vercel.com/" target="_blank">vercel</a></span>. As nobody pays for their pet-project in this day-and-age, we only have 10 seconds to perform any operation. Recalculating and updating indexes of Fissas with 50+ songs proved to be not possible. Event with the latest <span><a href="https://www.prisma.io/blog/prisma-and-serverless-73hbgKnZ6t" target="_blank">9x improvements</a></span> in prisma serverless cold starts.
-<br/><br/>
-Finally, due to the uniqueness of the data-modal we needed to update the indexes twice. Once to clear out the new index, and once to update the index of the track which was moved.
+**Calculating the new indexes, including the fake updates**
+```typescript
+class FissaService {
+  // ...
+
+  reorderPlaylist = async (pin: string) => {
+    const { currentIndex, tracks } = await this.getRoomDetailedInformation(pin);
+
+    try {
+      const { updates, fakeUpdates, newCurrentIndex } =
+        this.generateTrackIndexUpdates(tracks, currentIndex);
+
+      await this.db.$transaction(async (transaction) => {
+        if (currentIndex !== newCurrentIndex) {
+          await transaction.room.update({
+            where: { pin },
+            data: { currentIndex: newCurrentIndex },
+          });
+        }
+
+        // (1) Clear out the indexes
+        await transaction.room.update({
+          where: { pin },
+          data: { tracks: { updateMany: fakeUpdates } },
+        });
+
+        // (2) Set the correct indexes
+        await transaction.room.update({
+          where: { pin },
+          data: { tracks: { updateMany: updates } },
+        });
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  private generateTrackIndexUpdates = (
+    tracks: Track[],
+    currentIndex: number,
+  ) => {
+    const tracksWithScoreOrAfterIndex = tracks.filter(
+      ({ score, index }) => score !== 0 || index > currentIndex,
+    );
+    const tracksWithoutScoreAndBeforeIndex = tracks.filter(
+      ({ score, index }) => score === 0 && index <= currentIndex,
+    );
+
+    const sortedTracks = tracksWithScoreOrAfterIndex.sort(
+      (a, b) => b.score - a.score,
+    );
+
+    const sorted = tracksWithoutScoreAndBeforeIndex.concat(sortedTracks);
+    const newCurrentIndex = sorted.findIndex(
+      ({ index }) => index === currentIndex,
+    );
+
+    const updates = sorted
+      .map(({ trackId, index }, newIndex) => {
+        if (index === newIndex) return; // No need to update
+
+        return {
+          where: { trackId },
+          data: { index: newIndex },
+        };
+      })
+      .filter(Boolean);
+
+    const fakeUpdates = updates.map((update, index) => ({
+      ...update,
+      data: { ...update.data, index: index + tracks.length + 100 }, // Set to an non-existing index
+    }));
+
+    return { updates, fakeUpdates, newCurrentIndex };
+  };
+}
+```
+
+And for the final nail in the coffin, Fissa is hosted serverless on <span><a href="https://vercel.com/" target="_blank">vercel</a></span>. As nobody pays for their pet-project in this day-and-age, we only have 10 seconds to perform any operation. Recalculating and updating indexes of Fissas with 50+ songs proved to be not possible. Event with the latest <span><a href="https://www.prisma.io/blog/prisma-and-serverless-73hbgKnZ6t" target="_blank">9x improvements</a></span> in prisma serverless cold starts.
+
+**Type move the reordering logic to a node process**
+```typescript
+export const reorderPlaylistSync = async () => {
+  const fissas = await api.fissa.sync.active.query();
+
+  for (const fissa of fissas) {
+    if (!fissa.shouldReorder) continue;
+    if (isUpdating.get(fissa.pin)) continue;
+
+    try {
+      isUpdating.set(fissa.pin, true);
+      console.log(`[${fissa.pin}] reordering playlist`);
+
+      if (differenceInSeconds(fissa.expectedEndTime, new Date()) < 5) continue;
+
+      const { updates, newCurrentIndex } = generateTrackIndexUpdates(
+        fissa.tracks,
+        fissa.currentIndex,
+      );
+
+      if (!updates.length) {
+        console.info(`No updates needed for fissa ${fissa.pin}`);
+        continue;
+      }
+
+      await api.fissa.sync.reorder.mutate({
+        pin: fissa.pin,
+        updates,
+        newCurrentIndex,
+      });
+
+      console.log(`[${fissa.pin}] reordering done`);
+    } catch (error) {
+      console.error(`[${fissa.pin}] reordering failed`, error);
+    } finally {
+      isUpdating.delete(fissa.pin);
+    }
+  }
+};
+```
+
+**Simple node server to run the reordering**
+```typescript
+import { Cron } from "croner";
+
+import { reorderPlaylistSync } from "./syncs";
+
+// ┌──────────────── (optional) second (0 - 59)
+// │ ┌────────────── minute (0 - 59)
+// │ │ ┌──────────── hour (0 - 23)
+// │ │ │ ┌────────── day of month (1 - 31)
+// │ │ │ │ ┌──────── month (1 - 12, JAN-DEC)
+// │ │ │ │ │ ┌────── day of week (0 - 6, SUN-Mon)
+// │ │ │ │ │ │       (0 to 6 are Sunday to Saturday; 7 is Sunday, the same as 0)
+// │ │ │ │ │ │
+// * * * * * *
+Cron(`*/10 * * * * *`, reorderPlaylistSync);
+
+console.info("Sync server is running");
+```
 
 _The path of least resistance_
-Eventually we settled on inferring the position of a track based on its' score. The score is updated each time a user votes on a track. The score is cleared whenever the song is being played.
+Eventually we settled on inferring the position of a track based on its' score. The score is updated each time a user votes on a track and the score will be cleared whenever the song is being played.
 <br/><br/>
 By using the logic which was already in Fissa, we could actually remove a lot of code and make the whole process a lot more stable.
 

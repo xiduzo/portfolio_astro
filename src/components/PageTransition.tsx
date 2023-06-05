@@ -15,17 +15,17 @@ export const PageTransition: FC<Props> = ({ background }) => {
       {entryAnimation && (
         <section className="fixed top-0 bottom-0 z-20 w-full">
           <motion.div
-            className="fixed top-0 bottom-0 w-full bg-white"
+            className="fixed top-0 bottom-0 w-full bg-slate-100"
             initial={{ opacity: 1, bottom: 0 }}
             animate={{ bottom: "100vh" }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, delay: 0.1 }}
+            transition={{ duration: 0.2, delay: 0.25 }}
           />
           <motion.div
             className="fixed top-0 bottom-0 w-full"
             initial={{ top: "100vh", bottom: "0vh", opacity: 1 }}
             animate={{ top: "0vh" }}
-            transition={{ duration: 0.25, delay: 0 }}
+            transition={{ duration: 0.25 }}
             exit={{ bottom: "100vh" }}
             style={{ background }}
           />

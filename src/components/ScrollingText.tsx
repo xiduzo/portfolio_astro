@@ -39,7 +39,7 @@ export const ScrollingText: FC<Props> = ({
         className="relative whitespace-nowrap text-9xl translate-y-10 lg:text-[256px] font-extrabold tracking-widest lg:translate-y-20 space-x-32"
         initial={{ opacity: 0, left: "0vw" }}
         animate={{ opacity: 1, left: "-5vw" }}
-        transition={{ duration: 0.3, delay: 0.6 }}
+        transition={{ duration: 0.5, delay: 0.45 }}
         style={{ marginLeft: offset + "px" }}
       >
         {Array.from({ length: 60 }).map((_, index) => (

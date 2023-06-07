@@ -15,7 +15,7 @@ const { title, description, heroImage, headerColor } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
-  <PageTransition background={headerColor} client:only />
+  <PageTransition background={headerColor} client:load />
   <ScrollingText text={title} background={headerColor} client:only />
   <article id="markdown-content">
     <Image aria-hidden="true" src={heroImage} alt={description} />

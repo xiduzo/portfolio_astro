@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { FC, useEffect, useState } from "react";
-import { userPrefersReducedMotion } from "../hooks/userPrefersReducedMotion";
 
 export const PageTransition: FC<Props> = ({ background }) => {
   const [entryAnimation, setEntryAnimation] = useState(true);
@@ -18,7 +17,7 @@ export const PageTransition: FC<Props> = ({ background }) => {
           <motion.div className="hidden motion-reduce:block fixed w-full"
             initial={{ top: 0, bottom: 0, opacity: 1 }}
             exit={ {opacity: 0 }}
-            transition={{ duration: 0.75 }}
+            transition={{ duration: 1.5 }}
 
             style={{ background }}
           />

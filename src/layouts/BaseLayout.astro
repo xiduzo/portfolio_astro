@@ -23,7 +23,7 @@ const { title, description } = Astro.props;
   <body class="scroll-smooth">
     <Cursor />
     <a
-      class="absolute left-0 z-50 p-3 m-3 transition -translate-y-16 bg-primary focus:translate-y-0"
+      class="absolute left-0 z-50 p-3 m-3 transition -translate-y-16 motion-reduce:translate-y-0 motion-reduce:opacity-0 motion-reduce:-z-10 motion-reduce:focus:z-50 bg-primary focus:translate-y-0 focus:opacity-100"
       href="#main-content">Jump to content</a
     >
     <Header />

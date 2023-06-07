@@ -17,7 +17,7 @@ export const PageTransition: FC<Props> = ({ background }) => {
           <motion.div className="hidden motion-reduce:block fixed w-full"
             initial={{ top: 0, bottom: 0, opacity: 1 }}
             exit={ {opacity: 0 }}
-            transition={{ duration: 1.5 }}
+            transition={{ duration: 0.8 }}
 
             style={{ background }}
           />

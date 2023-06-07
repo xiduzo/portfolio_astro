@@ -400,7 +400,7 @@ class FissaService {
 
 And for the final nail in the coffin, Fissa is hosted serverless on <span><a href="https://vercel.com/" target="_blank">vercel</a></span>. As nobody pays for their pet-project in this day-and-age, we only have 10 seconds to perform any operation. Recalculating and updating indexes of Fissas with 50+ songs proved to be not possible. Event with the latest <span><a href="https://www.prisma.io/blog/prisma-and-serverless-73hbgKnZ6t" target="_blank">9x improvements</a></span> in prisma serverless cold starts.
 
-**Type move the reordering logic to a node process**
+**Trial to move the reordering logic to a node process**
 ```typescript
 export const reorderPlaylistSync = async () => {
   const fissas = await api.fissa.sync.active.query();

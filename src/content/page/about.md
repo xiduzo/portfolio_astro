@@ -50,7 +50,7 @@ While my focus predominantly lies in the realm of technology, my true strengths 
 <hr/>
 
 ## Who is sander _really_
-Next to coding I enjoy to cook and eat. I am fan of the Italian and Mexican kitchen but whenever there is flavour, I'm in!
+Next to coding, I enjoy to cook and eat. I am fan of the Italian and Mexican kitchen but whenever there is flavour, I'm in!
 <br/><br/>
 I like (to be in) nature and am your go-to-guy to entertain/annoy the dog/cat at any party!
 

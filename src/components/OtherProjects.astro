@@ -34,9 +34,9 @@ const projects = (await getCollection("portfolio"))
               alt={project.data.description}
               aria-hidden="true"
             />
-            <div class="text-xl font-extrabold">
+            <div class="text-xl font-extrabold text-slate-900 dark:text-slate-900">
               {project.data.title}{" "}
-              <span class="font-light description">
+              <span class="font-light description text-slate-900 dark:text-slate-900">
                 {project.data.description}
               </span>
             </div>

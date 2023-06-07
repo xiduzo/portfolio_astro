@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { FC, useEffect, useState } from "react";
+import { userPrefersReducedMotion } from "../hooks/userPrefersReducedMotion";
 
 export const ScrollingText: FC<Props> = ({
   background,
@@ -7,6 +8,9 @@ export const ScrollingText: FC<Props> = ({
   direction = "left",
 }) => {
   const [offset, setOffset] = useState(0);
+
+  const reduceMotion = userPrefersReducedMotion()
+
   useEffect(() => {
     const listener = () => {
       if (direction === "right") {
@@ -22,24 +26,24 @@ export const ScrollingText: FC<Props> = ({
         window.pageYOffset ||
         document.documentElement.scrollTop ||
         document.body.scrollTop;
-      setOffset(-scrollOffset * 1.5);
+      setOffset(-scrollOffset * (reduceMotion ? 0.5 :1.5));
     };
 
     document.addEventListener("scroll", listener);
     document.addEventListener("touchMove", listener);
-  }, [direction]);
+  }, [direction, reduceMotion]);
 
   return (
     <section
       aria-hidden="true"
-      className="flex items-end w-full -mt-20 overflow-hidden uppercase h-96 bg-slate-100"
+      className="flex items-end w-full -mt-20 overflow-hidden uppercase h-96"
       style={{ background }}
     >
       <motion.div
         className="relative whitespace-nowrap text-9xl translate-y-10 lg:text-[256px] font-extrabold tracking-widest lg:translate-y-20 space-x-32"
-        initial={{ opacity: 0, left: "0vw" }}
-        animate={{ opacity: 1, left: "-5vw" }}
-        transition={{ duration: 0.5, delay: 0.45 }}
+        initial={{ opacity: reduceMotion ? 1:0, left: "0vw" }}
+        animate={{ opacity: 1, left: reduceMotion ? "0vw" : "-5vw" }}
+        transition={{ duration: reduceMotion ? 0 : 0.5, delay: 0.45 }}
         style={{ marginLeft: offset + "px" }}
       >
         {Array.from({ length: 60 }).map((_, index) => (

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { FC, useEffect, useState } from "react";
+import { userPrefersReducedMotion } from "../hooks/userPrefersReducedMotion";
 
 export const PageTransition: FC<Props> = ({ background }) => {
   const [entryAnimation, setEntryAnimation] = useState(true);
@@ -14,19 +15,26 @@ export const PageTransition: FC<Props> = ({ background }) => {
     <AnimatePresence>
       {entryAnimation && (
         <section className="fixed top-0 bottom-0 z-20 w-full">
+          <motion.div className="hidden motion-reduce:block fixed w-full"
+            initial={{ top: 0, bottom: 0, opacity: 1 }}
+            exit={ {opacity: 0 }}
+            transition={{ duration: 0.75 }}
+
+            style={{ background }}
+          />
           <motion.div
-            className="fixed top-0 bottom-0 w-full bg-slate-100"
-            initial={{ opacity: 1, bottom: 0 }}
+            className="fixed w-full bg-slate-100 dark:bg-zinc-950 motion-reduce:hidden"
+            initial={{ opacity: 1, bottom: 0, top: 0 }}
             animate={{ bottom: "100vh" }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2, delay: 0.25 }}
           />
           <motion.div
-            className="fixed top-0 bottom-0 w-full"
-            initial={{ top: "100vh", bottom: "0vh", opacity: 1 }}
-            animate={{ top: "0vh" }}
+            className="fixed w-full motion-reduce:hidden"
+            initial={{ top: "100vh", bottom: 0, opacity: 1 }}
+            animate={{ top: 0 }}
             transition={{ duration: 0.25 }}
-            exit={{ bottom: "100vh" }}
+            exit={ { bottom: "100vh" }}
             style={{ background }}
           />
         </section>

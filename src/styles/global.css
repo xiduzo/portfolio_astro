@@ -1,15 +1,15 @@
 * {
-  @apply text-slate-900;
+  @apply text-slate-900 dark:text-slate-300;
   font-display: "fallback";
 }
 
 body {
-  @apply bg-slate-100;
+  @apply bg-slate-100 dark:bg-zinc-950;
   font-family: "Space Grotesk", "Arial", "Helvetica", "sans-serif";
 }
 
 main {
-  @apply bg-slate-100;
+  @apply bg-slate-100 dark:bg-zinc-950;
 }
 
 a {
@@ -28,7 +28,7 @@ img {
 }
 
 #markdown-content .container pre {
-  @apply max-w-5xl m-auto mb-36 py-4 px-6 shadow-xl rounded-3xl;
+  @apply max-w-5xl m-auto mb-36 py-4 px-3 md:px-6 mx-6 md:mx-0 shadow-xl rounded-3xl text-xs md:text-base;
 }
 
 #markdown-content .container > blockquote {
@@ -62,7 +62,7 @@ img {
 }
 
 #markdown-content ol li::marker {
-  @apply text-4xl text-gray-300;
+  @apply text-4xl text-gray-300 dark:text-gray-700;
   font-family: "caveat";
 }
 
@@ -116,7 +116,7 @@ img {
 }
 
 #markdown-content .container > p > strong:after {
-  @apply block;
+  @apply block dark:filter dark:invert;
   content: url("/arrow.svg");
 }
 

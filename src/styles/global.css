@@ -4,7 +4,7 @@
 }
 
 body {
-  @apply bg-slate-100 dark:bg-zinc-950;
+  @apply bg-slate-100 dark:bg-zinc-950 overflow-x-hidden;
   font-family: "Space Grotesk", "Arial", "Helvetica", "sans-serif";
 }
 
@@ -42,7 +42,7 @@ img {
 }
 
 #markdown-content .container pre {
-  @apply max-w-5xl m-auto mb-36 py-4 px-3 md:px-6 mx-6 md:mx-0 shadow-xl rounded-3xl text-xs md:text-base;
+  @apply max-w-5xl m-auto mb-36 py-4 px-3 md:px-6 mx-6 md:mx-auto shadow-xl rounded-3xl text-xs md:text-base;
 }
 
 #markdown-content .container > blockquote {

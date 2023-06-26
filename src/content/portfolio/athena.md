@@ -53,6 +53,7 @@ Some teachers of CMD are using a scrum like approach with their project teams in
 
 _References_
 <span>
-    <a href="https://github.com/xiduzo/afstudeerproject_backend" target="_blank">Code (server)</a><br/><br/>
+    <a href="https://github.com/xiduzo/afstudeerproject_backend" target="_blank">Code (server)</a>
+    <br/><br/>
     <a href="https://github.com/xiduzo/afstudeerproject" target="_blank">Code (app)</a>
 </span>

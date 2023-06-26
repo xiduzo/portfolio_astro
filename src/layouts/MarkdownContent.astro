@@ -16,19 +16,21 @@ const { title, description, heroImage, headerColor } = Astro.props;
 
 <BaseLayout title={title} description={description}>
   <PageTransition background={headerColor} client:load />
-  <ScrollingText text={title} background={headerColor} client:load />
+  <ScrollingText text={title} background={headerColor} client:only />
   <article id="markdown-content">
     <Image aria-hidden="true" src={heroImage} alt={description} />
     <h1 class="sr-only">{title}</h1>
 
-    <section class="py-40 mx-4 font-extrabold text-center">
+    <section
+      class="pt-40 pb-72 max-w-7xl m-auto px-4 font-extrabold text-center"
+    >
       <h2 class="text-6xl md:text-7xl">{description}</h2>
     </section>
     <section class="container pb-32 m-auto">
       <slot />
     </section>
   </article>
-  <ScrollingText text="More work" client:load direction="right" />
+  <ScrollingText text="More work" client:only direction="right" />
   <OtherProjects currentProject={title} background={headerColor} />
   <PageProgress color={headerColor} />
 </BaseLayout>

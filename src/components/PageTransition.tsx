@@ -7,25 +7,33 @@ export const PageTransition: FC<Props> = ({ background }) => {
   useEffect(() => {
     setTimeout(() => {
       setEntryAnimation(false);
-    }, 600);
+    }, 350);
   }, []);
 
   return (
     <AnimatePresence>
       {entryAnimation && (
-        <section className="fixed top-0 bottom-0 z-40 w-full">
-          <motion.div
-            className="fixed top-0 bottom-0 w-full bg-white"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, delay: 0.1 }}
+        <section className="fixed top-0 bottom-0 z-20 w-full">
+          <motion.div className="hidden motion-reduce:block fixed w-full"
+            initial={{ top: 0, bottom: 0, opacity: 1 }}
+            exit={ {opacity: 0 }}
+            transition={{ duration: 0.8 }}
+
+            style={{ background }}
           />
           <motion.div
-            className="fixed top-0 bottom-0 w-full"
-            initial={{ top: "100vh", bottom: "0vh", opacity: 1 }}
-            animate={{ top: "0vh" }}
-            transition={{ duration: 0.25, delay: 0 }}
-            exit={{ bottom: "100vh" }}
+            className="fixed w-full bg-slate-100 dark:bg-zinc-950 motion-reduce:hidden"
+            initial={{ opacity: 1, bottom: 0, top: 0 }}
+            animate={{ bottom: "100vh" }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, delay: 0.25 }}
+          />
+          <motion.div
+            className="fixed w-full motion-reduce:hidden"
+            initial={{ top: "100vh", bottom: 0, opacity: 1 }}
+            animate={{ top: 0 }}
+            transition={{ duration: 0.25 }}
+            exit={ { bottom: "100vh" }}
             style={{ background }}
           />
         </section>

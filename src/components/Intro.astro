@@ -70,18 +70,21 @@
     );
   };
 
+  const touchOrPress = isTouchDevice() ? "Touch <code>here</code>" : "Press <code>[any key]</code>";
+
   const texts = [
-    "Oh hi there...",
+    "Oh hi there,",
     "",
     `Good ${timeOfDay()}`,
+    "",
+    "",
     "",
     "My name is sander,",
     "A passionate developer with a creative mind™",
     "",
     "",
-    isTouchDevice()
-      ? "Touch <code>here</code> to continue"
-      : "Press <code>[any key]</code> to continue",
+    "",
+    `${touchOrPress} to continue...`,
   ];
 
   texts.forEach((text, index) => {

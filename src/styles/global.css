@@ -1,19 +1,33 @@
 * {
-  @apply text-slate-900;
+  @apply text-slate-900 dark:text-slate-200;
   font-display: "fallback";
 }
 
 body {
-  @apply bg-slate-100;
+  @apply bg-slate-100 dark:bg-stone-900 overflow-x-hidden;
   font-family: "Space Grotesk", "Arial", "Helvetica", "sans-serif";
 }
 
 main {
-  @apply bg-slate-100;
+  @apply bg-slate-100 dark:bg-zinc-900;
+}
+
+@media (prefers-contrast: more) {
+  * {
+    @apply text-black dark:text-white;
+  }
+
+  body {
+    @apply bg-white dark:bg-black;
+  }
+
+  main {
+    @apply bg-white dark:bg-black;
+  }
 }
 
 a {
-  @apply inline-block p-6 text-lg transition-all focus:bg-yellow-400 md:p-4 focus:outline-none;
+  @apply inline-block p-6 text-lg transition-all focus:bg-yellow-400 md:p-4 focus:outline-none dark:focus:text-slate-900;
 }
 
 a[target="_blank"]:hover {
@@ -25,6 +39,10 @@ img {
 }
 #markdown-content .container > hr {
   @apply mb-32;
+}
+
+#markdown-content .container pre {
+  @apply max-w-5xl m-auto mb-36 py-4 px-3 md:px-6 mx-6 md:mx-auto shadow-xl dark:shadow-md rounded-3xl text-xs md:text-base;
 }
 
 #markdown-content .container > blockquote {
@@ -44,7 +62,7 @@ img {
   @apply max-w-lg grid-cols-1 m-auto;
 }
 
-#markdown-content .container > blockquote p em {
+#markdown-content .container > blockquote p > em {
   @apply block mb-3 not-italic font-bold md:text-3xl;
 }
 
@@ -58,11 +76,11 @@ img {
 }
 
 #markdown-content ol li::marker {
-  @apply text-4xl text-gray-300;
+  @apply text-4xl text-gray-300 dark:text-gray-700;
   font-family: "caveat";
 }
 
-#markdown-content .container > p:has(em) {
+#markdown-content .container > p:has(> em) {
   @apply grid;
   grid-template-columns: 200px 1fr;
 }
@@ -78,6 +96,10 @@ img {
 
   #markdown-content .container > p:has(em) em:first-child {
     @apply mb-4 text-2xl;
+  }
+
+  #markdown-content .container > p:has(em) > em > a {
+    @apply text-2xl;
   }
 
   #markdown-content .container > p:not(:has(img)) {
@@ -98,13 +120,17 @@ img {
   left: calc(-50vw + 50%);
 }
 
+#markdown-content .container > p:has(> strong):not(:has(> img)) {
+  @apply mb-0;
+}
+
 #markdown-content .container > p > strong {
   @apply block w-full mb-3 text-2xl text-center normal-case;
   font-family: "caveat";
 }
 
 #markdown-content .container > p > strong:after {
-  @apply block;
+  @apply block dark:filter dark:invert;
   content: url("/arrow.svg");
 }
 
@@ -114,6 +140,10 @@ img {
 
 #markdown-content .container > p > em:first-child {
   @apply text-lg not-italic font-bold uppercase text-start;
+}
+
+#markdown-content .container > p > em > a {
+  @apply text-lg;
 }
 
 #markdown-content .container > p:has(> a) {

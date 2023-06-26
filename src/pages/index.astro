@@ -5,7 +5,7 @@ import FormattedDate from "../components/FormattedDate.astro";
 import Image from "../components/Image.astro";
 import Intro from "../components/Intro.astro";
 
-const projects = (await getCollection("portfolio")).sort((a, b) => {
+const projects = (await getCollection("portfolio")).filter(project => !Boolean(project.data.hidden)).sort((a, b) => {
   return (
     new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
   );

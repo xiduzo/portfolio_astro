@@ -5,6 +5,7 @@ pubDate: "Jun 02 2023"
 headerColor: "#5FB2FF"
 backgroundColor: "#FFF"
 heroImage: "/portfolio/fissa/showreel.png"
+hidden: true
 ---
 
 _Problem_

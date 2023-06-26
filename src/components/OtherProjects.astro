@@ -10,7 +10,7 @@ type Props = {
 const { currentProject, background } = Astro.props;
 
 const projects = (await getCollection("portfolio"))
-  .filter((project) => project.data.title !== currentProject)
+  .filter((project) => project.data.title !== currentProject && !Boolean(project.data.hidden))
   .sort(() => Math.random() - 0.5);
 ---
 

@@ -38,4 +38,12 @@ const { title, description } = Astro.props;
   setTimeout(() => {
     localStorage.setItem("lastVisit", new Date().toString());
   })
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const codeSamples = document.querySelectorAll("pre")
+
+    codeSamples.forEach(codeSample => {
+      codeSample.setAttribute("aria-hidden", "true")
+    })
+  })
 </script>

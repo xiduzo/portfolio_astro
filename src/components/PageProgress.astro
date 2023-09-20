@@ -15,9 +15,11 @@ const { color } = Astro.props;
 
 <script>
   const listener = () => {
+    const root = document.documentElement
+
     const scrollOffset =
       window.pageYOffset ||
-      document.documentElement.scrollTop ||
+      root.scrollTop ||
       document.body.scrollTop;
 
     const main = document.querySelector("main");
@@ -31,19 +33,13 @@ const { color } = Astro.props;
 
     const progress = (scrollOffset * 100) / scrollableContent;
 
-    document.documentElement.style.setProperty(
-      "--page-scroll-progress",
-      progress.toString() + "%"
-    );
+    root.style.setProperty("--page-scroll-progress",progress.toString() + "%");
 
     const asideRect = aside.getBoundingClientRect();
     // We add 64 because of the `-translate-y-16` in the base layout
     const opacity = asideRect.top - window.innerHeight + 64 > 0 ? 1 : 0;
 
-    document.documentElement.style.setProperty(
-      "--page-scroll-progress-opacity",
-      opacity.toString()
-    );
+    root.style.setProperty("--page-scroll-progress-opacity",opacity.toString());
   };
 
   document.addEventListener("scroll", listener);

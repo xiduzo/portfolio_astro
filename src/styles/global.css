@@ -72,7 +72,7 @@ img {
 }
 
 #markdown-content ol li {
-  @apply mb-2 list-decimal list-outside;
+  @apply mb-2 list-decimal list-outside ml-12 mr-4 md:mx-0;
 }
 
 #markdown-content ol li::marker {

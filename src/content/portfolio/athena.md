@@ -27,11 +27,11 @@ Giving- or asking for feedback can be a tough task, especially for first-year st
 ![Teachers insights into feedback](/portfolio/athena/feedback.png)
 
 _A contract_
-With Athena students of a project team are creating a contract at the start of the project with each other. This contract contains all indicators on which the students will give each other feedback upon.<br/><br/>
+With Athena students of a project team are creating a contract at the start of the project with each other. This contract contains all indicators on which the students will give each other feedback upon.<br aria-hidden="true"/><br aria-hidden="true"/>
 The indicators are divided into 4 competences; Attitude, accountability, knowledge development and functioning within the group.
-<br/><br/>
+<br aria-hidden="true"/><br aria-hidden="true"/>
 Project coordinators can set initial indicators which the students can select for their contract. Besides, Athena also allows each team to make their own indicators on which they think the whole team should act upon.
-<br/><br/>
+<br aria-hidden="true"/><br aria-hidden="true"/>
 All students within a project team give weekly feedback to each other on the agreed upon indicators.
 
 **Insights into trello activities**
@@ -44,7 +44,7 @@ As the purpose of Athena is to give more insight into team dynamics Athena is bu
 ![Detailed scrum insights from team members](/portfolio/athena/workload_2.png)
 
 _Performance_
-Besides feedback as an indicator in team dynamics performance and division of tasks are sometimes hard to see for project groups and teachers alike. <br/><br/>
+Besides feedback as an indicator in team dynamics performance and division of tasks are sometimes hard to see for project groups and teachers alike. <br aria-hidden="true"/><br aria-hidden="true"/>
 Some teachers of CMD are using a scrum like approach with their project teams in order to follow the progress of a project. Athena has the option to connect any project group to a trello board if a teacher would like to.
 
 <a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about Athena," aria-label="Send me an email to I can tell you more" target="_blank">I'd like to know more</a>
@@ -54,6 +54,6 @@ Some teachers of CMD are using a scrum like approach with their project teams in
 _References_
 <span>
     <a href="https://github.com/xiduzo/afstudeerproject_backend" target="_blank">Code (server)</a>
-    <br/><br/>
+    <br aria-hidden="true"/><br aria-hidden="true"/>
     <a href="https://github.com/xiduzo/afstudeerproject" target="_blank">Code (app)</a>
 </span>

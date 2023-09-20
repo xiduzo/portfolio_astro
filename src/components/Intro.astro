@@ -1,56 +1,42 @@
-<section
-  class="fixed inset-0 z-40 hidden p-2 bg-slate-950 scroll md:p-10 transition-all"
-  id="wrapper"
->
-  <div class="flex flex-col text-2xl space-y-3" id="content">
-    <!-- Content will be filled with JS -->
-  </div>
-</section>
+<div>
+  <div class="sr-only">Oh hi there, good day to you. My name is Sander, a passionate developer with a creative mind™.</div>
+  <section class="fixed inset-0 z-40 hidden p-2 bg-gray-950 scroll md:p-10 transition-all" id="wrapper" aria-hidden="true">
+    <div class="flex flex-col text-2xl space-y-3" id="content">
+      <div class="grid md:gap-3 gap-1 grid-cols-[1fr,10fr]">
+        <span class="text-green-600 font-extrabold px-2 md:px-4 uppercase">Ok</span>
+        <div class="text-slate-50">Oh hi there,</div>
+      </div>
+      <!-- Content will be filled with JS -->
+    </div>
+  </section>
+</div>
 
 <script>
   const body = document.querySelector("body");
-  const content = document.getElementById("content");
   const wrapper = document.getElementById("wrapper");
   let isIntroDone = false;
-  let hasSeenIntro = false;
 
   const closeIntro = () => {
     if (!isIntroDone) return;
-    if (hasSeenIntro) return;
 
-    hasSeenIntro = true;
+    document.removeEventListener("keydown", closeIntro);
+    body?.removeEventListener("click", closeIntro);
+    
     // Scroll to top
     // Just in case the user scrolled down
     window.scrollTo(0, 0);
+    body?.classList.remove("overflow-hidden")
 
     wrapper?.classList.add("opacity-0", "scale-0");
-    localStorage.setItem("lastVisit", new Date().toString());
 
     setTimeout(() => {
       wrapper?.remove();
     }, 500);
   };
 
+
   document.addEventListener("keydown", closeIntro);
   body?.addEventListener("click", closeIntro);
-
-  const lastVisit = localStorage.getItem("lastVisit");
-
-  if (lastVisit) {
-    const date1 = new Date(lastVisit).valueOf();
-    const date2 = new Date().valueOf();
-    const timeDifference = Math.abs(date2 - date1);
-    const differenceInHours = Math.ceil(timeDifference / (1000 * 60 * 60));
-
-    if (differenceInHours > 6) {
-      wrapper?.classList.remove("hidden");
-    } else {
-      hasSeenIntro = true;
-      wrapper?.remove();
-    }
-  } else {
-    wrapper?.classList.remove("hidden");
-  }
 
   const timeOfDay = (): string => {
     const time = new Date().getHours();
@@ -70,10 +56,9 @@
     );
   };
 
-  const touchOrPress = isTouchDevice() ? "Touch <code>here</code>" : "Press <code>[any key]</code>";
+  const touchOrPress = isTouchDevice() ? "Touch <code>anywhere</code>" : "Press <code>[any key]</code>";
 
   const texts = [
-    "Oh hi there,",
     "",
     `Good ${timeOfDay()}`,
     "",
@@ -87,39 +72,64 @@
     `${touchOrPress} to continue...`,
   ];
 
-  texts.forEach((text, index) => {
-    const textWrapper = document.createElement("div");
-    textWrapper.classList.add(
-      "grid",
-      "grid-cols-2",
-      "md:gap-3",
-      "gap-1",
-      "grid-cols-[1fr,10fr]"
-    );
+  const showIntro = () => {
+    if(!wrapper) return
 
-    const status = document.createElement("span");
-    status.innerHTML = "Ok";
-    status.classList.add(
-      "text-green-600",
-      "font-extrabold",
-      "px-2",
-      "md:px-4",
-      "uppercase"
-    );
-    status.ariaHidden = "true";
+    body?.classList.add("overflow-hidden")
+    wrapper.classList.remove("hidden");
+    wrapper?.focus()
 
-    const textContent = document.createElement("div");
-    textContent.classList.add("text-slate-50");
-    textContent.innerHTML = text;
+    texts.forEach((text, index) => {
+      const textWrapper = document.createElement("div");
+      textWrapper.classList.add(
+        "grid",
+        "grid-cols-2",
+        "md:gap-3",
+        "gap-1",
+        "grid-cols-[1fr,10fr]"
+      );
 
-    textWrapper.appendChild(status);
-    textWrapper.appendChild(textContent);
+      const status = document.createElement("span");
+      status.innerHTML = "Ok";
+      status.classList.add(
+        "text-green-600",
+        "font-extrabold",
+        "px-2",
+        "md:px-4",
+        "uppercase",
+      );
+      status.ariaHidden = "true";
 
-    setTimeout(() => {
-      content?.appendChild(textWrapper);
-      if (index === texts.length - 1) isIntroDone = true;
-    }, (500 + Math.random() * 100) * (index + 1));
-  });
+      const textContent = document.createElement("div");
+      textContent.classList.add("text-slate-50");
+      textContent.innerHTML = text;
+
+      textWrapper.appendChild(status);
+      textWrapper.appendChild(textContent);
+
+      setTimeout(() => {
+      const content = document.getElementById("content");
+        content?.appendChild(textWrapper);
+        if (index === texts.length - 1) isIntroDone = true;
+      }, (500 + Math.random() * 100) * (index + 1));
+    });
+  }
+
+  const lastVisit = localStorage.getItem("lastVisit");
+
+  if (lastVisit) {
+    const date1 = new Date(lastVisit).valueOf();
+    const date2 = new Date().valueOf();
+    const timeDifference = Math.abs(date2 - date1);
+    const differenceInHours = Math.ceil(timeDifference / (1000 * 60 * 60));
+    
+    console.log({lastVisit, differenceInHours})
+    if (differenceInHours > 6)  showIntro()
+  } else {
+    showIntro();
+  }
+  
+  showIntro();
 </script>
 
 <style is:inline>

@@ -14,14 +14,14 @@ const currentYear = new Date().getFullYear();
         >Sander Boer</a
       >
     </li>
-    <li class="text-center text-slate-100 opacity-30">
+    <li class="text-center text-slate-100 opacity-30" aria-hidden="true">
       &copy; {currentYear}
     </li>
     <li class="text-center lg:text-end">
       <a
         class="text-slate-100 focus:text-slate-800"
         href="https://github.com/xiduzo"
-        aria-label="Check out my GitHub to see what I'm up to"
+        aria-label="Check out my GitHub to see what I'm up to, opens GitHub in a new Tab"
         target="_blank">What I'm up to</a
       >
     </li>
@@ -31,7 +31,7 @@ const currentYear = new Date().getFullYear();
       target="_blank"
       href="mailto:mail@sanderboer.nl?subject=Let's have a chat!&body=Hi, I'd like to have a chat with you,"
       class="text-6xl font-extrabold text-slate-100 focus:text-slate-800 md:text-9xl"
-      aria-label="Send me an email so we can have some beers together"
+      aria-label="Send me an email so we can have some beers together, opens your email app to send me an email"
       >Let's have some 🍺</a
     >
   </div>
@@ -40,6 +40,7 @@ const currentYear = new Date().getFullYear();
       <a
         class="text-slate-100 focus:text-slate-800"
         target="_blank"
+        aria-label="Call me on my mobile phone, will open your phone app to call me"
         href="tel:+31636548880">Call me</a
       >
     </li>
@@ -47,6 +48,7 @@ const currentYear = new Date().getFullYear();
       <a
         class="text-slate-100 focus:text-slate-800"
         target="_blank"
+        aria-label="Send me an email, will open your email app to send me an email"
         href="mailto:mail@sanderboer.nl">Mail me</a
       >
     </li>
@@ -55,7 +57,7 @@ const currentYear = new Date().getFullYear();
         class="text-slate-100 focus:text-slate-800"
         target="_blank"
         href="https://www.linkedin.com/in/sander-boer-653110a5"
-        aria-label="Connect with me on LinkedIn">Connect with me</a
+        aria-label="Connect with me on LinkedIn, opens LinkedIn in a new Tab">Connect with me</a
       >
     </li>
   </ul>

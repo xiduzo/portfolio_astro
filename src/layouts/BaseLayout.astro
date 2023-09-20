@@ -33,3 +33,9 @@ const { title, description } = Astro.props;
     <Footer />
   </body>
 </html>
+
+<script>
+  setTimeout(() => {
+    localStorage.setItem("lastVisit", new Date().toString());
+  })
+</script>

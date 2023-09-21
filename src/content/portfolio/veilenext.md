@@ -2,7 +2,6 @@
 title: "VeileNext"
 description: "Modernize the biggest flower auction in the world"
 pubDate: "Jul 15 2021"
-drawColor: "#FF7200"
 headerColor: "#0BCA89"
 heroImage: "/portfolio/veilenext/showreel.png"
 ---

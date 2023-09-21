@@ -2,8 +2,7 @@
 title: "LiveStock"
 description: "Introduce humans to the blockchain and crypto-currency wallets"
 pubDate: "Feb 21 2018"
-drawColor: "#7D8CA9"
-headerColor: "#035F99"
+headerColor: "#3866a0"
 backgroundColor: "#FFF"
 heroImage: "/portfolio/livestock/showreel.png"
 ---

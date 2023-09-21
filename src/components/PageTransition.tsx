@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { FC, useEffect, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 
 export const PageTransition: FC<Props> = ({ background }) => {
   const [entryAnimation, setEntryAnimation] = useState(true);

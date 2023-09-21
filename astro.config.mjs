@@ -6,7 +6,6 @@ import react from "@astrojs/react";
 import vercel from "@astrojs/vercel/static";
 import compress from "astro-compress";
 
-import image from "@astrojs/image";
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -25,15 +24,10 @@ export default defineConfig({
       svg: true,
       img: false,
     }),
-    image({
-      serviceEntryPoint: '@astrojs/image/sharp',
-    }),
   ],
   output: "static",
   outDir: "./.vercel/output/static",
-  experimental: {
-   assets: true // required for vercel adapter; imageService: true
-  },
+  experimental: {},
   adapter: vercel({
     analytics: isProduction,
     imageService: isProduction,

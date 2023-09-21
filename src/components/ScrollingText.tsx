@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FC, useEffect, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import { userPrefersReducedMotion } from "../hooks/userPrefersReducedMotion";
 
 export const ScrollingText: FC<Props> = ({

@@ -115,9 +115,14 @@ img {
   @apply relative max-w-full my-48;
 }
 
-#markdown-content .container > p img {
+#markdown-content .container > p img,
+#markdown-content .container > img {
   @apply col-span-2 w-screen max-w-[100vw] relative;
   left: calc(-50vw + 50%);
+}
+
+#markdown-content .container > img {
+  @apply my-48;
 }
 
 #markdown-content .container > p:has(> strong):not(:has(> img)) {

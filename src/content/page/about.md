@@ -54,24 +54,24 @@ Next to coding, I enjoy to cook and eat. I am fan of the Italian and Mexican kit
 <br aria-hidden="true"/><br aria-hidden="true"/>
 I like (to be in) nature and am your go-to-guy to entertain/annoy the dog/cat at any party!
 
-![Three pictures of Sander. 1. with a dought machine, 2. in nature and 3. with a dog](/page/about/me_1.png)
+<img src="/page/about/me_1.png" alt="Three pictures of Sander. 1. with a dought machine, 2. in nature and 3. with a dog]" loading="lazy" />
 
 From time to time I try to experiment with random technologies like 3d printing, Augmented- and Virtual-Reality and micro-controllers.
 
-![Pictures of sander working with 3d-printing, Augmented- and Virtual-Reality and micro-controllers](/page/about/technologies.png)
+<img src="/page/about/technologies.png" alt="Pictures of sander working with 3d-printing, Augmented- and Virtual-Reality and micro-controllers" loading="lazy" />
 
 Sharing = caring.
 <br aria-hidden="true"/><br aria-hidden="true"/>
 I like to share my knowledge and experience with others. I do this by <span><a href="https://docs.google.com/presentation/d/16IS66caD_78nlevIkSzTQUb54KVkHEzJMG_Kw08B8pY/edit?usp=sharing" target="_blank">giving workshops</a></span>, <span><a href="https://www.masterdigitaldesign.com/staff/sander-boer" target="_blank">mentoring students</a></span> and trying to be an active member of the <span><a href="https://stackoverflow.com/users/4655177/xiduzo" target="_blank">developer community</a></span>.
 
-![3 pictures of sander sharing knowledge in various ways](/page/about/sharing.png)
+<img src="/page/about/sharing.png" alt="3 pictures of sander sharing knowledge in various ways" loading="lazy" />
 
 You can always challenge me for a game but be aware, I am in it to win it.
 
-![sander playing games](/page/about/games.png)
+![]()
 
 If the sun is out, I'd love to join you for a beer (or tequila).
 
-![sander drinking beers at various places](/page/about/beer.png)
+<img src="/page/about/beer.png" alt="sander drinking beers at various places" loading="lazy" />
 
 <a href="mailto:mail@sanderboer.nl?subject=Let's connect!&body=Hi, I'd like to connect with you," target="_blank">Let's get that beer</a>

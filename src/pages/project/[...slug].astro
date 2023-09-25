@@ -1,0 +1,24 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import MarkdownContent from "../../layouts/MarkdownContent.astro";
+import Image from "../../components/Image.astro";
+
+
+export const components = { img: Image };
+
+export async function getStaticPaths() {
+  const projects = await getCollection("project");
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: project,
+  }));
+}
+type Props = CollectionEntry<"project">;
+
+const project = Astro.props;
+const { Content } = await project.render();
+---
+
+<MarkdownContent {...project.data}>
+  <Content components={{ img: Image }} />
+</MarkdownContent>

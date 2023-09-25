@@ -9,7 +9,7 @@ type Props = {
 
 const { currentProject, background } = Astro.props;
 
-const projects = (await getCollection("portfolio"))
+const projects = (await getCollection("project"))
   .filter((project) => project.data.title !== currentProject && !Boolean(project.data.hidden))
   .sort(() => Math.random() - 0.5);
 ---
@@ -24,7 +24,7 @@ const projects = (await getCollection("portfolio"))
         <li class="snap-always snap-center md:snap-end relative shrink-0 w-[75vw] md:w-[60vw] lg:w-[35vw]">
           <a
             class="h-full"
-            href={`/portfolio/${project.slug}`}
+            href={`/project/${project.slug}`}
             aria-label={`project: ${project.data.title},${project.data.description}`}
           >
             <Image

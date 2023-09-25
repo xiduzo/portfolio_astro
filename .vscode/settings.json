@@ -1,5 +1,6 @@
- {
-  "cSpell.words":["astro","astrojs",
-    "Fissa"
-  ] ;
+{
+  "cSpell.words":["astro","astrojs","Fissa"],
+  "files.associations": {
+    "*.mdx": "markdown"
+  }
 }

@@ -5,7 +5,7 @@ import FormattedDate from "../components/FormattedDate.astro";
 import Image from "../components/Image.astro";
 import Intro from "../components/Intro.astro";
 
-const projects = (await getCollection("portfolio")).filter(project => !Boolean(project.data.hidden)).sort((a, b) => {
+const projects = (await getCollection("project")).filter(project => !Boolean(project.data.hidden)).sort((a, b) => {
   return (
     new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
   );
@@ -20,7 +20,7 @@ const projects = (await getCollection("portfolio")).filter(project => !Boolean(p
       projects.map((project) => (
         <li>
           <a
-            href={`/portfolio/${project.slug}/`}
+            href={`/project/${project.slug}/`}
             class="flex flex-col lg:space-x-4 stroke-white group lg:flex-row group"
             aria-label={`project: ${project.data.title}, ${project.data.description}`}
           >

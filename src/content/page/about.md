@@ -68,8 +68,6 @@ I like to share my knowledge and experience with others. I do this by <span><a h
 
 You can always challenge me for a game but be aware, I am in it to win it.
 
-![]()
-
 If the sun is out, I'd love to join you for a beer (or tequila).
 
 <img src="/page/about/beer.png" alt="sander drinking beers at various places" loading="lazy" />

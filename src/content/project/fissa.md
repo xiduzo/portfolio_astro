@@ -177,27 +177,26 @@ _Free with limits_
 export const useTracks = (trackIds?: string[]) => {
   const { addTracks, tracks, spotify } = useSpotifyStore();
 
-  const cachedTrackIds = useMemo(() => tracks.map(({ id }) => id), [trackIds, tracks]);
+  const cachedTrackIds = useMemo(() => new Set(tracks.map(({ id }) => id)), [tracks]);
 
-  const uncachedTrackIds = useMemo(() => {
-    return trackIds?.filter((trackId) => !cachedTrackIds.includes(trackId)) ?? [];
-  }, [trackIds, cachedTrackIds]);
+  const uncachedTrackIds = useMemo(
+    () => trackIds?.filter((trackId) => !cachedTrackIds.has(trackId)) ?? [],
+    [trackIds, cachedTrackIds],
+  );
 
-  const requestedTracks = useMemo(() => {
-    return (
-      trackIds?.map((trackId) => tracks.find(({ id }) => id === trackId)).filter(Boolean) ?? []
-    );
-  }, [trackIds, tracks]);
+  const requestedTracks = useMemo(
+    () => trackIds?.map((trackId) => tracks.find(({ id }) => id === trackId)).filter(Boolean) ?? [],
+    [trackIds, tracks],
+  );
 
   useMemo(async () => {
-    const promises = splitInChunks(uncachedTrackIds).map(async (chunk) => {
-      const { tracks } = await spotify.getTracks(chunk);
-      return tracks;
-    });
+    const promises = splitInChunks(uncachedTrackIds).map(
+      async (chunk) => (await spotify.getTracks(chunk)).tracks,
+    );
 
-    const tracks = (await Promise.all(promises)).flat();
+    const newTracks = (await Promise.all(promises)).flat();
 
-    if (tracks.length) addTracks(tracks);
+    if (newTracks.length) addTracks(newTracks);
   }, [uncachedTrackIds, addTracks, spotify]);
 
   return requestedTracks;
@@ -319,9 +318,9 @@ Easy peasy, lemon squeezy right? Well, not quite. This approach has a few drawba
 
 1. When we add a song to Fissa, we up-vote it. Who wouldn't up-vote their own track, right? But this means that whenever a track is added, we must recalculate the indexes of all the tracks below it because their order might change.
 2. Users can up- or down-vote tracks anytime, leading to constant index changes. While this isn't inherently problematic, it can disrupt ongoing index recalculations.
-3. Because of the unique index constraint in prisma, we had to update it twice: once to clear the new index and once to update the moved track's index.
+3. Because of the unique index constraint in prisma (read postgres), we had to update it twice: once to clear the new index and once to update the moved track's index.
 
-**Calculating the new indexes**
+**Messy code of calculating the new indexes**
 ```typescript
 class FissaService {
   // ...
@@ -485,10 +484,19 @@ model Track {
 
 **THE algorithm**
 ```typescript
-const sortTrack = (a: { time: Date; trackId: string }, b: { time: Date; trackId: string }) => {
-  const aTime = a.time.getTime();
-  const bTime = b.time.getTime();
+type Dates = { lastUpdateAt: Date; createdAt: Date; };
 
+export type SortableTrack = Dates & {
+  score: number;
+  trackId: string;
+  hasBeenPlayed: boolean;
+};
+
+const sortTrack = (date: keyof Dates) => (a: SortableTrack, b: SortableTrack) => {
+  const aTime = a[date].getTime();
+  const bTime = b[date].getTime();
+
+  if (a.score !== b.score) return b.score - a.score;
   if (aTime === bTime) return a.trackId.localeCompare(b.trackId);
 
   return aTime - bTime;
@@ -500,33 +508,23 @@ export const sortFissaTracksOrder = <T extends SortableTrack>(
 ) => {
   if (!tracks) return [];
 
-  let sortedTracks: T[] = [];
+  const { played, unplayed, active } = tracks.reduce(
+    (acc, track) => {
+      const { hasBeenPlayed, trackId } = track;
 
-  const playedTracks = tracks.filter(
-    ({ hasBeenPlayed, trackId }) => hasBeenPlayed && trackId !== activeTrackId,
+      if (trackId === activeTrackId) acc.active = track;
+      else if (hasBeenPlayed) acc.played.push(track);
+      else acc.unplayed.push(track);
+
+      return acc;
+    },
+    { played: [] as T[], unplayed: [] as T[], active: null as T | null },
   );
-  const unplayedTracks = tracks.filter(
-    ({ hasBeenPlayed, trackId }) => !hasBeenPlayed && trackId !== activeTrackId,
-  );
-  const activeTrack = tracks.find(({ trackId }) => trackId === activeTrackId);
 
-  const sortedPlayedTracks = playedTracks.sort((a, b) => {
-    return sortTrack({ ...a, time: a.lastUpdateAt }, { ...b, time: b.lastUpdateAt });
-  });
+  const sortedPlayedTracks = played.sort(sortTrack("lastUpdateAt"));
+  const sortedUnplayedTracks = unplayed.sort(sortTrack("createdAt"));
 
-  const sortedUnplayedTracks = unplayedTracks.sort((a, b) => {
-    if (a.score === b.score) {
-      return sortTrack({ ...a, time: a.createdAt }, { ...b, time: b.createdAt });
-    }
-
-    return b.score - a.score;
-  });
-
-  sortedTracks = sortedTracks.concat(sortedPlayedTracks);
-  if (activeTrack) sortedTracks.push(activeTrack);
-  sortedTracks = sortedTracks.concat(sortedUnplayedTracks);
-
-  return sortedTracks;
+  return [...sortedPlayedTracks, ...(active ? [active] : []), ...sortedUnplayedTracks];
 };
 ```
 

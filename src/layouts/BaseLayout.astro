@@ -15,7 +15,8 @@ type Props = {
 const { title, description } = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
+<!-- Made with ❤️ by xiduzo  --><!-- Oh hi there curious driod, seeking for information on how you can build this?  --><!-- You can find all the wisdom you need at https://github.com/xiduzo/portfolio_astro  -->
 <html lang="en">
   <head>
     <BaseHead title={title} description={description} />
@@ -31,19 +32,43 @@ const { title, description } = Astro.props;
       <slot />
     </main>
     <Footer />
+    <script>
+      setTimeout(() => {
+        localStorage.setItem("lastVisit", new Date().toString());
+      });
+
+      window.addEventListener("DOMContentLoaded", () => {
+        const codeSamples = document.querySelectorAll("pre");
+
+        codeSamples.forEach((codeSample) => {
+          codeSample.setAttribute("aria-hidden", "true");
+        });
+      });
+
+      const styles = [
+        "color: red",
+        "background: yellow",
+        "font-size: 30px",
+        "text-shadow: 2px 2px black",
+        "padding: 10px",
+        "font-weight: 900",
+      ].join(";");
+
+      console.log("%cMade with ❤️ by xiduzo", styles);
+      console.log(" ");
+      console.log("~~~");
+      console.log(" ");
+      console.log(
+        "%cOh hi there curious driod, seeking for information on how you can build this?",
+        "font-weight: 900"
+      );
+      console.log(
+        "%cYou can find all the wisdom you need at https://github.com/xiduzo/portfolio_astro",
+        "font-weight: 900"
+      );
+      console.log(" ");
+      console.log("~~~");
+      console.log(" ");
+    </script>
   </body>
 </html>
-
-<script>
-  setTimeout(() => {
-    localStorage.setItem("lastVisit", new Date().toString());
-  })
-
-  window.addEventListener("DOMContentLoaded", () => {
-    const codeSamples = document.querySelectorAll("pre")
-
-    codeSamples.forEach(codeSample => {
-      codeSample.setAttribute("aria-hidden", "true")
-    })
-  })
-</script>

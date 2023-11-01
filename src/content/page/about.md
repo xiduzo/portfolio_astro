@@ -30,7 +30,7 @@ _Creative technologist_
         <em>
             With a bachelor's degree in <a href="https://www.cmd-amsterdam.nl" target="_blank">Communication and Multimedia design</a> and a master's degree in <a href="https://www.masterdigitaldesign.com/alumni/sander-boer" target="_blank">Digital Design</a>
         </em>
-        <br aria-hidden="true"/><br aria-hidden="true"/>
+        <br aria-hidden="true"/>
         <sup>\*\*</sup>
         <em>With 15+ years of software development experience</em>
     </span>
@@ -41,7 +41,7 @@ Fusing amazing technology with good design. My driving force is to create tools 
 <br aria-hidden="true"/><br aria-hidden="true"/>
 Collaborating with individuals from diverse backgrounds to achieve a shared objective is a value I hold dear. I firmly believe that exceptional solutions emerge when we embrace a multitude of perspectives.
 <br aria-hidden="true"/><br aria-hidden="true"/>
-While my focus predominantly lies in the realm of technology, my true strengths lie in the intersection of UX and development. I recognize the value of actively participating in both disciplines, allowing me to enhance my strengths of both.
+While I'm deeply rooted in the realm of technology, my true strengths shine at the intersection of UX and development. Actively engaging in both disciplines is where I like to play ball.
 
 <hr/>
 
@@ -67,6 +67,8 @@ I like to share my knowledge and experience with others. I do this by <span><a h
 <img src="/page/about/sharing.png" alt="3 pictures of sander sharing knowledge in various ways" loading="lazy" />
 
 You can always challenge me for a game but be aware, I am in it to win it.
+
+<img src="/page/about/games.png" alt="sander playing all sorts of games" loading="lazy" />
 
 If the sun is out, I'd love to join you for a beer (or tequila).
 

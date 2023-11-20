@@ -21,6 +21,14 @@ const blogs = (await getCollection("blog"))
     class="container pt-56 m-auto -mt-16 space-y-16 lg:space-y-72 pb-72 min-h-screen"
   >
     {
+      blogs.length === 0 && (
+        <div>
+          Over here I will put some ramblings and brain farts. So far I have
+          prosponed this.
+        </div>
+      )
+    }
+    {
       blogs.map((blog) => (
         <li>
           <a

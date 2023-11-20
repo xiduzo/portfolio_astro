@@ -4,6 +4,7 @@ description: "Unravelling the magic from React"
 pubDate: "Nov 20 2023"
 headerColor: "#5DD4F4"
 heroImage: "/blog/suspense/showreel.png"
+hidden: true
 ---
 
 <p>

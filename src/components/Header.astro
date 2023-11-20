@@ -21,13 +21,17 @@ import HeaderLink from "./HeaderLink.astro";
       for="menu-toggle"
     >
       <input type="checkbox" id="menu-toggle" class="hidden" />
-      Menu
+       Menu
     </label>
     <nav
       class="flex flex-col justify-center flex-1 w-full text-center md:flex-row space-y-8 md:space-y-0 md:justify-end"
     >
-      <HeaderLink href="/" class="text-6xl md:text-base">Projects</HeaderLink>
-      <!-- <HeaderLink href="/blog">Blog</HeaderLink> -->
+      <HeaderLink href="/" class="text-6xl md:text-base">
+        Things I made
+      </HeaderLink>
+      <HeaderLink href="/blog" class="text-6xl md:text-base">
+        Things I wrote
+      </HeaderLink>
       <HeaderLink href="/page/about" class="text-6xl md:text-base">
         Who is Sander
       </HeaderLink>

@@ -18,8 +18,13 @@ const { title, description, heroImage, headerColor } = Astro.props;
   <PageTransition background={headerColor} client:load />
   <ScrollingText text={title} background={headerColor} client:only />
   <article id="markdown-content">
-    <Image aria-hidden="true" src={heroImage} alt={description} loading="eager" />
-    <h1 class="sr-only">Project: {title}</h1>
+    <Image
+      aria-hidden="true"
+      src={heroImage}
+      alt={description}
+      loading="eager"
+    />
+    <h1 class="sr-only">{title}</h1>
 
     <section
       class="pt-40 pb-72 max-w-7xl m-auto px-4 font-extrabold text-center"

@@ -3,7 +3,6 @@ title: "Fissa"
 description: "Not only one person should decide what's playing on a party"
 pubDate: "Jun 02 2023"
 headerColor: "#5FB2FF"
-backgroundColor: "#FFF"
 heroImage: "/project/fissa/showreel.png"
 hidden: false
 ---
@@ -45,11 +44,11 @@ _The journey to <a href="https://docs.expo.dev/" target="_blank">expo</a>_
 <p>
     <span>
         As with all the cross-platform tools I felt more like a <em>configurator</em> than a developer. Constantly fighting the framework to get things done, and having to write platform specific code anyway.
-        <br aria-hidden="true" /><br aria-hidden="true"/>
+        <br aria-hidden="true" /><br aria-hidden />
         What happened to the fun? Was this the end of the project?
-        <br aria-hidden="true"/><br aria-hidden="true"/>
+        <br aria-hidden /><br aria-hidden />
         I take great inspiration from <a href="https://www.youtube.com/@t3dotgg/videos" target="_blank">Theo Browne</a> which is how I stumbled upon the <a href="https://create.t3.gg/" target="_blank">T3-stack</a>. No more configuration<sup class="text-sm">*</sup>, just coding!
-        <br aria-hidden="true"/><br aria-hidden="true"/>
+        <br aria-hidden /><br aria-hidden />
         <span class="text-sm">
             <sup>*</sup>
             <em>
@@ -65,7 +64,7 @@ _The journey to <a href="https://docs.expo.dev/" target="_blank">expo</a>_
 _The great reset_
 <span>
     No, not <a href="https://www.weforum.org/great-reset/" target="_blank">that one</a>.
-    <br aria-hidden="true"/><br aria-hidden="true"/>
+    <br aria-hidden /><br aria-hidden />
     Working with TypeScript (for the past 5 years) has been a real game-changer and I would never go without, neither should any sane person. However, even TypeScript still has it's quirks.
     <br aria-hidden="true" /><br aria-hidden="true" />
     Luckily, our TypeScript wizard <a href="https://www.youtube.com/@mattpocockuk" target="_blank">Matt Pocock</a> released an awesome tool right when we started with Fissa; <a href="https://github.com/total-typescript/ts-reset" target="_blank">ts-reset</a>.
@@ -84,7 +83,7 @@ const filteredArray = [1, 2, undefined].filter(Boolean); // number[]
 
 ## A colorful Fissa
 Music is a blend of personal expression and social connection. By creating a collaborative playlist, and sharing your favorite tunes, we create a social experience.
-<br aria-hidden="true"/><br aria-hidden="true"/>
+<br aria-hidden /><br aria-hidden />
 However, we also want to give the user a personal experience. This is why decided to give each Fissa their own color palette.
 
 _Tailwind_
@@ -153,11 +152,11 @@ const Component = () => {
 
 ## Less = more
 Milan and myself are both big fans of Spotify and we recognize its strength. They focus on one thing, and they do it very well; explore and discover music. 
-<br aria-hidden="true"/><br aria-hidden="true"/>
+<br aria-hidden /><br aria-hidden />
 While building Fissa, Spotify introduced the <span><a href="https://support.spotify.com/us/article/remote-group-session/" target="_blank">remote group session</a></span>. However, this is always a hidden feature, changes constantly and does not seem to have any focus from Spotify.
-<br aria-hidden="true"/><br aria-hidden="true"/>
+<br aria-hidden /><br aria-hidden />
 Although we want to keep users fully engaged in Fissa, we would never be able to do the exploration of music as well as Spotify does. Therefore we put our focus on managing a collaborative playlist and utilize Spotify for the rest.
-<br aria-hidden="true"/><br aria-hidden="true"/>
+<br aria-hidden /><br aria-hidden />
 Do one thing, and do it well.
 
 **Explorations on how we could add songs to a fissa via Spotify**
@@ -166,9 +165,9 @@ Do one thing, and do it well.
 _Free with limits_
 <span>
     Spotify provides us with an <a href="https://developer.spotify.com/documentation/web-api" target="_blank">awesome API</a>. Unfortunately, and understandably, it is <a href="https://developer.spotify.com/documentation/web-api/concepts/rate-limits" target="_blank">rate limited</a>.
-    <br aria-hidden="true"/><br aria-hidden="true"/>
+    <br aria-hidden /><br aria-hidden />
     Users need to be signed in to their Spotify account to use Fissa, therefore we can utilize the unlimited API calls from personal accounts. Everything which is not related to the Fissa itself, like searching for songs, is done via the Fissa app and stored using <a href="https://github.com/pmndrs/zustand" target="_blank">zustand</a>.
-    <br aria-hidden="true"/><br aria-hidden="true"/>
+    <br aria-hidden /><br aria-hidden />
     This reduces the load on Fissa's servers and simultaneously also allows us to host more Fissas without hitting Spotify's usage restrictions. Win-Win.
 <span>
 
@@ -250,7 +249,7 @@ class NativeToast extends Toaster {
 ```
 
 By playing around with animal-eomjis as copy we try to lighten the mood of Fissa and bring some extra joy to the experience.
-<br aria-hidden="true"/><br aria-hidden="true"/>
+<br aria-hidden /><br aria-hidden />
 Besides, it was a fun exercise to find the right animal for the different states of Fissa.
 
 **A few examples of the use of emojis in Fissa**
@@ -258,9 +257,9 @@ Besides, it was a fun exercise to find the right animal for the different states
 
 ## The Fissa never stops.
 What is more annoying than being at a party, finally having the courage to show your moves and then the musics stops.
-<br aria-hidden="true"/><br aria-hidden="true"/>
+<br aria-hidden /><br aria-hidden />
 This should never happen, the Fissa never stops.
-<br aria-hidden="true"/><br aria-hidden="true"/>
+<br aria-hidden /><br aria-hidden />
 Whenever the queue is about to get empty, Fissa will add recommended tracks. These will be semi-random tracks, utilizing the <span><a href="https://developer.spotify.com/documentation/web-api/reference/get-recommendations" target="_blank">Spotify recommendations</a></span>, but most importantly they will be based on the tracks which gained the most votes.
 
 ```typescript
@@ -294,7 +293,7 @@ class FissaService {
 
 _Determining the next song_
 As the Fissa is a collaborative playlist, users determine the order of the songs. This is done by voting on the songs. This proved to be the most challenging part of the project.
-<br aria-hidden="true"/><br aria-hidden="true"/>
+<br aria-hidden /><br aria-hidden />
 Strap-on your seatbelt, the next part will contain a lot of nerd info.
 
 Initially we just stored the index of the songs directly into the database. This way we put an unique index on the track for data integrity, and we could easily sort the tracks by their index.
@@ -463,7 +462,7 @@ console.info("Sync server is running");
 
 _The path of least resistance_
 Eventually we settled on inferring the position of a track based on its' score. The score is updated each time a user votes on a track and the score will be cleared whenever the song is being played.
-<br aria-hidden="true"/><br aria-hidden="true"/>
+<br aria-hidden /><br aria-hidden />
 By using the logic which was already in Fissa, we could actually remove a lot of code and make the whole process a lot more stable.
 
 **Storing the score in the database**
@@ -529,7 +528,7 @@ export const sortFissaTracksOrder = <T extends SortableTrack>(
 ```
 
 Phew, you made it all the way through the though end. That last part was code heavy. Here, have a 🍪.
-<br aria-hidden="true"/><br aria-hidden="true"/>
+<br aria-hidden /><br aria-hidden />
 Code can be scary right, but it's also fun.
 
 <a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about Fissa," aria-label="Send me an email to I can tell you more" target="_blank">I'd like to know more</a>
@@ -538,7 +537,7 @@ Code can be scary right, but it's also fun.
 
 _Experience fissa_
 <span>
-    <a href="https://apps.apple.com/nl/app/fissa-houseparty/id1632218985" target="_blank">App store</a><br aria-hidden="true"/><br aria-hidden="true"/>
+    <a href="https://apps.apple.com/nl/app/fissa-houseparty/id1632218985" target="_blank">App store</a><br aria-hidden /><br aria-hidden />
     <a href="https://play.google.com/store/apps/details?id=com.fissa" target="_blank">Play store</a>
 </span>
 
@@ -549,6 +548,6 @@ _In collaboration with_
 
 _References_
 <span>
-    <a href="https://github.com/xiduzo/t3-fissa" target="_blank">Code</a><br aria-hidden="true"/><br aria-hidden="true"/>
+    <a href="https://github.com/xiduzo/t3-fissa" target="_blank">Code</a><br aria-hidden /><br aria-hidden />
     <a href="https://github.com/xiduzo/fissa" target="_blank">Prototype code</a>
 </span>

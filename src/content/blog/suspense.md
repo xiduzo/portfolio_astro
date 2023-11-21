@@ -27,7 +27,7 @@ Neat, but _how_ does it actually works? _How_ does `Suspense` know when to show 
 </span>
 
 ## TL;DR
-<Suspense/> acts as a fancy `try/catch` block.<br aria-hidden/><br aria-hidden/> `Suspense` will <i>`try`</i> to render your component and whenever a `Promise` is being thrown it will <i>`catch`</i> it and render the fallback component until the promise resolves.
+`Suspense` acts as a fancy `try/catch` block.<br aria-hidden/><br aria-hidden/> `Suspense` will <i>`try`</i> to render your component and whenever a `Promise` is being thrown it will <i>`catch`</i> it and render the fallback component until the promise resolves.
 
 ```jsx
 <Suspense fallback={{/* Catch */}}> 
@@ -160,9 +160,9 @@ _More than lazy loading_
 Suspense was initially added to React to support <a href="https://legacy.reactjs.org/docs/code-splitting.html#reactlazy" target="_blank">lazy loading of components</a>. But currently can also be used to await data fetching and adding of <a href="https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary" target="_blank">error boundaries</a>.
 </span>
 
-_User Experience_
+_User Experience (UX)_
 <span>
-In order to create a better User Experience (UX) it is important to show the user something while we are waiting for data to load. It is also possible to <a href="https://codesandbox.io/s/66nw34?file=/ArtistPage.js&utm_medium=sandpack" target="_blank">nest <code>Suspense</code> components</a> for a more fine-grained experience.
+In order to create a better UX it is important to show the user something while we are waiting for data to load. It is also possible to <a href="https://codesandbox.io/s/66nw34?file=/ArtistPage.js&utm_medium=sandpack" target="_blank">nest <code>Suspense</code> components</a> for a more fine-grained experience.
 </span>
 
 _Be a step ahead_
@@ -176,7 +176,7 @@ Even though `Suspense` is still experimental, libraries like <a href="https://re
 _More than lazy loading_
 For simple applications with straightforward data fetching requirements, using Suspense might introduce unnecessary complexity. In such cases, simpler solutions like data fetching libraries might be more suitable.
 
-_User Experience_
+_User Experience (UX)_
 <span>
 In scenarios where finer control over loading states or error handling is crucial, a more manual approach using traditional patterns like `useEffect` and `useState` might be preferred
 </span>

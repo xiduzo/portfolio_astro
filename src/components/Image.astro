@@ -1,5 +1,5 @@
 ---
-import { Image as AstroImage } from "astro:assets";
+import { Picture } from "astro:assets";
 
 export interface Props {
   src: string;
@@ -10,4 +10,4 @@ export interface Props {
 }
 ---
 
-<AstroImage width={1920} height={1080} loading="lazy" {...Astro.props} />
+<Picture width={1920} height={1080} loading="lazy" {...Astro.props} />

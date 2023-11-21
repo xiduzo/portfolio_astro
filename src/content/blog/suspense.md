@@ -1,10 +1,9 @@
 ---
 title: "<Suspense/>"
 description: "Unravelling the magic from React"
-pubDate: "Nov 20 2023"
+pubDate: "Nov 21 2023"
 headerColor: "#5DD4F4"
 heroImage: "/blog/suspense/showreel.png"
-hidden: true
 ---
 
 <p>
@@ -24,11 +23,11 @@ hidden: true
 
 _But how does it work?_
 <span>
-Neat, but _how_ does it actually works? _How_ does `Suspense` know when to show the fallback and when to show the child component? When I asked around I just got the answer that it's "magic". But I don't like magic code, so let's find out how it works
+Neat, but _how_ does it actually works? _How_ does `Suspense` know when to show the fallback and when to show the child component? When I asked around I just got the answer that <em>"it's magic"</em>. But I don't like magic code, so let's find out how it works
 </span>
 
 ## TL;DR
-`<Suspense/>` acts as a fancy `try/catch` block.<br aria-hidden/><br aria-hidden/>When a `Promise` has been thrown, `Suspense` will render the fallback component until the promise resolves.
+<Suspense/> acts as a fancy `try/catch` block.<br aria-hidden/><br aria-hidden/> `Suspense` will <i>`try`</i> to render your component and whenever a `Promise` is being thrown it will <i>`catch`</i> it and render the fallback component until the promise resolves.
 
 ```jsx
 <Suspense fallback={{/* Catch */}}> 
@@ -69,7 +68,7 @@ Simple as that! A fancy `try/catch` for React.
 
 Let's see if we can make it a bit more interesting and make an async call using suspense.
 
-First we need to create something we need to wait for.
+First we need to create something we need to wait for. In this example we will create some fake data fetching function as this is a common use case. In reality, `Suspense` can work with any asynchronous operation.
 
 ```javascript
 export function fakeApi(name) {
@@ -156,7 +155,7 @@ Suspense is a great way to handle asynchronous data fetching. It is a great alte
 </span>
 </p>
 
-_Lazy loading_
+_More than lazy loading_
 <span>
 Suspense was initially added to React to support <a href="https://legacy.reactjs.org/docs/code-splitting.html#reactlazy" target="_blank">lazy loading of components</a>. But currently can also be used to await data fetching and adding of <a href="https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary" target="_blank">error boundaries</a>.
 </span>
@@ -172,13 +171,17 @@ Even though `Suspense` is still experimental, libraries like <a href="https://re
 </span>
 
 ## Why wouldn't you use `<Suspense/>`
-<p>
-<span>
-It is important to recognize `Suspense` is still an experimental feature and should be used with caution. 
-</span>
-</p>
+`Suspense` adds another layer of abstraction to your code. This can make it harder to understand what is going on. If your team is already comfortable with existing patterns for data fetching, the introduction of Suspense might require additional training and adjustment.
 
-_Server components_
+_More than lazy loading_
+For simple applications with straightforward data fetching requirements, using Suspense might introduce unnecessary complexity. In such cases, simpler solutions like data fetching libraries might be more suitable.
+
+_User Experience_
+<span>
+In scenarios where finer control over loading states or error handling is crucial, a more manual approach using traditional patterns like `useEffect` and `useState` might be preferred
+</span>
+
+_Be a step ahead_
 <span>
 The whole concept of `Suspense` might also get overshadowed by <a href="https://react.dev/reference/react/use-server" target="_blank">server components</a> in the future. Where <a href="https://react.dev/reference/react/use#caveats" target="_blank">the documentation</a> mentions: <em>When fetching data in a Server Component, prefer `async` and `await` over `use`.</em>
 </span>
@@ -186,9 +189,14 @@ The whole concept of `Suspense` might also get overshadowed by <a href="https://
 ## Conclusion
 `Suspense` can be a powerful tool in your toolbox, especially if you truly understand how it functions. Don't treat it as your new shiny hammer and start hitting everything with it. Use it wisely and it will be a great addition to your work.
 
-_Other reads_
+<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about Suspense," aria-label="Send me an email so I can tell you more" target="_blank">I'd like to know more</a>
+
+_Unmentioned resources_
 <span>
     <a href="https://codesandbox.io/s/ymcj43" target="_blank">Reacts codesandbox example</a><br aria-hidden /><br aria-hidden />
-    <a href="https://blog.logrocket.com/data-fetching-react-suspense/" target="_blank">Data fetching with React Suspense</a>
+    <a href="https://17.reactjs.org/docs/concurrent-mode-suspense.html" target="_blank">React 17 documentation on suspense</a><br aria-hidden /><br aria-hidden />
+    <a href="https://stackoverflow.com/q/74196656/4655177" target="_blank">Another stackoverflow question</a><br aria-hidden /><br aria-hidden />
+    <a href="https://stackoverflow.com/a/73356890/4655177" target="_blank">And another stackoverflow question</a><br aria-hidden /><br aria-hidden />
+    <a href="https://blog.logrocket.com/data-fetching-react-suspense/" target="_blank">Logrocket blog post</a>
 </a>
 </span>

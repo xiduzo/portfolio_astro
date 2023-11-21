@@ -16,6 +16,6 @@ const blog = Astro.props;
 const { Content } = await blog.render();
 ---
 
-<MarkdownContent {...blog.data}>
+<MarkdownContent {...blog.data} showDates>
   <Content components={{ img: Image }} />
 </MarkdownContent>

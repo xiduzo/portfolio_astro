@@ -46,7 +46,7 @@ _Performance_
 Besides feedback as an indicator in team dynamics performance and division of tasks are sometimes hard to see for project groups and teachers alike. <br aria-hidden /><br aria-hidden />
 Some teachers of CMD are using a scrum like approach with their project teams in order to follow the progress of a project. Athena has the option to connect any project group to a trello board if a teacher would like to.
 
-<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about Athena," aria-label="Send me an email to I can tell you more" target="_blank">I'd like to know more</a>
+<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about Athena," aria-label="Send me an email so I can tell you more" target="_blank">I'd like to know more</a>
 
 <hr />
 

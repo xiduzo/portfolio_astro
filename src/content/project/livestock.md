@@ -77,7 +77,7 @@ _Market volatility_
     Users can trade commodities or use animals to produce them, with the aim of identifying good and bad wallet design strategies.
 </span>
 
-<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about LiveStock," aria-label="Send me an email to I can tell you more" target="_blank">I'd like to know more</a>
+<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about LiveStock," aria-label="Send me an email so I can tell you more" target="_blank">I'd like to know more</a>
 
 <hr />
 

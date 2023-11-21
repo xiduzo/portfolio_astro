@@ -9,9 +9,25 @@ import { PageTransition } from "../components/PageTransition";
 import OtherProjects from "../components/OtherProjects.astro";
 import Image from "../components/Image.astro";
 
-type Props = CollectionEntry<"project">["data"];
+type Props = CollectionEntry<"project">["data"] & {
+  showDates?: boolean;
+};
 
-const { title, description, heroImage, headerColor } = Astro.props;
+const {
+  title,
+  pubDate,
+  updatedDate,
+  description,
+  heroImage,
+  headerColor,
+  showDates,
+} = Astro.props;
+
+const formatter = Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
 ---
 
 <BaseLayout title={title} description={description}>
@@ -25,6 +41,25 @@ const { title, description, heroImage, headerColor } = Astro.props;
       loading="eager"
     />
     <h1 class="sr-only">{title}</h1>
+
+    {
+      showDates && (
+        <section class="text-center">
+          Publised on{" "}
+          <time datetime={formatter.format(pubDate)}>
+            {formatter.format(pubDate)}
+          </time>
+          {updatedDate && (
+            <>
+              , last updated on{" "}
+              <time datetime={formatter.format(updatedDate)}>
+                {formatter.format(updatedDate)}
+              </time>
+            </>
+          )}
+        </section>
+      )
+    }
 
     <section
       class="pt-40 pb-72 max-w-7xl m-auto px-4 font-extrabold text-center"

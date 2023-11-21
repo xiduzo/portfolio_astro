@@ -531,7 +531,7 @@ Phew, you made it all the way through the though end. That last part was code he
 <br aria-hidden /><br aria-hidden />
 Code can be scary right, but it's also fun.
 
-<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about Fissa," aria-label="Send me an email to I can tell you more" target="_blank">I'd like to know more</a>
+<a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about Fissa," aria-label="Send me an email so I can tell you more" target="_blank">I'd like to know more</a>
 
 <hr />
 

@@ -1,9 +1,18 @@
 <div>
-  <div class="sr-only">Oh hi there, good day to you. My name is Sander, a passionate developer with a creative mind™.</div>
-  <section class="fixed inset-0 z-40 hidden p-2 bg-gray-950 scroll md:p-10 transition-all" id="wrapper" aria-hidden="true">
+  <div class="sr-only">
+    Oh hi there, good day to you. My name is Sander, a passionate developer with
+    a creative mind™.
+  </div>
+  <section
+    class="fixed inset-0 z-40 hidden p-2 bg-gray-950 scroll md:p-10 transition-all"
+    id="wrapper"
+    aria-hidden="true"
+  >
     <div class="flex flex-col text-2xl space-y-3" id="content">
       <div class="grid md:gap-3 gap-1 grid-cols-[1fr,10fr]">
-        <span class="text-green-600 font-extrabold px-2 md:px-4 uppercase">Ok</span>
+        <span class="text-green-600 font-extrabold px-2 md:px-4 uppercase"
+          >Ok</span
+        >
         <div class="text-slate-50">Oh hi there,</div>
       </div>
       <!-- Content will be filled with JS -->
@@ -21,11 +30,11 @@
 
     document.removeEventListener("keydown", closeIntro);
     body?.removeEventListener("click", closeIntro);
-    
+
     // Scroll to top
     // Just in case the user scrolled down
     window.scrollTo(0, 0);
-    body?.classList.remove("overflow-hidden")
+    body?.classList.remove("overflow-hidden");
 
     wrapper?.classList.add("opacity-0", "scale-0");
 
@@ -33,7 +42,6 @@
       wrapper?.remove();
     }, 500);
   };
-
 
   document.addEventListener("keydown", closeIntro);
   body?.addEventListener("click", closeIntro);
@@ -56,28 +64,28 @@
     );
   };
 
-  const touchOrPress = isTouchDevice() ? "Touch <code>anywhere</code>" : "Press <code>[any key]</code>";
+  const touchOrPress = isTouchDevice()
+    ? "Touch <code>anywhere</code>"
+    : "Press <code>[any key]</code>";
 
   const texts = [
     "",
     `Good ${timeOfDay()}`,
     "",
     "",
-    "",
     "My name is sander,",
     "A passionate developer with a creative mind™",
-    "",
     "",
     "",
     `${touchOrPress} to continue...`,
   ];
 
   const showIntro = () => {
-    if(!wrapper) return
+    if (!wrapper) return;
 
-    body?.classList.add("overflow-hidden")
+    body?.classList.add("overflow-hidden");
     wrapper.classList.remove("hidden");
-    wrapper?.focus()
+    wrapper?.focus();
 
     texts.forEach((text, index) => {
       const textWrapper = document.createElement("div");
@@ -96,7 +104,7 @@
         "font-extrabold",
         "px-2",
         "md:px-4",
-        "uppercase",
+        "uppercase"
       );
       status.ariaHidden = "true";
 
@@ -107,13 +115,16 @@
       textWrapper.appendChild(status);
       textWrapper.appendChild(textContent);
 
-      setTimeout(() => {
-      const content = document.getElementById("content");
-        content?.appendChild(textWrapper);
-        if (index === texts.length - 1) isIntroDone = true;
-      }, (500 + Math.random() * 100) * (index + 1));
+      setTimeout(
+        () => {
+          const content = document.getElementById("content");
+          content?.appendChild(textWrapper);
+          if (index === texts.length - 1) isIntroDone = true;
+        },
+        (500 + Math.random() * 100) * (index + 1)
+      );
     });
-  }
+  };
 
   const lastVisit = localStorage.getItem("lastVisit");
 
@@ -122,12 +133,11 @@
     const date2 = new Date().valueOf();
     const timeDifference = Math.abs(date2 - date1);
     const differenceInHours = Math.ceil(timeDifference / (1000 * 60 * 60));
-    
-    if (differenceInHours > 6)  showIntro()
+
+    if (differenceInHours > 6) showIntro();
   } else {
     showIntro();
   }
-  
 </script>
 
 <style is:inline>

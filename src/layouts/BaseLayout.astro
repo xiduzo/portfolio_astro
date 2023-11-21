@@ -8,6 +8,7 @@ import Footer from "../components/Footer.astro";
 import Cursor from "../components/Cursor.astro";
 import HiFromConsole from "../components/HiFromConsole.astro";
 import CopyCode from "../components/CopyCode.astro";
+import Intro from "../components/Intro.astro";
 
 type Props = {
   title: string;
@@ -24,6 +25,7 @@ const { title, description } = Astro.props;
     <BaseHead title={title} description={description} />
   </head>
   <body class="scroll-smooth">
+    <Intro />
     <CopyCode />
     <HiFromConsole />
     <a
@@ -36,17 +38,18 @@ const { title, description } = Astro.props;
     </main>
     <Footer />
     <Cursor />
-  </body><script>
-    setTimeout(() => {
-      localStorage.setItem("lastVisit", new Date().toString());
-    });
+    <script>
+      setTimeout(() => {
+        localStorage.setItem("lastVisit", new Date().toString());
+      }, 100);
 
-    window.addEventListener("DOMContentLoaded", () => {
-      const codeSamples = document.querySelectorAll("pre");
+      window.addEventListener("DOMContentLoaded", () => {
+        const codeSamples = document.querySelectorAll("pre");
 
-      codeSamples.forEach((codeSample) => {
-        codeSample.setAttribute("aria-hidden", "true");
+        codeSamples.forEach((codeSample) => {
+          codeSample.setAttribute("aria-hidden", "true");
+        });
       });
-    });
-  </script>
+    </script>
+  </body>
 </html>

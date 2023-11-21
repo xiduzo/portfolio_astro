@@ -3,7 +3,6 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import Image from "../components/Image.astro";
-import Intro from "../components/Intro.astro";
 
 const projects = (await getCollection("project"))
   .filter((project) => !Boolean(project.data.hidden))
@@ -15,7 +14,6 @@ const projects = (await getCollection("project"))
 ---
 
 <BaseLayout title="Projects" description="Portfolio website Sander Boer">
-  <Intro />
   <h1 class="sr-only">My projects</h1>
   <ol class="container pt-56 m-auto -mt-16 space-y-16 lg:space-y-72 pb-72">
     {

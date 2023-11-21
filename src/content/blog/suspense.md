@@ -191,6 +191,8 @@ The whole concept of `Suspense` might also get overshadowed by <a href="https://
 
 <a href="mailto:mail@sanderboer.nl?subject=Let's chat!&body=Hi, I'd like to talk about Suspense," aria-label="Send me an email so I can tell you more" target="_blank">I'd like to know more</a>
 
+<hr />
+
 _Unmentioned resources_
 <span>
     <a href="https://codesandbox.io/s/ymcj43" target="_blank">Reacts codesandbox example</a><br aria-hidden /><br aria-hidden />

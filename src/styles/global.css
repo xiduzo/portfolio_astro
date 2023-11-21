@@ -172,3 +172,7 @@ img {
 #markdown-content .container > p:has(> a) a:hover:after {
   @apply translate-x-2;
 }
+
+.copy-code {
+  @apply absolute top-0 right-0 bg-amber-600 w-36 rounded-bl-lg py-2 hover:bg-amber-700 hover:cursor-copy text-center;
+}

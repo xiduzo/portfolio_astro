@@ -24,15 +24,15 @@ import HeaderLink from "./HeaderLink.astro";
        Menu
     </label>
     <nav
-      class="flex flex-col justify-center flex-1 w-full text-center md:flex-row space-y-8 md:space-y-0 md:justify-end"
+      class="flex flex-col justify-between flex-1 w-full text-center md:flex-row py-32 md:py-0 md:justify-end"
     >
-      <HeaderLink href="/" class="text-6xl md:text-base">
+      <HeaderLink href="/" class="text-4xl md:text-base">
         Things I made
       </HeaderLink>
-      <HeaderLink href="/blog" class="text-6xl md:text-base">
+      <HeaderLink href="/blog" class="text-4xl md:text-base">
         Things I wrote
       </HeaderLink>
-      <HeaderLink href="/page/about" class="text-6xl md:text-base">
+      <HeaderLink href="/page/about" class="text-4xl md:text-base">
         Who is Sander
       </HeaderLink>
     </nav>
@@ -41,13 +41,20 @@ import HeaderLink from "./HeaderLink.astro";
 
 <script>
   const menu = document.getElementById("menu-toggle") as HTMLInputElement;
+  const label = document.querySelector(
+    "label[for='menu-toggle']"
+  ) as HTMLLabelElement;
   const header = document.querySelector("header") as HTMLElement;
 
   menu?.addEventListener("click", () => {
     if (menu.checked) {
       header.classList.add("h-[100vh]");
+      label.style.color = "#000";
+      document.body.classList.add("overflow-hidden");
     } else {
       header.classList.remove("h-[100vh]");
+      label.style.color = "#fff";
+      document.body.classList.remove("overflow-hidden");
     }
   });
 </script>

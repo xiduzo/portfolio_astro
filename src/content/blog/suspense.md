@@ -1,5 +1,5 @@
 ---
-title: "˂Suspense/˃"
+title: "˱Suspense˲"
 description: "Unravelling the magic from React"
 pubDate: "Nov 21 2023"
 headerColor: "#5DD4F4"
@@ -12,7 +12,7 @@ heroImage: "/blog/suspense/showreel.png"
     </span>
 </p>
 
-> _`<Suspense/>`_ `Suspense` lets you display a fallback until its children have finished loading
+> _`<Suspense>`_ `Suspense` lets you display a fallback until its children have finished loading
 > <cite><a href="https://react.dev/reference/react/Suspense" target="_blank">react documentation</a></cite>
 
 ```jsx
@@ -148,7 +148,7 @@ export default function App() {
 </p>
 
 
-## Why would you use `<Suspense/>`
+## Why would you use `<Suspense>`
 <p>
 <span>
 Suspense is a great way to handle asynchronous data fetching. It is a great alternative to the <a href="https://react.dev/reference/react/useEffect#fetching-data-with-effects" target="_blank">traditional way</a> of handling data fetching in React.
@@ -170,7 +170,7 @@ _Be a step ahead_
 Even though `Suspense` is still experimental, libraries like <a href="https://relay.dev/docs/migration-and-compatibility/suspense-compatibility/" target="_blank">Relay</a>, <a href="https://swr.vercel.app/docs/suspense" target="_blank">swr</a> or <a href="https://tanstack.com/query/latest/docs/react/guides/suspense" target="_blank">@tanstack/react-query</a> have added support for it.
 </span>
 
-## Why wouldn't you use `<Suspense/>`
+## Why wouldn't you use `Suspense`
 `Suspense` adds another layer of abstraction to your code. This can make it harder to understand what is going on. If your team is already comfortable with existing patterns for data fetching, the introduction of Suspense might require additional training and adjustment.
 
 _More than lazy loading_

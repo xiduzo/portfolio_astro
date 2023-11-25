@@ -42,7 +42,7 @@ Hey you made it this far! This means you are interested in how things works inst
 
 <p>
 <span>
-As seen in the TL;DR whenever <i>something</i> throws a promise from within the <code>Suspense</code> component will render the fallback component until the promise resolves. 
+As seen in the TL;DR - whenever <i>something</i> throws a promise from within the <code>Suspense</code> component, it will render the fallback component until the promise resolves. 
 </span>
 </p>
 

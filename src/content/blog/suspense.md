@@ -1,5 +1,5 @@
 ---
-title: "<Suspense/>"
+title: "˂Suspense/˲"
 description: "Unravelling the magic from React"
 pubDate: "Nov 21 2023"
 headerColor: "#5DD4F4"

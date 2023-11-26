@@ -23,6 +23,9 @@ const { title, description, image = "/placeholder-social.jpg" } = Astro.props;
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 
+<!-- Site map -->
+<link rel="sitemap" href="/sitemap-index.xml" />
+
 <!-- Primary Meta Tags -->
 <title>{title} | Sander Boer</title>
 <meta name="title" property="og:title" content={`${title} | Sander Boer`} />

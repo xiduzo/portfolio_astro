@@ -12,6 +12,16 @@ const isProduction = process.env.NODE_ENV === 'production';
 // https://astro.build/config
 export default defineConfig({
   site: "https://www.sanderboer.nl/",
+  prefetch: true,
+  markdown: {
+    syntaxHighlight: "shiki",
+    shikiConfig: {
+      experimentalThemes: {
+        light: 'github-light',
+        dark: 'github-dark'
+      }
+    },
+  },
   integrations: [
     mdx(),
     sitemap({

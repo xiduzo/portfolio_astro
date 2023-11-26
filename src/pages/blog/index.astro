@@ -1,8 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import FormattedDate from "../../components/FormattedDate.astro";
-import Image from "../../components/Image.astro";
+import BigTitleItem from "../../components/BigTitleItem.astro";
 
 const blogs = (await getCollection("blog"))
   .filter((blog) => !Boolean(blog.data.hidden))
@@ -18,48 +17,7 @@ const blogs = (await getCollection("blog"))
   <ol
     class="container pt-56 m-auto -mt-16 space-y-16 lg:space-y-72 pb-72 min-h-screen"
   >
-    {
-      blogs.length === 0 && (
-        <div>
-          Over here I will put some ramblings and brain farts. So far I have
-          prosponed this.
-        </div>
-      )
-    }
-    {
-      blogs.map((blog) => (
-        <li>
-          <a
-            href={`/blog/${blog.slug}/`}
-            class="flex flex-col lg:space-x-4 stroke-white group lg:flex-row group"
-            aria-label={`${blog.data.title}, ${blog.data.description}`}
-          >
-            <div class="block transition-all opacity-100 pointer-events-none lg:max-w-screen-md w-fit lg:absolute lg:left-40 lg:opacity-0 group-hover:opacity-100 group-hover:left-60 lg:motion-reduce:left-60 lg:-mt-32">
-              <Image
-                width={1280}
-                height={960}
-                src={blog.data.heroImage}
-                alt={blog.data.description}
-                aria-hidden="true"
-              />
-            </div>
-            <h2
-              class="mb-4 text-6xl break-words font-extrabold tracking-widest lg:text-9xl mix-blend-multiply dark:mix-blend-difference group-focus:text-slate-900"
-              style={{ color: blog.data.headerColor }}
-            >
-              {blog.data.title}
-            </h2>
-            <section class="max-w-xs text-xl transition-all lg:group-hover:opacity-10 group-focus:text-slate-900">
-              {blog.data.description}
-              <FormattedDate
-                class="block opacity-60 group-focus:text-slate-900"
-                date={blog.data.pubDate}
-                format={{ year: "numeric" }}
-              />
-            </section>
-          </a>
-        </li>
-      ))
-    }
+    {blogs.map((blog) => <BigTitleItem baseHref="blog" {...blog} />)}
   </ol>
 </BaseLayout>
+ ../../components/BigTitleItem.tsx

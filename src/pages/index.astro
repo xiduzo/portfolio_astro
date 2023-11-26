@@ -1,8 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import FormattedDate from "../components/FormattedDate.astro";
-import Image from "../components/Image.astro";
+import BigTitleItem from "../components/BigTitleItem.astro";
 
 const projects = (await getCollection("project"))
   .filter((project) => !Boolean(project.data.hidden))
@@ -18,37 +17,7 @@ const projects = (await getCollection("project"))
   <ol class="container pt-56 m-auto -mt-16 space-y-16 lg:space-y-72 pb-72">
     {
       projects.map((project) => (
-        <li>
-          <a
-            href={`/project/${project.slug}/`}
-            class="flex flex-col lg:space-x-4 stroke-white group lg:flex-row group"
-            aria-label={`${project.data.title}, ${project.data.description}`}
-          >
-            <div class="block transition-all opacity-100 pointer-events-none lg:max-w-screen-md w-fit lg:absolute lg:left-40 lg:opacity-0 group-hover:opacity-100 group-hover:left-60 lg:motion-reduce:left-60 lg:-mt-32">
-              <Image
-                width={1280}
-                height={960}
-                src={project.data.heroImage}
-                alt={project.data.description}
-                aria-hidden="true"
-              />
-            </div>
-            <h2
-              class="mb-4 text-6xl break-word font-extrabold tracking-widest lg:text-9xl mix-blend-multiply dark:mix-blend-difference group-focus:text-slate-900"
-              style={{ color: project.data.headerColor }}
-            >
-              {project.data.title}
-            </h2>
-            <section class="max-w-xs text-xl transition-all lg:group-hover:opacity-10 group-focus:text-slate-900">
-              {project.data.description}
-              <FormattedDate
-                class="block opacity-60 group-focus:text-slate-900"
-                date={project.data.pubDate}
-                format={{ year: "numeric" }}
-              />
-            </section>
-          </a>
-        </li>
+        <BigTitleItem baseHref="project" {...project} />
       ))
     }
   </ol>

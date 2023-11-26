@@ -1,0 +1,49 @@
+---
+import { type CollectionEntry } from "astro:content";
+import Image from "./Image.astro";
+import FormattedDate from "./FormattedDate.astro";
+
+type Collections = "project" | "blog";
+type Props = Pick<CollectionEntry<Collections>, "data" | "slug"> & {
+  baseHref: Collections;
+};
+
+const { slug, data, baseHref } = Astro.props;
+const { title, description, heroImage, pubDate, headerColor } = data;
+---
+
+<li>
+  <a
+    href={`/${baseHref}/${slug}/`}
+    class="flex flex-col lg:space-x-4 stroke-white group lg:flex-row group"
+    aria-label={`${title}, ${description}`}
+  >
+    <div
+      class="block transition-all opacity-100 pointer-events-none lg:max-w-screen-md w-fit lg:absolute lg:left-40 lg:opacity-0 group-hover:opacity-100 group-hover:left-60 lg:motion-reduce:left-60 lg:-mt-32"
+    >
+      <Image
+        width={1280}
+        height={960}
+        src={heroImage}
+        alt={description}
+        aria-hidden="true"
+      />
+    </div>
+    <h2
+      class="mb-4 text-6xl break-word font-extrabold tracking-widest lg:text-9xl mix-blend-multiply dark:mix-blend-difference group-focus:text-slate-900"
+      style={{ color: headerColor }}
+    >
+      {title}
+    </h2>
+    <section
+      class="max-w-xs text-xl transition-all lg:group-hover:opacity-10 group-focus:text-slate-900"
+    >
+      {description}
+      <FormattedDate
+        class="block opacity-60 group-focus:text-slate-900"
+        date={pubDate}
+        format={{ year: "numeric" }}
+      />
+    </section>
+  </a>
+</li>

@@ -8,6 +8,7 @@ import PageProgress from "../components/PageProgress.astro";
 import { PageTransition } from "../components/PageTransition";
 import OtherProjects from "../components/OtherProjects.astro";
 import Image from "../components/Image.astro";
+import FormattedDate from "../components/FormattedDate.astro";
 
 type Props = CollectionEntry<"project">["data"] & {
   showDates?: boolean;
@@ -22,12 +23,6 @@ const {
   headerColor,
   showDates,
 } = Astro.props;
-
-const formatter = Intl.DateTimeFormat("en-US", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
 ---
 
 <BaseLayout title={title} description={description}>
@@ -45,16 +40,10 @@ const formatter = Intl.DateTimeFormat("en-US", {
     {
       showDates && (
         <section class="text-center">
-          Publised on{" "}
-          <time datetime={formatter.format(pubDate)}>
-            {formatter.format(pubDate)}
-          </time>
+          Publised on <FormattedDate date={pubDate} />
           {updatedDate && (
             <>
-              , last updated on{" "}
-              <time datetime={formatter.format(updatedDate)}>
-                {formatter.format(updatedDate)}
-              </time>
+              , last updated on <FormattedDate date={updatedDate} />
             </>
           )}
         </section>

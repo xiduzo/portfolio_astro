@@ -14,7 +14,11 @@ export default defineConfig({
   site: "https://www.sanderboer.nl/",
   integrations: [
     mdx(),
-    sitemap(),
+    sitemap({
+      changefreq: "monthly",
+      lastmod: new Date().toISOString(),
+      priority: 0.7,
+    }),
     tailwind(),
     react(),
     compress({

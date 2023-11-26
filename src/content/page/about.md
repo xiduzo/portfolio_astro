@@ -8,7 +8,7 @@ heroImage: "/page/about/sander.jpg"
 
 _Who am I_
 <span>
-    Designer by education, developer by interest, tinkerer by curiosity.<br aria-hidden /></br>
+    Designer by education, developer by interest, tinkerer by curiosity.<br aria-hidden /><br aria-hidden />
     I have always been captivated by the world of technology. While all my friends were playing a modified version of a game called <a href="https://otservlist.org" target="_blank">tibia</a>, my focus was on the intricacies of creating my own version.
     <br aria-hidden /><br aria-hidden />
     This is where my interest for programming arose as I had to figure out how to host a server, create a database or even change the game code to make it work as I wanted it to work.

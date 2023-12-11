@@ -30,154 +30,69 @@ a {
   @apply inline-block p-6 text-lg transition-all focus:bg-yellow-400 md:p-4 focus:outline-none dark:focus:text-slate-900;
 }
 
+a[target="_blank"]:hover {
+  @apply cursor-alias;
+}
+
+.container p a {
+  @apply underline;
+}
+
 .container p a,
 .container li a {
   @apply py-1.5 px-2.5 -mx-1.5 text-2xl;
+}
+
+.container p span:has(img) {
+  @apply mt-32;
+}
+.container p:nth-of-type(3n + 1) span img {
+  @apply transform -scale-x-100;
 }
 
 .footnotes {
   @apply mt-80;
 }
 
-hr + hr + p:has(picture) {
-  margin-left: -12.5vw;
-  margin-right: -12.5vw;
+blockquote em,
+blockquote cite {
+  @apply block;
 }
 
-a[target="_blank"]:hover {
-  @apply cursor-alias;
+blockquote em {
+  @apply font-bold;
 }
 
-/* #markdown-content pre {
-  @apply max-w-5xl m-auto py-4 pt-16 md:pt-4 px-3 md:px-6 mx-6 md:mx-auto shadow-xl dark:shadow-md rounded-2xl;
-} */
-/* 
-#markdown-content .container > blockquote {
-  @apply px-6 md:px-0 mb-20;
+blockquote cite {
+  @apply text-right;
 }
 
-#markdown-content .container > blockquote cite {
-  @apply block mt-4 text-2xl italic;
-}
-
-#markdown-content .container > blockquote cite:before {
+blockquote cite::before {
   @apply mr-2;
-  content: "—";
+  content: "⎯";
 }
 
-#markdown-content .container > blockquote p {
-  @apply max-w-lg grid-cols-1 m-auto;
+pre code {
+  float: left;
 }
 
-#markdown-content .container > blockquote p > em {
-  @apply block mb-3 not-italic font-bold md:text-3xl;
-}
-
-#markdown-content ol,
-#markdown-content p {
-  @apply max-w-4xl m-auto text-2xl font-light md:text-3xl mb-36 gap-x-16;
-}
-
-#markdown-content ol li {
-  @apply mb-2 list-decimal list-outside ml-12 mr-4 md:mx-0;
+sup a {
+  @apply text-base !important;
 }
 
 li::marker {
-  @apply text-4xl text-gray-300 dark:text-gray-700;
-  font-family: "caveat";
+  @apply font-caveat text-4xl text-gray-300 dark:text-gray-700;
 }
 
-#markdown-content .container > p:has(> em) {
-  @apply grid;
-  grid-template-columns: 200px 1fr;
-}
-
-#markdown-content .container > p em > a {
-  @apply text-sm;
-}
-
-@media screen and (max-width: 768px) {
-  #markdown-content .container > p:has(em) {
-    @apply grid-cols-1;
-  }
-
-  #markdown-content .container > p:has(em) em:first-child {
-    @apply mb-4 text-2xl;
-  }
-
-  #markdown-content .container > p:has(em) > em > a {
-    @apply text-2xl;
-  }
-
-  #markdown-content .container > p:not(:has(img)) {
-    @apply px-6;
-  }
-}
-
-#markdown-content .container > h2 {
-  @apply max-w-4xl px-6 m-auto mt-20 mb-4 text-4xl font-extrabold md:px-0;
-}
-
-#markdown-content .container > p:has(img) {
-  @apply relative max-w-full my-48;
-}
-
-#markdown-content .container > p img,
-#markdown-content .container > img {
-  @apply col-span-2 w-screen max-w-[100vw] relative;
+hr + hr + p:has(picture) {
+  @apply w-screen max-w-[100vw] relative;
   left: calc(-50vw + 50%);
 }
 
-#markdown-content .container > img {
-  @apply my-48;
+[id]::before {
+  content: "";
+  display: block;
+  height: 100px;
+  margin-top: -100px;
+  visibility: hidden;
 }
-
-#markdown-content .container > p:has(> strong):not(:has(> img)) {
-  @apply mb-0;
-}
-
-#markdown-content .container > p > strong {
-  @apply block w-full mb-3 text-2xl text-center normal-case;
-  font-family: "caveat";
-}
-
-#markdown-content .container > p > strong:after {
-  @apply block dark:filter dark:invert;
-  content: url("/arrow.svg");
-}
-
-#markdown-content .container p:nth-of-type(3n + 1) > strong:after {
-  @apply transform -scale-x-100;
-}
-
-#markdown-content .container > p > em:first-child {
-  @apply text-lg not-italic font-bold uppercase text-start;
-}
-
-#markdown-content .container > p > em > a {
-  @apply text-lg;
-}
-
-#markdown-content .container > p:has(> a) {
-  @apply text-center my-52;
-}
-
-#markdown-content .container > p a {
-  @apply p-3 -m-3 text-2xl underline md:text-3xl underline-offset-1;
-}
-
-#markdown-content .container > p:has(> a) a {
-  @apply p-4 text-2xl;
-}
-
-#markdown-content .container > p:has(> a) a:after {
-  @apply inline-block ml-2 mr-1 transition-all;
-  content: "→";
-}
-
-#markdown-content .container > p:has(> a) a:focus:after,
-#markdown-content .container > p:has(> a) a:hover:after {
-  @apply translate-x-2;
-}
-
-*/

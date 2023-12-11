@@ -1,0 +1,27 @@
+---
+import Image from "./Image.astro";
+
+interface Props {
+  title?: string;
+  src: string;
+  alt: string;
+}
+
+const props = Astro.props;
+---
+
+{
+  props.title && (
+    <span class="block w-full mb-3 text-2xl text-center normal-case font-caveat">
+      <strong>{props.title}</strong>
+      <img
+        class="block dark:filter dark:invert !w-3 m-auto"
+        src="/arrow.svg"
+        alt="arrow pointing to image"
+        aria-hidden
+        loading="lazy"
+      />
+    </span>
+  )
+}
+<Image {...props} />

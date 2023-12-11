@@ -1,0 +1,106 @@
+---
+title: "VeileNext"
+description: "Modernize the biggest flower auction in the world"
+pubDate: "Jul 15 2021"
+headerColor: "#0BCA89"
+heroImage: "/project/veilenext/showreel.png"
+---
+
+![Flower auction Aalsmeer 1940 - 1969](/project/veilenext/aalsmeer_1940.jpg)
+
+## Problem
+For over 100 years, Royal Flora Holland (RFH) has been a leading player in global flower trading and hosts the world's largest flower auction.
+
+As a cooperative of growers, RFH has centralized the supply of flowers and plants by combining multiple auction locations. While RFH has automated many auction processes and [transitioned to the public cloud](https://www.conclusion.nl/application-innovation/cases/de-applicatie-transformatie-naar-de-aws-public-cloud-voor-royal-floraholland), the underlying .NET Windows-based applications [remained unchanged](https://aws.amazon.com/products/storage/lift-and-shift).
+
+---
+---
+![Flowers being physically moved beneath the clock on rail tracks build at the auction location](/project/veilenext/beneath_the_clock.jpg "Flowers being sold beneath the clock")
+
+## Challenge
+RFH's old physical processes were built into many tools, making automation a key aspect of their digital transformation. This is evident in the digital interfaces and processes that still reflect the traditional "beneath the clock" auction method.
+
+The challenge now is to modernize the real-time auction using the public cloud, while navigating a complex environment where [users resist change](https://amstelveenblog.nl/2021/02/20/protest-tegen-bloemenveiling).
+
+---
+![A schematic overview of the processes and tools which have been build to model the physical flower auction](/project/veilenext/physical_processes.jpg "Processes and tools to mimic the physical auction")
+
+### Our approach
+Modernizing technology stack by migrating from monolithic applications to microservices and replacing old desktop applications with web-based technologies, while emphasizing user needs in the development process of an almost greenfield system.
+
+---
+![A schematic overview of the proposed new architecture](/project/veilenext/proposed_architecture.png "Proposed new architecture")
+
+## History
+
+A [Dutch Auction](https://www.youtube.com/watch?v=uAdmzyKagvE) has been the traditional way of selling flowers in the Netherlands. The auction process involves transporting flowers to the auction site where auctioneers use a mechanical clock to set a suitable price.
+
+---
+---
+![An auctioneer auctioning flowers beneath a mechanical clock](/project/veilenext/physical_clock.png "Auctioning with a mechanical clock")
+
+## Automation
+During the automation of the flower auction, several tools and processes were developed to support the physical processes. These include digital buying locations such as the _Tribune Werkplek_ and the remote buying application, _Kopen Op Afstand_, which enable buyers to purchase from anywhere in the world.
+
+Tools like [Beeldveilen](https://www.hortipoint.nl/vakbladvoordebloemisterij/floraholland-voert-beeldveilen-in-op-alle-klokken-rijnsburg) allowed buyers to inspect flowers and plants without being physically present at the auction.
+
+While [Floriday](https://www.floriday.io) has modernized the supply chain of RFH, the real-time auction, where auctioneers sell flowers and plants to buyers worldwide, still relies on outdated systems.
+
+---
+---
+![Auctioning with current systems as the 'Tribune werkplek', 'Kopen op afstand' and 'beeldveilen'](/project/veilenext/current_auctioning.jpg "Auctioning with current systems")
+
+## Modernize
+
+To update the flower auction to modern standards, we identified four areas that required improvement:
+
+1. The systems were constructed as monolithic entities that are heavily inter-connected
+2. UDP is used to send instantaneous messages to clients
+3. Releases are planned and scheduled with multiple planned freezes
+4. Clients exclusive to Windows are used
+
+### 1. Micro-services
+We are untangling the highly intertwined current systems of RFH by transforming the monolithic applications into micro-services in the new system. To ensure clear separation of concerns, each micro-service is responsible for a single task, while still allowing interdependence among services.
+
+Our micro-services are running on cloud native building blocks and utilize standard cloud patterns developed by [Conclusion Application Innovation](https://www.conclusion.nl/application-innovation). This architecture allows each service to be individually scalable based on the required load for any given time of day.
+
+### 2. Websockets
+The current systems use UDP/multi-cast to broadcast messages to all active buyers. Although this technology is proven, there are some issues that require the system to send messages multiple times to ensure that all clients receive the correct data.
+
+To replace UDP messaging, any new technology must meet two requirements:
+
+1. Ensure that all clients receive real-time updates
+2. Provide an average maximum latency of 90ms from anywhere in the world
+
+After researching various technologies and their implementations, we determined that the [.NET implementation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/websockets?view=aspnetcore-6.0) was the most appropriate solution for our needs.
+
+### 3. Continuous Integration / Continuous Delivery (CI/CD)
+The new auction system is developed using complete CI/CD tooling, eliminating planned releases and freeze periods. To ensure quick and reliable releases, all new code is thoroughly tested and monitored.
+
+The frontend uses [Storybook](https://storybook.js.org) to develop and test components in isolation, while also bringing business requirements, development, and design together.
+
+End-to-end tests are performed using [Cypress](https://docs.cypress.io/guides/overview/why-cypress) to ensure seamless integration of components and expected behavior of the application in real-world scenarios.
+
+Quality gates are integrated into the automated release pipeline to prevent untested code from reaching production. The releases are continuously monitored with tools such as [Cypress dashboard](https://www.cypress.io/dashboard) and [SonarCube](https://www.sonarqube.org).
+
+### 4. A web interface
+Buying flowers and plants at the auction can be inconvenient for new buyers as they have to install software that runs exclusively on Windows.
+
+In addition, this software requires manual updates to access new features or bug fixes. Users must also install and operate a VPN client to connect to the RFH network and receive UDP messages.
+
+To improve accessibility, we have developed a new system that utilizes a browser-based React application. This application can be accessed through any device with an internet connection, including desktops, tablets, and even phones.
+
+![Status quo of the auctioneers interface](/project/veilenext/status_quo.png "Status quo")
+
+![Exploratory design of the auctioneer interface to spark conversations](/project/veilenext/exploration.png "Exploratory design to spark conversations")
+
+The project is still under active development and is currently in the [pilot phase](https://www.royalfloraholland.com/en/campaign/on-site-auctioning-eelde) with a small group of growers and buyers[^1].
+
+[^1]: as of writing, July 15th 2021
+
+## Mentioned at
+- [Conclusion Application Innovation](https://www.conclusion.nl/werken-bij/nieuws/met-verschillende-ontwikkelaars-werken-aan-een-doel)
+
+## References
+- [Public storybook of the project](https://storybook.rfh-auction.com)
+- [Showcasing how we test websockets in VeileNext using Cypress](https://www.meetup.com/nl-NL/cypress-meetup-group-netherlands/events/277899235)

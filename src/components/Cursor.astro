@@ -58,6 +58,18 @@
     elem.style.setProperty("--radius", state.radius);
   };
 
+  const addProperTargetToExternalLinks = (e: HTMLAnchorElement) => {
+    const link = e.getAttribute("href");
+    if (link == null) return;
+    // internal links
+    if (link.startsWith("/")) return;
+    // anchor links
+    if (link.startsWith("#")) return;
+
+    e.setAttribute("target", "_blank");
+    e.setAttribute("rel", "noopener noreferrer");
+  };
+
   const updateState = (e: MouseEvent | Event) => {
     const state = createState(e);
     updateProperties(cursor, state);
@@ -69,9 +81,8 @@
   document.onreadystatechange = () => {
     if (document.readyState !== "complete") return;
 
-    console.log("ready");
-
     document.querySelectorAll("a, button").forEach((elem) => {
+      addProperTargetToExternalLinks(elem as HTMLAnchorElement);
       elem.addEventListener("mouseenter", () => (onElement = elem));
       elem.addEventListener("mouseleave", () => (onElement = null));
     });

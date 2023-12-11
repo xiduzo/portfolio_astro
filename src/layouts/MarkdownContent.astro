@@ -28,7 +28,7 @@ const {
 <BaseLayout title={title} description={description}>
   <PageTransition background={headerColor} client:load />
   <ScrollingText text={title} background={headerColor} client:only />
-  <article id="markdown-content">
+  <article>
     <Image
       aria-hidden="true"
       src={heroImage}
@@ -55,7 +55,7 @@ const {
     >
       <div class="text-6xl md:text-7xl">{description}</div>
     </section>
-    <section class="container pb-32 m-auto">
+    <section class="pb-32 m-auto px-4 xl:px-0 container">
       <slot />
     </section>
   </article>

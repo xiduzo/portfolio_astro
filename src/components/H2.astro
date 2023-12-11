@@ -1,0 +1,10 @@
+---
+import Typewriter from "./Typewriter.astro";
+const props = Astro.props;
+---
+
+<h2 {...props} class="text-3xl mb-4 mt-16 md:mt-24 lg:mt-48">
+  <Typewriter>
+    <slot />
+  </Typewriter>
+</h2>

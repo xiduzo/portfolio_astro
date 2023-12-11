@@ -2,6 +2,8 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import MarkdownContent from "../../layouts/MarkdownContent.astro";
 import Image from "../../components/Image.astro";
+import Code from "../../components/Code.astro";
+import OrderedList from "../../components/OrderedList.astro";
 
 export async function getStaticPaths() {
   const blogs = await getCollection("blog");
@@ -17,5 +19,5 @@ const { Content } = await blog.render();
 ---
 
 <MarkdownContent {...blog.data} showDates>
-  <Content components={{ img: Image }} />
+  <Content components={{ img: Image, code: Code, ol: OrderedList }} />
 </MarkdownContent>

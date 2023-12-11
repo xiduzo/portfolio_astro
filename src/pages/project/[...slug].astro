@@ -1,10 +1,15 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
 import MarkdownContent from "../../layouts/MarkdownContent.astro";
+
 import Image from "../../components/Image.astro";
-
-
-export const components = { img: Image };
+import Code from "../../components/Code.astro";
+import OrderedList from "../../components/OrderedList.astro";
+import Paragraph from "../../components/Paragraph.astro";
+import H2 from "../../components/H2.astro";
+import H3 from "../../components/H3.astro";
+import Hr from "../../components/Hr.astro";
+import UnorderedList from "../../components/UnorderedList.astro";
 
 export async function getStaticPaths() {
   const projects = await getCollection("project");
@@ -20,5 +25,16 @@ const { Content } = await project.render();
 ---
 
 <MarkdownContent {...project.data}>
-  <Content components={{ img: Image }} />
+  <Content
+    components={{
+      img: Image,
+      pre: Code,
+      ol: OrderedList,
+      ul: UnorderedList,
+      p: Paragraph,
+      h2: H2,
+      h3: H3,
+      hr: Hr,
+    }}
+  />
 </MarkdownContent>

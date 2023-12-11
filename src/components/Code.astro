@@ -1,0 +1,50 @@
+---
+const props = Astro.props;
+
+const className = props.class;
+
+delete props.class;
+---
+
+<pre-block>
+  <pre
+    {...props}
+    aria-hidden
+    tabindex="0"
+    class=`${className} relative p-4 pt-16 md:pt-4 max-w-screen-lg md:ml-auto shadow-xl dark:shadow-md rounded-2xl my-16 md:my-26 lg:my-32`>
+  <slot />
+  <button class="absolute top-0 right-0 text-black bg-amber-500 w-full md:w-36 md:rounded-bl-lg md:py-2 py-4 hover:bg-amber-600 hover:cursor-copy text-center">Copy code</button>
+</pre>
+</pre-block>
+
+<script>
+  // Inspiration: https://timneubauer.dev/blog/copy-code-button-in-astro/
+  class PreBlock extends HTMLElement {
+    constructor() {
+      super();
+      const preElement = this.querySelector("pre");
+      const copyButton = this.querySelector("button");
+
+      copyButton?.addEventListener("click", async () => {
+        if (!preElement || !copyButton) return;
+
+        await this.copyCode(preElement, copyButton);
+      });
+    }
+
+    private async copyCode(element: HTMLPreElement, button: HTMLButtonElement) {
+      const code = element.querySelector("code");
+      const text = code?.innerText ?? "unable to copy code";
+
+      await navigator.clipboard.writeText(text);
+
+      button.innerText = "Code copied";
+
+      setTimeout(() => {
+        button.innerText = "Copy code";
+      }, 3000);
+    }
+  }
+
+  customElements.define("pre-block", PreBlock);
+</script>

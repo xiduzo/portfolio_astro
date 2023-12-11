@@ -1,0 +1,52 @@
+---
+
+---
+
+<type-writer>
+  <slot />
+</type-writer>
+
+<script>
+  import Typewriter from "typewriter-effect/dist/core";
+  class Writer extends HTMLElement {
+    private observer: IntersectionObserver = new IntersectionObserver(
+      this.type.bind(this),
+      {
+        threshold: 0,
+      }
+    );
+    private initalLoad = true;
+
+    constructor() {
+      super();
+      const element = this.querySelector("*");
+
+      if (element) return;
+
+      this.classList.add("opacity-0");
+
+      this.observer.observe(this);
+    }
+
+    private type() {
+      if (!this.observer) return;
+      if (this.initalLoad) {
+        this.initalLoad = false;
+        return;
+      }
+
+      this.classList.remove("opacity-0");
+
+      new Typewriter(this, {
+        autoStart: true,
+        strings: this.innerHTML,
+        loop: false,
+        cursor: "",
+      });
+
+      this.observer.unobserve(this);
+    }
+  }
+
+  customElements.define("type-writer", Writer);
+</script>

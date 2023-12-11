@@ -7,7 +7,6 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Cursor from "../components/Cursor.astro";
 import HiFromConsole from "../components/HiFromConsole.astro";
-import CopyCode from "../components/CopyCode.astro";
 import Intro from "../components/Intro.astro";
 
 type Props = {
@@ -26,7 +25,6 @@ const { title, description } = Astro.props;
   </head>
   <body class="scroll-smooth">
     <Intro />
-    <CopyCode />
     <HiFromConsole />
     <a
       class="absolute left-0 z-50 p-3 m-3 transition -translate-y-16 motion-reduce:translate-y-0 motion-reduce:opacity-0 motion-reduce:-z-10 motion-reduce:focus:z-50 bg-primary focus:translate-y-0 focus:opacity-100"
@@ -42,14 +40,6 @@ const { title, description } = Astro.props;
       setTimeout(() => {
         localStorage.setItem("lastVisit", new Date().toString());
       }, 100);
-
-      window.addEventListener("DOMContentLoaded", () => {
-        const codeSamples = document.querySelectorAll("pre");
-
-        codeSamples.forEach((codeSample) => {
-          codeSample.setAttribute("aria-hidden", "true");
-        });
-      });
     </script>
   </body>
 </html>

@@ -23,7 +23,16 @@ export default defineConfig({
     },
   },
   integrations: [
-    mdx(),
+    mdx({
+      syntaxHighlight: "shiki",
+      shikiConfig: {
+        // experimentalThemes: {
+        //   light: 'github-light',
+        //   dark: 'github-dark'
+        // },
+        theme: "github-dark",
+      }
+    }),
     sitemap({
       changefreq: "monthly",
       lastmod: new Date().toISOString(),

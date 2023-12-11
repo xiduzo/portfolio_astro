@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { type FC, useEffect, useState } from "react";
 import { userPrefersReducedMotion } from "../hooks/userPrefersReducedMotion";
 
+// TODO check if we can make this an astro component as well
 export const ScrollingText: FC<Props> = ({
   background,
   text,
@@ -26,7 +27,7 @@ export const ScrollingText: FC<Props> = ({
         window.pageYOffset ||
         document.documentElement.scrollTop ||
         document.body.scrollTop;
-      setOffset(-scrollOffset * (reduceMotion ? 0.5 :1.5));
+      setOffset(-scrollOffset * (reduceMotion ? 0.5 : 1.5));
     };
 
     document.addEventListener("scroll", listener);

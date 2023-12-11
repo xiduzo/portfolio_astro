@@ -30,21 +30,28 @@ a {
   @apply inline-block p-6 text-lg transition-all focus:bg-yellow-400 md:p-4 focus:outline-none dark:focus:text-slate-900;
 }
 
+.container p a,
+.container li a {
+  @apply py-1.5 px-2.5 -mx-1.5 text-2xl;
+}
+
+.footnotes {
+  @apply mt-80;
+}
+
+hr + hr + p:has(picture) {
+  margin-left: -12.5vw;
+  margin-right: -12.5vw;
+}
+
 a[target="_blank"]:hover {
   @apply cursor-alias;
 }
 
-img {
-  @apply w-full;
-}
-#markdown-content .container > hr {
-  @apply mb-32;
-}
-
-#markdown-content .container pre {
-  @apply max-w-5xl m-auto mb-36 py-4 pt-16 md:pt-4 px-3 md:px-6 mx-6 md:mx-auto shadow-xl dark:shadow-md rounded-2xl text-xs md:text-base;
-}
-
+/* #markdown-content pre {
+  @apply max-w-5xl m-auto py-4 pt-16 md:pt-4 px-3 md:px-6 mx-6 md:mx-auto shadow-xl dark:shadow-md rounded-2xl;
+} */
+/* 
 #markdown-content .container > blockquote {
   @apply px-6 md:px-0 mb-20;
 }
@@ -75,7 +82,7 @@ img {
   @apply mb-2 list-decimal list-outside ml-12 mr-4 md:mx-0;
 }
 
-#markdown-content ol li::marker {
+li::marker {
   @apply text-4xl text-gray-300 dark:text-gray-700;
   font-family: "caveat";
 }
@@ -173,6 +180,4 @@ img {
   @apply translate-x-2;
 }
 
-.copy-code {
-  @apply absolute top-0 right-0 text-black bg-amber-500 w-full md:w-36 md:rounded-bl-lg md:py-2 py-4 hover:bg-amber-600 hover:cursor-copy text-center;
-}
+*/

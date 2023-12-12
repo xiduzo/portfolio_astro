@@ -8,6 +8,10 @@ body {
   font-family: "Space Grotesk", "Arial", "Helvetica", "sans-serif";
 }
 
+::selection {
+  @apply bg-yellow-400 text-stone-900;
+}
+
 main {
   @apply bg-slate-100 dark:bg-zinc-900;
 }
@@ -34,6 +38,7 @@ a[target="_blank"]:hover {
   @apply cursor-alias;
 }
 
+.container h2 a,
 .container p a {
   @apply underline;
 }
@@ -41,6 +46,10 @@ a[target="_blank"]:hover {
 .container p a,
 .container li a {
   @apply py-1.5 px-2.5 -mx-1.5 text-2xl;
+}
+
+.container h2 a {
+  @apply py-1.5 px-2.5 -mx-2 text-3xl;
 }
 
 .container p span:has(img) {

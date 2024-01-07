@@ -24,12 +24,11 @@ const projects = (await getCollection("project"))
   >
     {
       projects.map((project) => (
-        <li class="snap-always snap-center md:snap-end relative shrink-0 w-[75vw] md:w-[60vw] lg:w-[35vw]">
-          <a
-            class="h-full"
-            href={`/project/${project.slug}`}
-            aria-label={`${project.data.title},${project.data.description}`}
-          >
+        <li
+          class="snap-always snap-center md:snap-end relative shrink-0 w-[75vw] md:w-[60vw] lg:w-[35vw]"
+          aria-label={`${project.data.title},${project.data.description}`}
+        >
+          <a class="h-full" href={`/project/${project.slug}`}>
             <Image
               width={320}
               height={240}
@@ -38,7 +37,7 @@ const projects = (await getCollection("project"))
               aria-hidden="true"
             />
             <div class="text-xl font-extrabold text-slate-900 dark:text-slate-900">
-              {project.data.title}{" "}
+              {project.data.title}
               <span class="font-light description text-slate-900 dark:text-slate-900">
                 {project.data.description}
               </span>
@@ -48,6 +47,12 @@ const projects = (await getCollection("project"))
       ))
     }
   </ol>
+  <em
+    class="px-12 block w-full text-center md:text-right mt-4 text-slate-900"
+    aria-hidden
+  >
+    Scroll for more <span class="motion-safe:animate-pulse">👉</span>
+  </em>
 </aside>
 
 <style>

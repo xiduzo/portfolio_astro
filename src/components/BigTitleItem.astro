@@ -12,11 +12,10 @@ const { slug, data, baseHref } = Astro.props;
 const { title, description, heroImage, pubDate, headerColor } = data;
 ---
 
-<li>
+<li aria-label={`${title}, ${description}`}>
   <a
     href={`/${baseHref}/${slug}/`}
     class="flex flex-col lg:space-x-4 stroke-white group lg:flex-row group"
-    aria-label={`${title}, ${description}`}
   >
     <div
       class="block transition-all opacity-100 pointer-events-none lg:max-w-screen-md w-fit lg:absolute lg:left-40 lg:opacity-0 group-hover:opacity-100 group-hover:left-60 lg:motion-reduce:left-60 lg:-mt-32"

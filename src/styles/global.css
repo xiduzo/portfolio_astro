@@ -38,7 +38,7 @@ a[target="_blank"]:hover {
   @apply cursor-alias;
 }
 
-.container h2 a,
+.container h2 type-writer a,
 .container p a {
   @apply underline;
 }
@@ -48,7 +48,7 @@ a[target="_blank"]:hover {
   @apply py-1.5 px-2.5 -mx-1.5 text-2xl;
 }
 
-.container h2 a {
+.container h2 type-writer a {
   @apply py-1.5 px-2.5 -mx-2 text-3xl;
 }
 
@@ -98,6 +98,7 @@ hr + hr + p:has(picture) {
   left: calc(-50vw + 50%);
 }
 
+/* Make sure anchor links will end to the proper section */
 [id]::before {
   content: "";
   display: block;

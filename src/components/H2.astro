@@ -1,10 +1,16 @@
 ---
+import AnchorLink from "./AnchorLink.astro";
 import Typewriter from "./Typewriter.astro";
 const props = Astro.props;
+console.log(props);
 ---
 
-<h2 {...props} class="text-3xl mb-4 mt-16 md:mt-24 lg:mt-48">
+<h2
+  {...props}
+  class="text-3xl mb-4 mt-16 md:mt-24 lg:mt-48 max-w-screen-md mx-auto group"
+>
   <Typewriter>
     <slot />
   </Typewriter>
+  <AnchorLink {...props} />
 </h2>

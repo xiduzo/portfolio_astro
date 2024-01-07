@@ -11,11 +11,8 @@
   class Writer extends HTMLElement {
     private observer: IntersectionObserver = new IntersectionObserver(
       this.type.bind(this),
-      {
-        threshold: 0,
-      }
+      { threshold: 0 }
     );
-    private initalLoad = true;
 
     constructor() {
       super();
@@ -25,26 +22,25 @@
 
       this.classList.add("opacity-0");
 
-      this.observer.observe(this);
+      const that = this;
+      setTimeout(() => {
+        this.observer.observe(that);
+      }, 500);
     }
 
-    private type() {
-      if (!this.observer) return;
-      if (this.initalLoad) {
-        this.initalLoad = false;
-        return;
-      }
+    private type(entries: IntersectionObserverEntry[]) {
+      if (!entries[0]?.isIntersecting) return;
 
+      this.observer.unobserve(this);
       this.classList.remove("opacity-0");
 
       new Typewriter(this, {
         autoStart: true,
+        delay: 70,
         strings: this.innerHTML,
         loop: false,
         cursor: "",
       });
-
-      this.observer.unobserve(this);
     }
   }
 

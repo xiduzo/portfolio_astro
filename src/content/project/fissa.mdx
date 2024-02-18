@@ -55,7 +55,7 @@ Luckily, our TypeScript wizard [Matt Pocock](https://www.youtube.com/@mattpocock
 // Import in a single file, then across your whole project...
 import "@total-typescript/ts-reset";
 
-// .filter just got smarter!
+// .filter got smarter!
 const filteredArray = [1, 2, undefined].filter(Boolean); // number[]
 ```
 
@@ -235,7 +235,7 @@ As the Fissa is a collaborative playlist, users determine the order of the songs
 
 Strap-on your seatbelt, the next part will contain a lot of nerd info.
 
-Initially we just stored the index of the songs directly into the database. This way we put an unique index on the track for data integrity, and we could easily sort the tracks by their index.
+Initially we stored the index of the songs directly into the database. This way we put an unique index on the track for data integrity, and we could easily sort the tracks by their index.
 
 ```prisma
 // Initial model

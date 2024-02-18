@@ -1,0 +1,12 @@
+---
+import AnchorLink from "../AnchorLink.astro";
+const props = Astro.props;
+---
+
+<h3
+  {...props}
+  class="text-2xl mb-4 mt-32 font-bold max-w-screen-md mx-auto group"
+>
+  <slot />
+  <AnchorLink {...props} />
+</h3>

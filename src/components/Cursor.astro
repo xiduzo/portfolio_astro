@@ -75,6 +75,24 @@
     updateProperties(cursor, state);
   };
 
+  const playRandomHoverSound = (elem: HTMLAnchorElement) => {
+    // Check if element is inside of an <article>
+    if (elem.closest("article") == null) return;
+
+    if (elem.parentElement?.tagName !== "LI") return;
+
+    // Play sound
+    const audios = [
+      "/sound/bloop-1-184019.mp3",
+      "/sound/bloop-2-186531.mp3",
+      "/sound/bloop-3-186532.mp3",
+      "/sound/bloop-4-186533.mp3",
+    ];
+    const audio = new Audio(audios[Math.floor(Math.random() * audios.length)]);
+    audio.volume = 0.3;
+    audio.play();
+  };
+
   document.addEventListener("mousemove", updateState);
   document.addEventListener("scroll", updateState);
 
@@ -83,7 +101,10 @@
 
     document.querySelectorAll("a, button").forEach((elem) => {
       addProperTargetToExternalLinks(elem as HTMLAnchorElement);
-      elem.addEventListener("mouseenter", () => (onElement = elem));
+      elem.addEventListener("mouseenter", () => {
+        onElement = elem;
+        playRandomHoverSound(elem as HTMLAnchorElement);
+      });
       elem.addEventListener("mouseleave", () => (onElement = null));
     });
   };

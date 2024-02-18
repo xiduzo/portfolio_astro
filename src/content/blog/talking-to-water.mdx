@@ -1,0 +1,177 @@
+---
+title: "Talking to water"
+description: "And the art of the bodge"
+pubDate: "Feb 21 2024"
+headerColor: "#EBA6A9"
+heroImage: "/blog/suspense/showreel.png"
+---
+
+One of the things I like about my job at the [Master Digital Design](https://www.masterdigitaldesign.com) is the odd requests I get from students from time to time.
+
+This time a group of students came to me asking if I could guide them on how they could _talk to water_.
+
+But how does one _talk to water_? And what does it even mean to _talk to water_?
+
+---
+---
+![AuraMotions](/blog/talking-to-water/auramotions.jpeg "AuraMotions, picture by ???")
+
+---
+
+> “What we say to water can impact its crystals: positive words create intricate structures and negative words lead to collapse (Dr. Masaru Emoto). <br/><br/>AuraMotions is an art project, that processes what we say to make different colours and patterns of water. <br/><br/> It applies sentiment analysis technology to detect emotions from what we say. Then, through MQTT, data is sent to TouchDesigner to create captivating effects on water.”
+> <cite>The student group[^1]</cite>
+
+---
+
+In this post I would like to share the technical aspects of this project.
+
+For the non-technical aspects, I would like to refer you to the students[^1] themselves.
+
+[^1]: The students are: sdf asdkjfh asdljkf j
+
+## How does one talk to water?
+Well, that is an interesting question.
+
+Like how most of my answers start with _"I don't know, but let's figure it out together"_, this answer was no different.
+
+Luckily I am quite comfortable with [the art of the bodge](https://www.youtube.com/watch?v=lIFE7h3m40U).
+
+Making prototypes work just enough to convey a concept. No need for perfection, fault-proof code or future-proof solutions.
+
+### So, what is the concept?
+Put simply the concept is to use sentiment analysis to detect the _emotions_ of the words we say.
+
+These emotions are then used as the input for generative art in the `AuraMotions` installation.
+
+## The game plan
+In order to _talk to water_ I broke the problem down in 3 steps:
+
+1. Speech-to-text; convert human voice into the words they speak
+2. Sentiment analysis; determine the _emotions_ of those words
+3. Stream results; connect with `AuraMotions`
+
+### 1. Speech-to-text
+We can not imagine our lives without the use of [ChatGPT](https://chat.openai.com/) anymore. But did you know OpenAI has a forgotten little brother, especially after the release of [sora](https://openai.com/sora)?
+
+[Whisper](https://openai.com/research/whisper) is <cite>"an open-sourced neural net that approaches human level robustness and accuracy on English speech recognition"</cite>.
+
+You are able to use the Whisper API to convert speech to text. But some cool folks have build a [python wrapper](https://github.com/abdeladim-s/pywhispercpp) around the open-source model for easy, free and local use.
+
+
+```python
+from pywhispercpp.examples.assistant import Assistant
+
+def commands_callback(model_output):
+    print(f"user said: {model_output}")
+
+    # TODO: sentiment analysis
+
+my_assistant = Assistant(
+    commands_callback=commands_callback,
+    n_threads=8)
+
+my_assistant.start()
+```
+
+And just like that we have our speech-to-text working.
+
+### 2. Sentiment analysis
+Now that we have the text, we need to determine the _emotion_ of the words. Are they positive, negative, neutral or ...?
+
+A tool I have been wanting to play around with for a while now was [Hugging Face](https://huggingface.co/).
+
+Hugging face allows you and me, as mere mortals, to use very sophisticated open-sourced machine learning models.
+
+```python highlight
+from pywhispercpp.examples.assistant import Assistant
+from transformers import pipeline
+
+model = "j-hartmann/emotion-english-distilroberta-base"
+classifier = pipeline("text-classification", model=model, return_all_scores=True)
+
+def commands_callback(model_output):
+    print(f"user said: {model_output}")
+
+    print("feels like:")
+    for sentiment in classifier(model_output)[0]:
+        print(f"{sentiment['label']}: {sentiment['score']}")
+
+        # TODO: stream results
+
+my_assistant = Assistant(
+    commands_callback=commands_callback,
+    n_threads=8)
+
+my_assistant.start()
+```
+
+Like magic 🪄,
+
+Reasonably accurate sentiment analysis with a few lines of code.
+
+### 3. Stream results
+In architecture rooms this would be a hot-topic. Having multiple sessions to discuss the up- and down-sides of different streaming protocols. Calculating throughput needs, determine latency requirements and write-up reliability specifications.
+
+But we are bodging things over here, we _just_ need to send some data from one tool to another tool.
+
+At the university we happen to have set-up a [MQTT broker](https://mosquitto.org) for students to do just that.
+
+Even though [UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol) messaging would have been a better fit for the job we used MQTT as it was already there, configured, and known to work.
+
+
+```python
+from pywhispercpp.examples.assistant import Assistant
+from transformers import pipeline
+import paho.mqtt.client as mqtt
+
+model = "j-hartmann/emotion-english-distilroberta-base"
+classifier = pipeline("text-classification", model=model, return_all_scores=True)
+
+client = mqtt.Client("talk-with-water" + str(random.randint(0, 1000)))
+client.username_pw_set("*****", "*****")
+client.connect("*****")
+client.loop_start()
+
+def commands_callback(model_output):
+    print(f"user said: {model_output}")
+
+    print("feels like:")
+    for sentiment in classifier(model_output)[0]:
+        print(f"{sentiment['label']} {sentiment['score']}")
+
+        client.publish(f"AuraMotions/{sentiment['label']}", sentiment['score'])
+
+my_assistant = Assistant(
+    commands_callback=commands_callback,
+    n_threads=8)
+
+my_assistant.start()
+```
+
+And thats it.
+
+We can now _talk to water_.
+
+From here on out the students could use the MQTT messages to create the visuals they wanted.
+
+## Experience it yourself
+Before going down the rabbit hole and I will lose you. You can experience the project yourself or use it as the basis for your next bodge project!
+
+- [Check out the code](https://github.com/xiduzo/whisper-sentiment-analysis)
+- [Run with docker](https://hub.docker.com/repository/docker/xiduzo/whisper-sentiment-analysis/general)
+
+---
+---
+![Visualization](/blog/talking-to-water/ai-generated-image.png "AI imagination when given the student's description as prompt, krea.ai")
+
+## Magic with 30 lines of code
+That is the beauty of the current state of technology. We can bodge together our wildest imaginations with a few lines of code.
+
+By _standing on the shoulder of giants_, we can create magic.
+
+Thank you random strangers on the internet ❤️.
+
+
+
+## Down the rabbit hole
+

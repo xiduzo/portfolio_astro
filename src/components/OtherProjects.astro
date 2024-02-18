@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import Image from "../components/Image.astro";
+import Image from "./elements/Image.astro";
 
 type Props = {
   currentProject: string;
@@ -27,6 +27,7 @@ const projects = (await getCollection("project"))
         <li
           class="snap-always snap-center md:snap-end relative shrink-0 w-[75vw] md:w-[60vw] lg:w-[35vw]"
           aria-label={`${project.data.title},${project.data.description}`}
+          data-other-project
         >
           <a class="h-full" href={`/project/${project.slug}`}>
             <Image
@@ -61,3 +62,22 @@ const projects = (await getCollection("project"))
     content: "|";
   }
 </style>
+
+<script>
+  const items = document.querySelectorAll("[data-other-project]");
+
+  items.forEach((item) => {
+    item.addEventListener("mouseenter", () => {
+      const audios = [
+        "/sound/happy-pop-1-185286.mp3",
+        "/sound/happy-pop-2-185287.mp3",
+        "/sound/happy-pop-3-185288.mp3",
+      ];
+      const audio = new Audio(
+        audios[Math.floor(Math.random() * audios.length)]
+      );
+      audio.volume = 0.1337;
+      audio.play();
+    });
+  });
+</script>

@@ -48,6 +48,17 @@ a[target="_blank"]:hover {
   @apply py-1.5 px-2.5 -mx-1.5 text-2xl;
 }
 
+:not(footer).container ul li > a::before {
+  @apply inline-block pr-2 pl-0 duration-100 transition-all;
+  content: "👈 ";
+  transform-style: preserve-3d;
+}
+
+:not(footer).container ul li > a:hover::before {
+  @apply pl-2 pr-0 duration-200;
+  transform: rotateY(180deg);
+}
+
 .container h2 type-writer a {
   @apply py-1.5 px-2.5 -mx-2 text-3xl;
 }

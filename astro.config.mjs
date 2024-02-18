@@ -6,7 +6,6 @@ import react from "@astrojs/react";
 import vercel from "@astrojs/vercel/static";
 import compress from "astro-compress";
 
-
 const isProduction = process.env.NODE_ENV === 'production';
 
 // https://astro.build/config
@@ -23,16 +22,7 @@ export default defineConfig({
     },
   },
   integrations: [
-    mdx({
-      syntaxHighlight: "shiki",
-      shikiConfig: {
-        // experimentalThemes: {
-        //   light: 'github-light',
-        //   dark: 'github-dark'
-        // },
-        theme: "github-dark",
-      }
-    }),
+    mdx(),
     sitemap({
       changefreq: "monthly",
       lastmod: new Date().toISOString(),

@@ -1,5 +1,5 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import type { CollectionEntry, ContentCollectionKey } from "astro:content";
 import "@fontsource/space-grotesk";
 import "@fontsource/caveat";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -7,10 +7,10 @@ import { ScrollingText } from "../components/ScrollingText";
 import PageProgress from "../components/PageProgress.astro";
 import { PageTransition } from "../components/PageTransition";
 import OtherProjects from "../components/OtherProjects.astro";
-import Image from "../components/Image.astro";
+import Image from "../components/elements/Image.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 
-type Props = CollectionEntry<"project">["data"] & {
+type Props = CollectionEntry<ContentCollectionKey>["data"] & {
   showDates?: boolean;
 };
 

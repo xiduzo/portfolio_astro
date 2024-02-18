@@ -2,15 +2,15 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import MarkdownContent from "../../layouts/MarkdownContent.astro";
 
-import Code from "../../components/Code.astro";
-import OrderedList from "../../components/OrderedList.astro";
-import Paragraph from "../../components/Paragraph.astro";
-import H2 from "../../components/H2.astro";
-import H3 from "../../components/H3.astro";
-import Hr from "../../components/Hr.astro";
-import UnorderedList from "../../components/UnorderedList.astro";
+import Code from "../../components/elements/Code.astro";
+import OrderedList from "../../components/elements/OrderedList.astro";
+import Paragraph from "../../components/elements/Paragraph.astro";
+import H2 from "../../components/elements/H2.astro";
+import H3 from "../../components/elements/H3.astro";
+import Hr from "../../components/elements/Hr.astro";
+import UnorderedList from "../../components/elements/UnorderedList.astro";
 import ImageWithTitle from "../../components/ImageWithTitle.astro";
-import BlockQuote from "../../components/BlockQuote.astro";
+import BlockQuote from "../../components/elements/BlockQuote.astro";
 
 export async function getStaticPaths() {
   const projects = await getCollection("project");

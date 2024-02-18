@@ -5,6 +5,7 @@ pubDate: "Feb 21 2024"
 headerColor: "#EBA6A9"
 heroImage: "/blog/suspense/showreel.png"
 ---
+import Cookie from '../../components/Cookie.astro'
 
 One of the things I like about my job at the [Master Digital Design](https://www.masterdigitaldesign.com) is the odd requests I get from students from time to time.
 
@@ -154,24 +155,43 @@ We can now _talk to water_.
 
 From here on out the students could use the MQTT messages to create the visuals they wanted.
 
+## Magic with 30 lines of code
+By _standing on the shoulder of giants_, we can bodge together our wildest imaginations.
+
+Thank you random strangers on the internet ❤️.
+
 ## Experience it yourself
-Before going down the rabbit hole and I will lose you. You can experience the project yourself or use it as the basis for your next bodge project!
+Before going [down the rabbit hole](#down-the-rabbit-hole) and I will lose you.
+
+You can experience the project yourself or use it as the basis for your next bodge project!
 
 - [Check out the code](https://github.com/xiduzo/whisper-sentiment-analysis)
 - [Run with docker](https://hub.docker.com/repository/docker/xiduzo/whisper-sentiment-analysis/general)
 
 ---
 ---
-![Visualization](/blog/talking-to-water/ai-generated-image.png "AI imagination when given the student's description as prompt, krea.ai")
-
-## Magic with 30 lines of code
-That is the beauty of the current state of technology. We can bodge together our wildest imaginations with a few lines of code.
-
-By _standing on the shoulder of giants_, we can create magic.
-
-Thank you random strangers on the internet ❤️.
+![Visualization](/blog/talking-to-water/ai-generated-image.png "AI imagination when given the student's description as prompt using krea.ai")
 
 
 
 ## Down the rabbit hole
+Awesome, you made it this far.
 
+Before you begin the next part, have a <Cookie name="talking-to-water"/>!
+
+### Works on my machine
+While the code presented above worked on my machine, the bodged solution is not without its flaws.
+
+While the project runs fine when all tools and dependencies are available, it was breaking down when the students tried to run it on their own machines.
+
+Either (the correct version of) python was not installed or dependencies like `ffmpeg` were not available on the students' machines.
+
+But this is a common problem in software development.
+
+The infamous _"works on my machine"_.
+
+![A meme depicting the "works on my machine" issue 600x](/blog/talking-to-water/works-on-my-machine.webp)
+
+### Docker
+
+![A meme depicting the "works on my docker" issue 600x](/blog/talking-to-water/works-on-my-docker.webp)

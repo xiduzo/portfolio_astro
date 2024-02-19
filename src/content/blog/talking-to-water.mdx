@@ -24,7 +24,9 @@ But how does one _talk to water_? And what does it even mean to _talk to water_?
 
 ---
 
-In this post I would like to share the technical aspects of this project.
+In this post I would like to share some light the technical aspects of this project.
+
+I will keep it light and easy to follow, leaving out jargon until going [down the rabbit hole](#down-the-rabbit-hole).
 
 For the non-technical aspects, I would like to refer you to the students[^1] themselves.
 
@@ -153,9 +155,9 @@ And thats it.
 
 We can now _talk to water_.
 
-From here on out the students could use the MQTT messages to create the visuals they wanted.
+From here on out the students could use _emotions_ sent by the MQTT messages to create any (generated) visual representation they need.
 
-## Magic with 30 lines of code
+### Magic with 30 lines of code
 By _standing on the shoulder of giants_, we can bodge together our wildest imaginations.
 
 Thank you random strangers on the internet ❤️.
@@ -180,18 +182,106 @@ Awesome, you made it this far.
 Before you begin the next part, have a <Cookie name="talking-to-water"/>!
 
 ### Works on my machine
-While the code presented above worked on my machine, the bodged solution is not without its flaws.
+While the code presented above worked on my machine, and might work on your machine with some technical knowledge, the bodged solution is not without its flaws.
 
 While the project runs fine when all tools and dependencies are available, it was breaking down when the students tried to run it on their own machines.
 
 Either (the correct version of) python was not installed or dependencies like `ffmpeg` were not available on the students' machines.
 
-But this is a common problem in software development.
+![A meme depicting the "works on my machine" issue 600x](/blog/talking-to-water/works-on-my-machine.webp "The infamous works on my machine")
 
-The infamous _"works on my machine"_.
+### Docker to the rescue!
+This is a common problem in software development. Make a `Dockerfile` and ship it.
 
-![A meme depicting the "works on my machine" issue 600x](/blog/talking-to-water/works-on-my-machine.webp)
+```Dockerfile
+# Dockerfile
 
-### Docker
+FROM python:3.11.7
+
+# Get dependencies to make the container to work
+RUN apt update && apt install -y ffmpeg alsa-utils pulseaudio pulseaudio-utils libportaudio2 libasound-dev nano && apt clean
+
+# Install the required packages
+WORKDIR /usr/src/app
+RUN pip install --upgrade pip
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install pywhispercpp repository
+RUN git clone --recurse-submodules https://github.com/abdeladim-s/pywhispercpp.git
+
+# Build and install pywhispercpp
+WORKDIR /usr/src/app/pywhispercpp
+RUN python -m build --wheel
+RUN pip install dist/pywhispercpp-*.whl
+
+# Copy the main.py file
+WORKDIR /usr/src/app
+COPY main.py ./
+COPY src ./
+
+# Run the project
+CMD ["python3", "-u", "main.py"]
+```
+
+Voila, packaging the whole project neatly in a docker container will solve all our problems right?
+
+Right?!
 
 ![A meme depicting the "works on my docker" issue 600x](/blog/talking-to-water/works-on-my-docker.webp)
+
+### The final bodge
+While docker solved the problem of dependencies, it introduced a new problem.
+
+Audio was not being captured by the container, at least not on macOS machines.
+
+We don't have the luxury of running docker with `--device /dev/snd` as you would on a linux machine.
+
+After some googling I found a tool called [PulseAudio](https://www.freedesktop.org/wiki/Software/PulseAudio/) which could _"[...] transfer audio to a different machine [...]"_.
+
+This could be to a machine on the other side of the room, building, city or even world. Or in our case, to a docker container.
+
+To make installing PulseAudio as easy as possible for the students, I wrote a small bash script.
+
+```bash
+# install-pulseaudio-for-mac.sh
+
+#!/bin/bash
+
+# Install pulseaudio for mac
+brew install pulseaudio
+
+# Run the command and store its output in a variable
+output=$(pulseaudio --version)
+
+# Extract the version number using awk
+version=$(echo "$output" | awk '{print $2}')
+
+file="/opt/homebrew/Cellar/pulseaudio/$version/etc/pulse/default.pa.d"
+if test -e "$file"; then
+    echo "File exists"
+else
+    # Create the file
+    echo "File does not exist, creating it now..."
+    touch "$file"
+fi
+
+echo "writing configuration to file..."
+echo "$(cat .config/pulse/pulseaudio.conf)" >> /opt/homebrew/Cellar/pulseaudio/$version/etc/pulse/default.pa.d
+
+echo "Configuration written to file:"
+echo "$(cat /opt/homebrew/Cellar/pulseaudio/$version/etc/pulse/default.pa.d)"
+
+# Restart pulseaudio
+echo "Restarting pulseaudio..."
+brew services restart pulseaudio
+
+echo "Checking pulseaudio status..."
+sleep 5
+pulseaudio --check -v
+```
+
+So finally, the students (and you) can run the project with two simple commands:
+
+1. `./install-pulseaudio-for-mac.sh`
+2. `docker run --net=host --privileged -e PULSE_SERVER=<HOST_IP> xiduzo/whisper-sentiment-analysis:latest`

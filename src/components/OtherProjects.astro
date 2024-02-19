@@ -29,15 +29,21 @@ const projects = (await getCollection("project"))
           aria-label={`${project.data.title},${project.data.description}`}
           data-other-project
         >
-          <a class="h-full" href={`/project/${project.slug}`}>
-            <Image
-              width={320}
-              height={240}
-              src={project.data.heroImage}
-              alt={project.data.description}
-              aria-hidden="true"
-            />
-            <div class="text-xl font-extrabold text-slate-900 dark:text-slate-900">
+          <a class="w-full" href={`/project/${project.slug}`}>
+            <section
+              class="w-full"
+              style={{
+                background: project.data.contrastColor,
+              }}
+            >
+              <Image
+                src={project.data.heroImage}
+                alt={project.data.description}
+                aria-hidden="true"
+                class={`${project.data.contrastColor ? "max-w-xs md:max-w-sm mx-auto translate-y-12" : ""}`}
+              />
+            </section>
+            <div class="mt-24 text-xl font-extrabold text-slate-900 dark:text-slate-900">
               {project.data.title}
               <span class="font-light description text-slate-900 dark:text-slate-900">
                 {project.data.description}

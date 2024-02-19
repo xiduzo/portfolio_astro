@@ -5,28 +5,48 @@ const currentYear = new Date().getFullYear();
 <footer
   class="container fixed inset-0 flex flex-col justify-between max-w-full p-3 -z-10 bg-slate-950 md:p-12"
 >
-  <ul class="grid lg:grid-cols-3 md:space-y-8 lg:space-y-0">
-    <li class="text-center lg:text-start">
-      <a
-        class="text-slate-100 focus:text-slate-800"
-        href="/"
-        aria-label="Go to home page of the portfolio from Sander Boer"
-        >Sander Boer</a
-      >
-    </li>
-    <li class="text-center text-slate-100 opacity-30" aria-hidden="true">
-      &copy; 2022 - {currentYear}
-    </li>
-    <li class="text-center lg:text-end">
-      <a
-        class="text-slate-100 focus:text-slate-800"
-        href="https://github.com/xiduzo"
-        aria-label="Check out my GitHub to see what I'm up to, opens GitHub in a new Tab"
-        target="_blank">What I'm up to</a
-      >
-    </li>
-  </ul>
-  <div class="text-center">
+  <section>
+    <ul class="flex justify-around flex-col md:flex-row opacity-40 mb-8">
+      <li class="text-center lg:text-end">
+        <a
+          class="text-slate-100 focus:text-slate-800"
+          href="/page/accessibility"
+          aria-label="I am having accessibility problems using your website"
+          >Suggest accessibility improvements</a
+        >
+      </li>
+      <li class="text-center lg:text-end">
+        <a
+          class="text-slate-100 focus:text-slate-800"
+          href="/page/credits"
+          aria-label="See the credits for this website">Credits</a
+        >
+      </li>
+    </ul>
+
+    <ul class="grid lg:grid-cols-3 md:space-y-8 lg:space-y-0">
+      <li class="text-center lg:text-start">
+        <a
+          class="text-slate-100 focus:text-slate-800"
+          href="/"
+          aria-label="Go to home page of the portfolio from Sander Boer"
+          >Sander Boer</a
+        >
+      </li>
+      <li class="text-center text-slate-100 opacity-30" aria-hidden="true">
+        &copy; 2022 - {currentYear}
+      </li>
+      <li class="text-center lg:text-end">
+        <a
+          class="text-slate-100 focus:text-slate-800"
+          href="https://github.com/xiduzo"
+          aria-label="Check out my GitHub to see what I'm up to, opens GitHub in a new Tab"
+          target="_blank">What I'm up to</a
+        >
+      </li>
+    </ul>
+  </section>
+  <section class="text-center">
     <a
       target="_blank"
       href="mailto:mail@sanderboer.nl?subject=Let's have a chat!&body=Hi, I'd like to have a chat with you,"
@@ -34,7 +54,7 @@ const currentYear = new Date().getFullYear();
       aria-label="Send me an email so we can have some beers together, opens your email app to send me an email"
       >Let's have some 🍺</a
     >
-  </div>
+  </section>
   <ul class="grid md:space-y-8 lg:space-y-0 mb-14 md:mb-0 lg:grid-cols-3">
     <li class="text-center lg:text-start">
       <a

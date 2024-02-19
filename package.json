@@ -1,7 +1,13 @@
 {
   "name": "portfolio",
+  "description": "A personal portfolio website",
   "type": "module",
-  "version": "0.0.1",
+  "author": {
+    "name": "Sander boer",
+    "email": "mail@sanderboer.nl"
+  },
+  "license": "GNU GPLv3",
+  "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

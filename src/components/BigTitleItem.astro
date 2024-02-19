@@ -8,7 +8,8 @@ type Props = Pick<CollectionEntry<ContentCollectionKey>, "data" | "slug"> & {
 };
 
 const { slug, data, baseHref } = Astro.props;
-const { title, description, heroImage, pubDate, headerColor } = data;
+const { title, description, heroImage, pubDate, headerColor, contrastColor } =
+  data;
 ---
 
 <li aria-label={`${title}, ${description}`}>
@@ -18,24 +19,27 @@ const { title, description, heroImage, pubDate, headerColor } = data;
     data-big-title-item
   >
     <div
-      class="block transition-all opacity-100 pointer-events-none lg:max-w-screen-md w-fit lg:absolute lg:left-40 lg:opacity-0 group-hover:opacity-100 group-hover:left-60 lg:motion-reduce:left-60 lg:-mt-32"
+      aria-hidden="true"
+      class="block transition-all mb-12 lg:mb-0 opacity-100 lg:w-[1280px] lg:h-[480px] pointer-events-none lg:max-w-screen-md lg:absolute lg:-translate-x-20 lg:opacity-0 group-hover:opacity-100 group-hover:translate-x-20 lg:motion-reduce:left-60 lg:-mt-52"
+      style={{
+        background: contrastColor,
+      }}
     >
       <Image
-        width={1280}
-        height={960}
         src={heroImage}
         alt={description}
-        aria-hidden="true"
+        loading="eager"
+        class={`${contrastColor ? "px-12 max-w-sm mx-auto translate-y-12 lg:max-w-lg lg:translate-y-32" : ""}`}
       />
     </div>
     <h2
-      class="mb-4 text-6xl break-word font-extrabold tracking-widest lg:text-9xl mix-blend-multiply dark:mix-blend-difference group-focus:text-slate-900 max-w-5xl"
+      class="mb-4 mt-12 lg:mt-0 text-6xl break-word font-extrabold tracking-widest text-center lg:text-start lg:text-9xl mix-blend-multiply dark:mix-blend-difference group-focus:text-slate-900 max-w-5xl"
       style={{ color: headerColor }}
     >
       {title}
     </h2>
     <section
-      class="max-w-xs text-xl transition-all lg:group-hover:opacity-10 group-focus:text-slate-900"
+      class="lg:max-w-xs text-xl transition-all text-center lg:text-start lg:group-hover:opacity-10 group-focus:text-slate-900"
     >
       {description}
       <FormattedDate

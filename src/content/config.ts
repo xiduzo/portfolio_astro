@@ -11,6 +11,7 @@ const type = {
 			.or(z.date())
 			.transform((val) => new Date(val)),
 		headerColor: z.string(),
+		contrastColor: z.string().optional(),
 		updatedDate: z
 			.string()
 			.optional()

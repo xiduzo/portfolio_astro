@@ -12,7 +12,7 @@ export interface Props {
 }
 
 const regex = /(.*?)(\d*)(x)(\d*)/;
-const match = Astro.props.alt.match(regex);
+const match = Astro.props.alt?.match(regex);
 const style: Partial<Pick<CSSProperties, "maxWidth" | "maxHeight">> = {};
 if (match) {
   const [, path, width, _, height] = match;

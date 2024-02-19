@@ -21,6 +21,7 @@ const {
   description,
   heroImage,
   headerColor,
+  contrastColor,
   showDates,
 } = Astro.props;
 ---
@@ -29,17 +30,26 @@ const {
   <PageTransition background={headerColor} client:load />
   <ScrollingText text={title} background={headerColor} client:only />
   <article>
-    <Image
+    <section
       aria-hidden="true"
-      src={heroImage}
-      alt={description}
-      loading="eager"
-    />
+      class={`${contrastColor ? "mb-36" : ""}`}
+      style={{
+        background: contrastColor,
+      }}
+    >
+      <Image
+        src={heroImage}
+        alt={description}
+        loading="eager"
+        class={`${contrastColor ? "max-w-5xl mx-auto translate-y-24" : ""}`}
+      />
+    </section>
+
     <h1 class="sr-only">{title}</h1>
 
     {
       showDates && (
-        <section class="text-center">
+        <section class="text-center pt-12">
           Publised on <FormattedDate date={pubDate} />
           {updatedDate && (
             <>

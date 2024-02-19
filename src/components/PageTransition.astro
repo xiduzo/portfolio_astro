@@ -27,9 +27,16 @@ const { background } = Astro.props;
     constructor() {
       super();
 
+      document.body.classList.add("overflow-hidden");
       const reduceMotion =
         window?.matchMedia(`(prefers-reduced-motion: reduce)`).matches ||
         window?.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
+
+      const rect = document
+        .querySelector("main")
+        ?.querySelector("scrolling-text")
+        ?.getBoundingClientRect();
+      const bottom = Math.max(0, rect?.bottom ?? 0);
 
       anime
         .timeline()
@@ -42,24 +49,27 @@ const { background } = Astro.props;
         .add({
           targets: this.querySelector("[data-page-transition-background]"),
           opacity: 0,
-          duration: 800,
+          duration: 200,
           offset: "+=300",
         })
         .add({
           targets: this.querySelector("[data-page-transition-header]"),
-          translateY: reduceMotion ? 0 : -window.innerHeight,
-          duration: reduceMotion ? 0 : 1250,
-          offset: "+=300",
-        })
-        .add({
-          targets: this.querySelector("[data-page-transition-header]"),
-          opacity: 0,
-          duration: reduceMotion ? 1250 : 300,
-          offset: 500,
-        })
-        .finished.then(() => {
-          this.remove();
+          translateY: reduceMotion ? 0 : -window.innerHeight + bottom,
+          easing: "easeOutQuad",
+          duration: reduceMotion ? 0 : 150,
+          offset: 50,
         });
+
+      anime({
+        targets: this.querySelector("[data-page-transition-header]"),
+        opacity: [1, 0.3],
+        duration: reduceMotion ? 1250 : 250,
+        easing: "linear",
+        delay: 575,
+      }).finished.then(() => {
+        this.remove();
+        document.body.classList.remove("overflow-hidden");
+      });
     }
   }
   customElements.define("page-transition", PageTransition);

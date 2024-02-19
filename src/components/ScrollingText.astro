@@ -41,9 +41,8 @@ const { background, text, direction } = Astro.props;
       anime
         .timeline({
           targets,
-          opacity: [0, 1],
-          duration: reduceMotion ? 0 : 500,
-          delay: 1200,
+          opacity: [0.5, 1],
+          duration: reduceMotion ? 0 : 800,
         })
         .add({
           marginLeft:
@@ -51,7 +50,8 @@ const { background, text, direction } = Astro.props;
               ? -width + document.documentElement.clientWidth + 160
               : -160,
           easing: "easeOutCubic",
-          duration: reduceMotion ? 0 : 200,
+          duration: reduceMotion ? 0 : 1400,
+          delay: 500,
         });
 
       const scrollAnimation = anime({

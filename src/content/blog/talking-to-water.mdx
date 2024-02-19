@@ -191,7 +191,9 @@ Either (the correct version of) python was not installed or dependencies like `f
 ![A meme depicting the "works on my machine" issue 600x](/blog/talking-to-water/works-on-my-machine.webp "The infamous works on my machine")
 
 ### Docker to the rescue!
-This is a common problem in software development. Make a `Dockerfile` and ship it.
+Mismatching versions and missing dependencies is a common problem in software development.
+
+A common sollution is to make a `Dockerfile` and ship it that way.
 
 ```Dockerfile
 # Dockerfile
@@ -228,7 +230,7 @@ Voila, packaging the whole project neatly in a docker container will solve all o
 
 Right?!
 
-![A meme depicting the "works on my docker" issue 600x](/blog/talking-to-water/works-on-my-docker.webp)
+![A meme depicting the "works on my docker" issue 600x](/blog/talking-to-water/works-on-my-docker.webp "New tool, new issue")
 
 ### The final bodge
 While docker solved the problem of dependencies, it introduced a new problem.

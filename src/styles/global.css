@@ -70,6 +70,11 @@ a[target="_blank"]:hover {
   @apply transform -scale-x-100;
 }
 
+.footnotes ol::before {
+  @apply mb-12 inline-block italic opacity-60;
+  content: "Footnotes";
+}
+
 .footnotes {
   @apply mt-80;
 }

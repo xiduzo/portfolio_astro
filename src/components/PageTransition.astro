@@ -27,6 +27,10 @@ const { background } = Astro.props;
     constructor() {
       super();
 
+      const reduceMotion =
+        window?.matchMedia(`(prefers-reduced-motion: reduce)`).matches ||
+        window?.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
+
       anime
         .timeline()
         .add({
@@ -43,14 +47,14 @@ const { background } = Astro.props;
         })
         .add({
           targets: this.querySelector("[data-page-transition-header]"),
-          translateY: -window.innerHeight,
-          duration: 1250,
+          translateY: reduceMotion ? 0 : -window.innerHeight,
+          duration: reduceMotion ? 0 : 1250,
           offset: "+=300",
         })
         .add({
           targets: this.querySelector("[data-page-transition-header]"),
           opacity: 0,
-          duration: 300,
+          duration: reduceMotion ? 1250 : 300,
           offset: 500,
         })
         .finished.then(() => {

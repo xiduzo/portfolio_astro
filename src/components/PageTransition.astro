@@ -1,0 +1,62 @@
+---
+export type Props = {
+  background: string;
+};
+
+const { background } = Astro.props;
+---
+
+<page-transition aria-hidden="true" class="fixed top-0 bottom-0 z-20 inset-0">
+  <section
+    data-page-transition-background
+    class="fixed bg-slate-100 dark:bg-stone-900 motion-reduce:hidden inset-0"
+  >
+  </section>
+  <section
+    data-page-transition-header
+    class="absolute inset-0"
+    style={{ background }}
+  >
+  </section>
+</page-transition>
+
+<script>
+  import anime from "animejs";
+
+  class PageTransition extends HTMLElement {
+    constructor() {
+      super();
+
+      anime
+        .timeline()
+        .add({
+          targets: this.querySelector("[data-page-transition-header]"),
+          translateY: [window.innerHeight, 0],
+          duration: 250,
+          easing: "linear",
+        })
+        .add({
+          targets: this.querySelector("[data-page-transition-background]"),
+          opacity: 0,
+          duration: 800,
+          offset: "+=300",
+        })
+        .add({
+          targets: this.querySelector("[data-page-transition-header]"),
+          translateY: -window.innerHeight,
+          duration: 1250,
+          offset: "+=300",
+        })
+        .add({
+          targets: this.querySelector("[data-page-transition-header]"),
+          opacity: 0,
+          duration: 300,
+          offset: 500,
+        })
+        .finished.then(() => {
+          this.remove();
+        });
+    }
+  }
+  customElements.define("page-transition", PageTransition);
+</script>

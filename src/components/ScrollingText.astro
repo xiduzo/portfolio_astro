@@ -23,6 +23,7 @@ const { background, text, direction } = Astro.props;
 
 <script>
   import anime from "animejs";
+
   class ScrollingText extends HTMLElement {
     constructor() {
       super();
@@ -41,9 +42,8 @@ const { background, text, direction } = Astro.props;
         .timeline({
           targets,
           opacity: [0, 1],
-
           duration: reduceMotion ? 0 : 500,
-          delay: 600,
+          delay: 1200,
         })
         .add({
           marginLeft:

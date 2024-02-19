@@ -5,7 +5,7 @@ import "@fontsource/caveat";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ScrollingText from "../components/ScrollingText.astro";
 import PageProgress from "../components/PageProgress.astro";
-import { PageTransition } from "../components/PageTransition";
+import PageTransition from "../components/PageTransition.astro";
 import OtherProjects from "../components/OtherProjects.astro";
 import Image from "../components/elements/Image.astro";
 import FormattedDate from "../components/FormattedDate.astro";
@@ -27,7 +27,7 @@ const {
 ---
 
 <BaseLayout title={title} description={description}>
-  <PageTransition background={headerColor} client:load />
+  <PageTransition background={headerColor} />
   <ScrollingText text={title} background={headerColor} />
   <article>
     {

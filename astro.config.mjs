@@ -7,8 +7,6 @@ import vercel from "@astrojs/vercel/static";
 import compress from "astro-compress";
 import * as transformers from 'shikiji-transformers';
 
-
-console.log(Object.values(transformers))
 const isProduction = process.env.NODE_ENV === 'production';
 
 // https://astro.build/config
@@ -23,13 +21,10 @@ export default defineConfig({
       transformers: Object.values(transformers),
       theme: 'github-dark',
       // experimentalThemes: {
-      //   light: 'github-light',
-      //   dark: 'github-dark'
+      //   light: 'github-dark',
+      //   dark: 'github-light'
       // },
       wrap: true,
-      langs: [
-        
-      ]
     },
   },
   integrations: [

@@ -27,9 +27,9 @@ But how does one _talk to water_? And what does it even mean to _talk to water_?
 
 ---
 
-In this post I would like to share some light the technical aspects of this project.
+In this post I would like to shed light on the technical aspects of this project.
 
-I will keep it light and easy to follow, leaving out jargon until going [down the rabbit hole](#down-the-rabbit-hole).
+I will keep it straightforward and easy to follow, leaving out jargon until going [down the rabbit hole](#down-the-rabbit-hole).
 
 For the non-technical aspects, I would like to refer you to the students[^1] themselves.
 
@@ -88,18 +88,19 @@ A tool I have been wanting to play around with for a while now was [Hugging Face
 
 Hugging face allows you and me, as mere mortals, to use very sophisticated open-sourced machine learning models.
 
-```python highlight
+
+```python
 from pywhispercpp.examples.assistant import Assistant
 from transformers import pipeline
 
-model = "j-hartmann/emotion-english-distilroberta-base"
+model = "j-hartmann/emotion-english-distilroberta-base"  # [!code highlight]
 classifier = pipeline("text-classification", model=model, return_all_scores=True)
 
 def commands_callback(model_output):
     print(f"user said: {model_output}")
 
-    print("feels like:")
-    for sentiment in classifier(model_output)[0]:
+    print("feels like:") 
+    for sentiment in classifier(model_output)[0]:  
         print(f"{sentiment['label']}: {sentiment['score']}")
 
         # TODO: stream results
@@ -198,9 +199,7 @@ Mismatching versions and missing dependencies is a common and solved problem in 
 
 We make a `Dockerfile` and ship it that way.
 
-```Dockerfile
-# Dockerfile
-
+```dockerfile
 FROM python:3.11.7
 
 # Get dependencies to make the container to work
@@ -249,8 +248,6 @@ This could be to a machine on the other side of the room, building, city, world 
 To make installing `PulseAudio` as easy as possible for the students, I wrote a small bash script.
 
 ```bash
-# install-pulseaudio-for-mac.sh
-
 #!/bin/bash
 
 # Install pulseaudio for mac

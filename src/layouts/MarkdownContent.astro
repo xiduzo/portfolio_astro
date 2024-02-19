@@ -3,7 +3,7 @@ import type { CollectionEntry, ContentCollectionKey } from "astro:content";
 import "@fontsource/space-grotesk";
 import "@fontsource/caveat";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { ScrollingText } from "../components/ScrollingText";
+import ScrollingText from "../components/ScrollingText.astro";
 import PageProgress from "../components/PageProgress.astro";
 import { PageTransition } from "../components/PageTransition";
 import OtherProjects from "../components/OtherProjects.astro";
@@ -28,7 +28,7 @@ const {
 
 <BaseLayout title={title} description={description}>
   <PageTransition background={headerColor} client:load />
-  <ScrollingText text={title} background={headerColor} client:only />
+  <ScrollingText text={title} background={headerColor} />
   <article>
     {
       heroImage && (
@@ -43,7 +43,7 @@ const {
             src={heroImage}
             alt={description}
             loading="eager"
-            class={`${contrastColor ? "max-w-5xl mx-auto translate-y-24" : ""}`}
+            class={`${contrastColor ? "max-w-5xl mx-auto translate-y-24 px-5" : ""}`}
           />
         </section>
       )
@@ -73,7 +73,7 @@ const {
       <slot />
     </section>
   </article>
-  <ScrollingText text="More work" client:only direction="right" />
+  <ScrollingText text="More work" direction="right" />
   <OtherProjects currentProject={title} background={headerColor} />
   <PageProgress color={headerColor} />
 </BaseLayout>

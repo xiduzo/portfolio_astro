@@ -1,0 +1,86 @@
+---
+export interface Props {
+  background?: string;
+  text: string;
+  direction?: "left" | "right";
+}
+
+const { background, text, direction } = Astro.props;
+---
+
+<scrolling-text
+  aria-hidden="true"
+  class="flex items-end w-full -mt-20 overflow-hidden uppercase h-96"
+  style={{ background }}
+  data-direction={direction}
+>
+  <div
+    class="relative whitespace-nowrap text-9xl -mb-10 lg:text-[256px] font-extrabold tracking-widest lg:-mb-20 space-x-32"
+  >
+    {Array.from({ length: 15 }).map(() => <span>{text}</span>)}
+  </div>
+</scrolling-text>
+
+<script>
+  import anime from "animejs";
+  class ScrollingText extends HTMLElement {
+    constructor() {
+      super();
+
+      const direction = this.getAttribute("data-direction");
+      const targets = this.getElementsByTagName("div")[0];
+      if (!targets) return;
+
+      const reduceMotion =
+        window?.matchMedia(`(prefers-reduced-motion: reduce)`).matches ||
+        window?.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
+
+      const { width } = targets?.getBoundingClientRect();
+
+      anime
+        .timeline({
+          targets,
+          opacity: [0, 1],
+
+          duration: reduceMotion ? 0 : 500,
+          delay: 600,
+        })
+        .add({
+          marginLeft:
+            direction === "right"
+              ? -width + document.documentElement.clientWidth + 160
+              : -160,
+          easing: "easeOutCubic",
+          duration: reduceMotion ? 0 : 200,
+        });
+
+      const scrollAnimation = anime({
+        targets,
+        translateX: direction === "right" ? width : -width,
+        easing: "easeInQuad",
+        autoplay: false,
+      });
+
+      window.addEventListener("scroll", () => {
+        const scrollOffset =
+          window.scrollY ??
+          document.documentElement.scrollTop ??
+          document.body.scrollTop;
+
+        if (direction === "right") {
+          scrollAnimation.seek(
+            scrollAnimation.duration *
+              (scrollOffset /
+                (document.documentElement.scrollHeight - window.innerHeight))
+          );
+          return;
+        }
+
+        scrollAnimation.seek(
+          scrollAnimation.duration * (scrollOffset / window.innerHeight)
+        );
+      });
+    }
+  }
+  customElements.define("scrolling-text", ScrollingText);
+</script>

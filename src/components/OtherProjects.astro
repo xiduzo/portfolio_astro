@@ -25,7 +25,7 @@ const projects = (await getCollection("project"))
     {
       projects.map((project) => (
         <li
-          class="snap-always snap-center md:snap-end relative shrink-0 w-[75vw] md:w-[60vw] lg:w-[35vw]"
+          class="snap-always snap-center md:snap-end relative shrink-0 w-[80vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] 2xl:w-[40vw]"
           aria-label={`${project.data.title},${project.data.description}`}
           data-other-project
         >
@@ -40,7 +40,7 @@ const projects = (await getCollection("project"))
                 src={project.data.heroImage}
                 alt={project.data.description}
                 aria-hidden="true"
-                class={`${project.data.contrastColor ? "max-w-xs md:max-w-sm mx-auto translate-y-12" : ""}`}
+                class={`${project.data.contrastColor ? "max-w-xs md:max-w-sm mx-auto translate-y-12 px-3 md:px-0" : ""}`}
               />
             </section>
             <div class="mt-24 text-xl font-extrabold text-slate-900 dark:text-slate-900">

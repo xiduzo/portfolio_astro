@@ -9,13 +9,10 @@ export interface Props {
 <script>
   class Cookie extends HTMLElement {
     #eatenOpacity = "20%";
+    #audio = new Audio("/sound/eating-a-cracker-mouth-closed-102488.mp3");
 
     constructor() {
       super();
-
-      const audio = new Audio(
-        "/sound/eating-a-cracker-mouth-closed-102488.mp3"
-      );
 
       const name = this.attributes.getNamedItem("name")?.value;
       if (!name) return;
@@ -30,7 +27,7 @@ export interface Props {
       this.onclick = () => {
         this.onclick = null;
         localStorage.setItem(localStorageName, "true");
-        audio.play();
+        this.#audio.play();
 
         this.style.opacity = this.#eatenOpacity;
       };

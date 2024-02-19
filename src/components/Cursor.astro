@@ -13,7 +13,10 @@
     radius: string;
   };
 
+  const CUSTOM_CURSOR_BASE_SIZE = 56;
   const cursor = document.querySelector("#custom-cursor") as HTMLElement;
+  const header = document.querySelector("header") as HTMLElement;
+
   let onElement: Element | null = null;
   let prevEvent: MouseEvent | null = null;
 
@@ -21,8 +24,8 @@
     const defaultState: State = {
       x: e instanceof MouseEvent ? e.clientX : prevEvent?.clientX ?? 0,
       y: e instanceof MouseEvent ? e.clientY : prevEvent?.clientY ?? 0,
-      width: 56,
-      height: 56,
+      width: CUSTOM_CURSOR_BASE_SIZE,
+      height: CUSTOM_CURSOR_BASE_SIZE,
       radius: "100px",
     };
 
@@ -70,9 +73,17 @@
     e.setAttribute("rel", "noopener noreferrer");
   };
 
+  const setCursorZIndex = () => {
+    const { top, height } = header.getBoundingClientRect();
+    const { bottom } = cursor.getBoundingClientRect();
+    const isCloseToHeader = bottom - CUSTOM_CURSOR_BASE_SIZE < top + height;
+
+    cursor.style.zIndex = isCloseToHeader ? "40" : "30";
+  };
+
   const updateState = (e: MouseEvent | Event) => {
-    const state = createState(e);
-    updateProperties(cursor, state);
+    setCursorZIndex();
+    updateProperties(cursor, createState(e));
   };
 
   let audioTimeout: NodeJS.Timeout | null = null;
@@ -131,7 +142,7 @@
   }
 
   #custom-cursor {
-    @apply fixed top-0 left-0 transform-gpu ease-in-out z-50 pointer-events-none;
+    @apply fixed top-0 left-0 transform-gpu ease-in-out z-30 pointer-events-none;
     display: none;
     width: var(--width);
     height: var(--height);

@@ -20,7 +20,9 @@ But how does one _talk to water_? And what does it even mean to _talk to water_?
 
 ---
 
-> “What we say to water can impact its crystals: positive words create intricate structures and negative words lead to collapse (Dr. Masaru Emoto). <br/><br/>AuraMotions is an art project, that processes what we say to make different colours and patterns of water. <br/><br/> It applies sentiment analysis technology to detect emotions from what we say. Then, through MQTT, data is sent to TouchDesigner to create captivating effects on water.”
+> What we say to water can impact its crystals: positive words create intricate structures and negative words lead to collapse (Dr. Masaru Emoto).<br aria-hidden="true"/><br aria-hidden="true"/>
+> AuraMotions is an art project that processes what we say to make different colours and patterns of water.<br aria-hidden="true"/><br aria-hidden="true"/>
+> It applies sentiment analysis technology to detect emotions from what we say. Then, through MQTT, data is sent to TouchDesigner to create captivating effects on water.
 > <cite>The student group[^1]</cite>
 
 ---
@@ -33,7 +35,7 @@ For the non-technical aspects, I would like to refer you to the students[^1] the
 
 [^1]: The students are: sdf asdkjfh asdljkf j
 
-## How does one talk to water?
+## How does one _talk to water_?
 Well, that is an interesting question.
 
 Like how most of my answers start with _"I don't know, but let's figure it out together"_, this answer was no different.
@@ -59,7 +61,7 @@ We can not imagine our lives without the use of [ChatGPT](https://chat.openai.co
 
 [Whisper](https://openai.com/research/whisper) is <cite>"an open-sourced neural net that approaches human level robustness and accuracy on English speech recognition"</cite>.
 
-Some cool folks have build a [python wrapper](https://github.com/abdeladim-s/pywhispercpp) around the open-sourced model for easy, free and local use.
+Some cool folks even build a [python wrapper](https://github.com/abdeladim-s/pywhispercpp) around the open-sourced model for easy, free and local use.
 
 
 ```python
@@ -118,7 +120,7 @@ In architecture rooms this would be a hot-topic. Having multiple sessions to dis
 
 But we are bodging things over here, we _just_ need to send some data from one tool to another tool.
 
-At the university we happen to have set-up a [MQTT broker](https://mosquitto.org) for students to do just that.
+At the university we have set-up a [MQTT broker](https://mosquitto.org) to do just that.
 
 Even though [UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol) messaging would have been a better fit for the job we used MQTT as it was already there, configured, and known to work.
 
@@ -183,18 +185,18 @@ Awesome, you made it this far.
 Before you begin the next part, have a <Cookie name="talking-to-water"/>!
 
 ### Works on my machine
-While the code presented above worked on my machine, and might work on your machine with some technical knowledge, the bodged solution is not without its flaws.
+While the code presented above worked on my machine, and probably works on your machine with some technical knowledge, the bodged solution is not without its flaws.
 
 While the project runs fine when all tools and dependencies are available, it was breaking down when the students tried to run it on their own machines.
 
-Either (the correct version of) python was not installed or dependencies like `ffmpeg` were not available on the students' machines.
+Either (the correct version of) python was not installed or dependencies, like `ffmpeg`, were not available on the students' machines.
 
 ![A meme depicting the "works on my machine" issue 600x](/blog/talking-to-water/works-on-my-machine.webp "The infamous works on my machine")
 
 ### Docker to the rescue!
-Mismatching versions and missing dependencies is a common problem in software development.
+Mismatching versions and missing dependencies is a common and solved problem in software development.
 
-A common sollution is to make a `Dockerfile` and ship it that way.
+We make a `Dockerfile` and ship it that way.
 
 ```Dockerfile
 # Dockerfile
@@ -227,7 +229,7 @@ COPY src ./
 CMD ["python3", "-u", "main.py"]
 ```
 
-Voila, packaging the whole project neatly in a docker container will solve all our problems right?
+Voil&agrave;, packaging the whole project neatly in a docker container will solve all our problems right?
 
 Right?!
 
@@ -242,9 +244,9 @@ We don't have the luxury of running docker with `--device /dev/snd` as you would
 
 After some googling I found a tool called [PulseAudio](https://www.freedesktop.org/wiki/Software/PulseAudio/) which could _"[...] transfer audio to a different machine [...]"_.
 
-This could be to a machine on the other side of the room, building, city or even world. Or in our case, to a docker container.
+This could be to a machine on the other side of the room, building, city, world or to a docker container running on the same machine.
 
-To make installing PulseAudio as easy as possible for the students, I wrote a small bash script.
+To make installing `PulseAudio` as easy as possible for the students, I wrote a small bash script.
 
 ```bash
 # install-pulseaudio-for-mac.sh

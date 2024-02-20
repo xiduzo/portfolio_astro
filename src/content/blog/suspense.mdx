@@ -57,7 +57,7 @@ As seen in the TL;DR - whenever _something_ throws a promise from within the `Su
 
 ```jsx
 function ComponentWhichThrows() {
-  throw new Promise(() => {}); // This will trigger the fallback state
+  throw new Promise(() => {}); // This will trigger the fallback state // [!code highlight]
 
   return "hi there";
 };
@@ -127,7 +127,7 @@ And finally we can use this inside of our component
 
 ```jsx
 function YourComponent() {
-  const data = use(fakeApi("xiduzo"))
+  const data = use(fakeApi("xiduzo")) // [!code highlight]
 
   return <div>{data}</div>;
 };

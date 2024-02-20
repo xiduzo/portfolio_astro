@@ -76,7 +76,6 @@ Tailwind offers a great way to [configure](https://tailwindcss.com/docs/configur
 
 ```typescript
 // Tailwind config.js
-
 const pinkey = {
   100: "#FFCAF7",
   500: "#FF5FE5",
@@ -119,12 +118,12 @@ We can then use this exposed variable within our components.
 
 ```tsx
 // Component.tsx
-
 import { theme } from "@fissa/tailwind-config";
 
 const Component = () => {
     return (
         <SafeAreaView style={{ backgroundColor: theme["900"] }}>
+          { /* ... */ }
         </SafeAreaView>
     )
 }
@@ -205,22 +204,20 @@ Whenever the queue is about to get empty, Fissa will add recommended tracks. The
 
 ```typescript
 class FissaService {
-    // ...
-
     playNextTrack = async () => {
         // ...
 
-        if (nextTracks.length <= TRACKS_BEFORE_ADDING_RECOMMENDATIONS) {
-            const withPositiveScore = tracks.filter(({ totalScore }) => totalScore > 0);
-            const tracksToMap = withPositiveScore.length ? withPositiveScore : tracks;
+        if (nextTracks.length <= TRACKS_BEFORE_ADDING_RECOMMENDATIONS) { // [!code focus]
+            const withPositiveScore = tracks.filter(({ totalScore }) => totalScore > 0); // [!code focus]
+            const tracksToMap = withPositiveScore.length ? withPositiveScore : tracks; // [!code focus]
 
-            const trackIds = tracksToMap
-                .map(({ trackId }) => trackId)
-                .sort(randomSort)
-                .slice(0, TRACKS_BEFORE_ADDING_RECOMMENDATIONS);
+            const trackIds = tracksToMap // [!code focus]
+                .map(({ trackId }) => trackId) // [!code focus]
+                .sort(randomSort) // [!code focus]
+                .slice(0, TRACKS_BEFORE_ADDING_RECOMMENDATIONS); // [!code focus]
 
             try {
-                await this.trackService.addRecommendedTracks(pin, trackIds, access_token!);
+                await this.trackService.addRecommendedTracks(pin, trackIds, access_token!); // [!code focus]
             } catch (e) {
                 logger.error(`${fissa.pin}, failed adding recommended tracks`, e);
             }
@@ -240,10 +237,8 @@ Strap-on your seatbelt, the next part will contain a lot of nerd info.
 Initially we stored the index of the songs directly into the database. This way we put an unique index on the track for data integrity, and we could easily sort the tracks by their index.
 
 ```prisma
-// Initial model
-
 model Track {
-    index  Int @db.SmallInt
+    index  Int @db.SmallInt // [!code focus]
     trackId String @map("track_id") @db.VarChar(22)
 
     fissa Fissa @relation(fields: [pin], references: [pin], onDelete: Cascade)
@@ -263,8 +258,6 @@ Easy peasy, lemon squeezy right? Well, not quite. This approach has a few drawba
 
 ```typescript
 class FissaService {
-  // ...
-
   reorderPlaylist = async (pin: string) => {
     const { currentIndex, tracks } = await this.getRoomDetailedInformation(pin);
 
@@ -280,60 +273,21 @@ class FissaService {
           });
         }
 
-        // (1) Clear out the indexes
-        await transaction.room.update({
-          where: { pin },
-          data: { tracks: { updateMany: fakeUpdates } },
-        });
+        // (1) Clear out the indexes // [!code focus]
+        await transaction.room.update({ // [!code focus]
+          where: { pin }, // [!code focus]
+          data: { tracks: { updateMany: fakeUpdates } }, // [!code focus]
+        }); // [!code focus]
 
-        // (2) Set the correct indexes
-        await transaction.room.update({
-          where: { pin },
-          data: { tracks: { updateMany: updates } },
-        });
+        // (2) Set the correct indexes // [!code focus]
+        await transaction.room.update({ // [!code focus]
+          where: { pin }, // [!code focus]
+          data: { tracks: { updateMany: updates } }, // [!code focus]
+        }); // [!code focus]
       });
     } catch (e) {
       console.log(e);
     }
-  };
-
-  private generateTrackIndexUpdates = (
-    tracks: Track[],
-    currentIndex: number,
-  ) => {
-    const tracksWithScoreOrAfterIndex = tracks.filter(
-      ({ score, index }) => score !== 0 || index > currentIndex,
-    );
-    const tracksWithoutScoreAndBeforeIndex = tracks.filter(
-      ({ score, index }) => score === 0 && index <= currentIndex,
-    );
-
-    const sortedTracks = tracksWithScoreOrAfterIndex.sort(
-      (a, b) => b.score - a.score,
-    );
-
-    const sorted = tracksWithoutScoreAndBeforeIndex.concat(sortedTracks);
-    const newCurrentIndex = sorted.findIndex(
-      ({ index }) => index === currentIndex,
-    );
-
-    const updates = sorted
-      .map(({ trackId, index }, newIndex) => {
-        if (index === newIndex) return; // No need to update
-
-        return {
-          where: { trackId },
-          data: { index: newIndex },
-        };
-      })
-      .filter(Boolean);
-
-    const fakeUpdates = updates.map((update, index) => ({
-      ...update,
-      data: { ...update.data, index: index + tracks.length + 100 }, // Set to an non-existing index
-    }));
-
-    return { updates, fakeUpdates, newCurrentIndex };
   };
 }
 ```
@@ -343,17 +297,16 @@ And for the final nail in the coffin, Fissa is hosted serverless on [vercel](htt
 ### The path of least resistance
 Eventually we settled on inferring the position of a track based on its' score. The score is updated each time a user votes on a track and the score will be cleared whenever the song is being played.
 
-By using the logic which was already in Fissa, we could actually remove a lot of code and make the whole process a lot more stable.
+By using the logic which was already in Fissa, we could remove a lot of code and make the whole process a lot more stable.
 
 ```prisma
 model Track {
+    index Int @db.SmallInt // [!code --]
+    score Int @db.SmallInt @default(0) // [!code ++]
     trackId String @map("track_id") @db.VarChar(22)
 
     fissa Fissa @relation(fields: [pin], references: [pin], onDelete: Cascade)
     pin String @db.VarChar(4)
-
-    votes Vote[]
-    score Int @db.SmallInt @default(0) // Value used for ordering tracks in a fissa
 
     @@unique([pin, trackId])
     @@map("tracks")
@@ -374,7 +327,7 @@ const sortTrack = (date: keyof Dates) => (a: SortableTrack, b: SortableTrack) =>
   const aTime = a[date].getTime();
   const bTime = b[date].getTime();
 
-  if (a.score !== b.score) return b.score - a.score;
+  if (a.score !== b.score) return b.score - a.score;  // [!code focus]
   if (aTime === bTime) return a.trackId.localeCompare(b.trackId);
 
   return aTime - bTime;

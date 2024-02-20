@@ -8,14 +8,13 @@ delete props.class;
 <pre-block>
   <pre
     {...props}
-    aria-hidden
     tabindex="0"
     class=`${className} group !overflow-x-hidden relative flex p-4 max-w-screen-lg md:mx-auto shadow-xl dark:shadow-md rounded-2xl my-16 md:my-26 lg:my-32`>
     <slot />
-    <button aria-label="copy code" class="bg-zinc-800 md:opacity-0 group-hover:opacity-100 transition-all group-hover:delay-150 duration-300 border group flex border-gray-600 items-center justify-center absolute top-2 right-2 w-12 h-12 p-3 text-gray-900 rounded-xl hover:cursor-copy hover:disabled:cursor-wait text-center">
-      <span class="absolute" style={{opacity: 0}}>Copied!</span>
-      <img src="/clipboard.svg" class="group-disabled:hidden block" alt="Copy code" />
-      <img src="/clipboard-check.svg" class="group-disabled:block hidden" alt="Copied code" />
+    <button aria-label="Copy code" class="bg-zinc-800 md:opacity-0 group-hover:opacity-100 transition-all group-hover:delay-150 duration-300 border group flex border-gray-600 items-center justify-center absolute top-2 right-2 w-12 h-12 p-3 text-gray-900 rounded-xl hover:cursor-copy hover:disabled:cursor-wait text-center">
+      <span aria-hidden="true" class="absolute" style={{opacity: 0}}>Copied!</span>
+      <img aria-hidden="true" src="/clipboard.svg" class="group-disabled:hidden block" alt="Copy code" />
+      <img aria-hidden="true" src="/clipboard-check.svg" class="group-disabled:block hidden" alt="Copied code" />
     </button>
   </pre>
 </pre-block>
@@ -39,6 +38,7 @@ delete props.class;
 
     private async copyCode(element: HTMLPreElement, button: HTMLButtonElement) {
       const code = element.querySelector("code");
+      const initialLabel = button.ariaLabel;
       button.disabled = true;
 
       const text = code?.innerText ?? "Oops, I was unable to copy the code";
@@ -61,7 +61,7 @@ delete props.class;
       const cancelAnimation = () => {
         animation.pause();
         animation.seek(0);
-        button.ariaLabel = "Copy code";
+        button.ariaLabel = initialLabel;
         button.disabled = false;
         button.removeEventListener("mouseleave", cancelAnimation);
       };

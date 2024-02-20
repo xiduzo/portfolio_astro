@@ -133,7 +133,7 @@ from pywhispercpp.examples.assistant import Assistant
 from transformers import pipeline
 import paho.mqtt.client as mqtt # [!code focus]
 
-client = mqtt.Client("talk-with-water" + str(random.randint(0, 1000))) # [!code focus]
+client = mqtt.Client("talking-to-water" + str(random.randint(0, 1000))) # [!code focus]
 client.username_pw_set("*****", "*****")
 client.connect("*****")
 client.loop_start()

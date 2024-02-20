@@ -250,38 +250,25 @@ To make installing `PulseAudio` as easy as possible for the students, I wrote a 
 
 ```bash
 #!/bin/bash
+if [ -z "$(brew -v)" ]; then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
 
-# Install pulseaudio for mac
 brew install pulseaudio
 
-# Run the command and store its output in a variable
-output=$(pulseaudio --version)
+pulseaudio_version=$(echo "$(pulseaudio --version)" | awk '{print $2}')
 
-# Extract the version number using awk
-version=$(echo "$output" | awk '{print $2}')
-
-file="/opt/homebrew/Cellar/pulseaudio/$version/etc/pulse/default.pa.d"
-if test -e "$file"; then
-    echo "File exists"
-else
-    # Create the file
-    echo "File does not exist, creating it now..."
+file="/opt/homebrew/Cellar/pulseaudio/$pulseaudio_version/etc/pulse/default.pa.d"
+if ! test -e "$file"; then
     touch "$file"
 fi
 
-echo "writing configuration to file..."
-echo "$(cat .config/pulse/pulseaudio.conf)" >> /opt/homebrew/Cellar/pulseaudio/$version/etc/pulse/default.pa.d
+echo "$(cat .config/pulse/pulseaudio.conf)" >> /opt/homebrew/Cellar/pulseaudio/$pulseaudio_version/etc/pulse/default.pa.d
 
-echo "Configuration written to file:"
-echo "$(cat /opt/homebrew/Cellar/pulseaudio/$version/etc/pulse/default.pa.d)"
-
-# Restart pulseaudio
-echo "Restarting pulseaudio..."
 brew services restart pulseaudio
 
-echo "Checking pulseaudio status..."
 sleep 5
-pulseaudio --check -v
+pulseaudio --check -v # Make sure everything is working
 ```
 
 So finally, the students (and you) can run the project with two simple commands:

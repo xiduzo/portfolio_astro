@@ -1,5 +1,6 @@
 ---
 import Typewriter from "../Typewriter.astro";
+import AnchorLinkIcon from "./AnchorLinkIcon.astro";
 const props = Astro.props;
 ---
 
@@ -8,12 +9,7 @@ const props = Astro.props;
     href={`#${props.id}`}
     class="text-3xl -translate-x-6 md:-translate-x-4 group flex items-center"
   >
-    <span
-      aria-hidden="true"
-      class="text-base hidden md:block transition-all duration-300 opacity-20 group-hover:opacity-100 group-hover:-translate-x-12 absolute -translate-x-8 bg-zinc-800 border border-gray-600 px-2 rounded-lg"
-    >
-      #
-    </span>
+    <AnchorLinkIcon />
     <Typewriter>
       <slot />
     </Typewriter>

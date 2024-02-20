@@ -71,7 +71,6 @@
     if (target.tagName === "MAIN") return;
 
     const setHash = () => {
-      console.log("scroll end");
       window.location.hash = id;
       window.removeEventListener("scrollend", setHash);
     };

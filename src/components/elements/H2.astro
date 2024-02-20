@@ -1,15 +1,21 @@
 ---
-import AnchorLink from "../AnchorLink.astro";
 import Typewriter from "../Typewriter.astro";
 const props = Astro.props;
 ---
 
-<h2
-  {...props}
-  class="text-3xl mb-4 mt-16 md:mt-24 lg:mt-48 max-w-screen-md mx-auto group"
->
-  <Typewriter>
-    <slot />
-  </Typewriter>
-  <AnchorLink {...props} />
+<h2 {...props} class="max-w-screen-md mx-auto mt-16 md:mt-24 lg:mt-48 mb-4">
+  <a
+    href={`#${props.id}`}
+    class="text-3xl -translate-x-6 md:-translate-x-4 group flex items-center"
+  >
+    <span
+      aria-hidden="true"
+      class="text-base hidden transition-all duration-300 opacity-20 group-hover:opacity-100 hover:bg-zinc-700 group-hover:-translate-x-12 md:block absolute -translate-x-8 bg-zinc-800 border border-gray-600 px-2 rounded-lg"
+    >
+      #
+    </span>
+    <Typewriter>
+      <slot />
+    </Typewriter>
+  </a>
 </h2>

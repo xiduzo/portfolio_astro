@@ -61,13 +61,34 @@
     elem.style.setProperty("--radius", state.radius);
   };
 
-  const addProperTargetToExternalLinks = (e: HTMLAnchorElement) => {
-    const link = e.getAttribute("href");
-    if (link == null) return;
-    // internal links
-    if (link.startsWith("/")) return;
-    // anchor links
-    if (link.startsWith("#")) return;
+  const smoothScrollTo = (href: string) => {
+    const id = href.replace("#", "");
+    const target = document.getElementById(id);
+    const link = document.querySelector(`a[href="#${id}"]`);
+
+    if (!link) return;
+    if (!target) return;
+    if (target.tagName === "MAIN") return;
+
+    const setHash = () => {
+      console.log("scroll end");
+      window.location.hash = id;
+      window.removeEventListener("scrollend", setHash);
+    };
+
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const { top } = target.getBoundingClientRect();
+      window.addEventListener("scrollend", setHash);
+      window.scrollTo({ top: top + window.scrollY, behavior: "smooth" });
+    });
+  };
+
+  const addPropertiesBasedOnHref = (e: HTMLAnchorElement) => {
+    const href = e.getAttribute("href");
+    if (href == null) return;
+    if (href.startsWith("/")) return; // internal links
+    if (href.startsWith("#")) return smoothScrollTo(href); // anchor links
 
     e.setAttribute("target", "_blank");
     e.setAttribute("rel", "noopener noreferrer");
@@ -116,7 +137,7 @@
     if (document.readyState !== "complete") return;
 
     document.querySelectorAll("a, button").forEach((elem) => {
-      addProperTargetToExternalLinks(elem as HTMLAnchorElement);
+      addPropertiesBasedOnHref(elem as HTMLAnchorElement);
       elem.addEventListener("mouseenter", () => {
         onElement = elem;
         playRandomHoverSound(elem as HTMLAnchorElement);

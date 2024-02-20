@@ -1,12 +1,18 @@
 ---
-import AnchorLink from "../AnchorLink.astro";
 const props = Astro.props;
 ---
 
-<h3
-  {...props}
-  class="text-2xl mb-4 mt-32 font-bold max-w-screen-md mx-auto group"
->
-  <slot />
-  <AnchorLink {...props} />
+<h3 {...props} class="max-w-screen-md mx-auto mt-32 mb-4">
+  <a
+    href={`#${props.id}`}
+    class="text-2xl font-bold -translate-x-6 md:-translate-x-4 group flex items-center"
+  >
+    <span
+      aria-hidden="true"
+      class="text-base hidden transition-all duration-300 opacity-10 group-hover:opacity-100 group-hover:-translate-x-12 md:block absolute -translate-x-8 bg-zinc-800 border border-gray-600 px-2 rounded-lg"
+    >
+      #
+    </span>
+    <slot />
+  </a>
 </h3>

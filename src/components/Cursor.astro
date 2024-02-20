@@ -61,21 +61,19 @@
     elem.style.setProperty("--radius", state.radius);
   };
 
-  const smoothScrollTo = (href: string) => {
-    const id = href.replace("#", "");
-    const target = document.getElementById(id);
-    const link = document.querySelector(`a[href="#${id}"]`);
+  const smoothScrollTo = (href: string, element: HTMLAnchorElement) => {
+    const hash = href.replace("#", "");
+    const target = document.getElementById(hash);
 
-    if (!link) return;
     if (!target) return;
-    if (target.tagName === "MAIN") return;
+    if (target?.tagName === "MAIN") return;
 
     const setHash = () => {
-      window.location.hash = id;
+      window.location.hash = hash;
       window.removeEventListener("scrollend", setHash);
     };
 
-    link.addEventListener("click", (e) => {
+    element.addEventListener("click", (e) => {
       e.preventDefault();
       const { top } = target.getBoundingClientRect();
       window.addEventListener("scrollend", setHash);
@@ -87,7 +85,7 @@
     const href = e.getAttribute("href");
     if (href == null) return;
     if (href.startsWith("/")) return; // internal links
-    if (href.startsWith("#")) return smoothScrollTo(href); // anchor links
+    if (href.startsWith("#")) return smoothScrollTo(href, e); // anchor links
 
     e.setAttribute("target", "_blank");
     e.setAttribute("rel", "noopener noreferrer");

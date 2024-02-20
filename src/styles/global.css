@@ -122,3 +122,54 @@ hr + hr + p:has(picture) {
   margin-top: -100px;
   visibility: hidden;
 }
+
+pre code {
+  @apply w-full;
+}
+
+pre code .line,
+pre code .line .highlighted-word {
+  @apply transition-all duration-500;
+}
+
+pre code .line.highlighted,
+pre code .line.diff.remove,
+pre code .line.diff.add {
+  @apply -mx-6 px-6 inline-block;
+  width: calc(100% + 48px);
+}
+
+pre code .line .highlighted-word {
+  @apply px-1 py-0.5 border rounded-md border-slate-500;
+}
+
+pre code .line .highlighted-word,
+pre code .line.highlighted {
+  @apply bg-white bg-opacity-10;
+}
+
+pre code .line.highlighted.warning {
+  @apply bg-amber-500 bg-opacity-15;
+}
+
+pre code .line.highlighted.error,
+pre code .line.diff.remove {
+  @apply bg-red-500 bg-opacity-15;
+}
+
+pre code .line.diff.remove::before {
+  @apply content-['-'] text-red-300 -ml-2.5;
+}
+
+pre code .line.diff.add {
+  @apply bg-green-500 bg-opacity-15;
+}
+
+pre code .line.diff.add::before {
+  @apply content-['+'] text-green-300 -ml-2.5;
+}
+
+pre.has-focused code .line:not(.focused) {
+  @apply opacity-80;
+  filter: blur(0.1rem);
+}

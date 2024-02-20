@@ -91,19 +91,19 @@ Hugging face allows you and me, as mere mortals, to use very sophisticated open-
 
 ```python
 from pywhispercpp.examples.assistant import Assistant
-from transformers import pipeline
+from transformers import pipeline # [!code focus]
 
-model = "j-hartmann/emotion-english-distilroberta-base"  # [!code highlight]
-classifier = pipeline("text-classification", model=model, return_all_scores=True)
+model = "j-hartmann/emotion-english-distilroberta-base" # [!code focus]
+classifier = pipeline("text-classification", model=model, return_all_scores=True) # [!code focus]
 
 def commands_callback(model_output):
     print(f"user said: {model_output}")
 
-    print("feels like:") 
-    for sentiment in classifier(model_output)[0]:  
-        print(f"{sentiment['label']}: {sentiment['score']}")
+    print("feels like:") # [!code focus]
+    for sentiment in classifier(model_output)[0]: # [!code focus]
+        print(f"{sentiment['label']}: {sentiment['score']}") # [!code focus]
 
-        # TODO: stream results
+        # TODO: stream results # [!code focus]
 
 my_assistant = Assistant(
     commands_callback=commands_callback,
@@ -129,15 +129,15 @@ Even though [UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol) messagin
 ```python
 from pywhispercpp.examples.assistant import Assistant
 from transformers import pipeline
-import paho.mqtt.client as mqtt
+import paho.mqtt.client as mqtt # [!code focus]
+
+client = mqtt.Client("talk-with-water" + str(random.randint(0, 1000))) # [!code focus]
+client.username_pw_set("*****", "*****") # [!code focus]
+client.connect("*****") # [!code focus]
+client.loop_start() # [!code focus]
 
 model = "j-hartmann/emotion-english-distilroberta-base"
 classifier = pipeline("text-classification", model=model, return_all_scores=True)
-
-client = mqtt.Client("talk-with-water" + str(random.randint(0, 1000)))
-client.username_pw_set("*****", "*****")
-client.connect("*****")
-client.loop_start()
 
 def commands_callback(model_output):
     print(f"user said: {model_output}")
@@ -146,7 +146,7 @@ def commands_callback(model_output):
     for sentiment in classifier(model_output)[0]:
         print(f"{sentiment['label']} {sentiment['score']}")
 
-        client.publish(f"AuraMotions/{sentiment['label']}", sentiment['score'])
+        client.publish(f"AuraMotions/{sentiment['label']}", sentiment['score']) # [!code focus]
 
 my_assistant = Assistant(
     commands_callback=commands_callback,

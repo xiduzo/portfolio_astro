@@ -5,7 +5,18 @@ import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
 import vercel from "@astrojs/vercel/static";
 import compress from "astro-compress";
-import * as transformers from 'shikiji-transformers';
+
+// @shikijs/transformers is broken - for now
+// https://www.reddit.com/r/astrojs/comments/1atheyx/integrating_shiki_transformers_with_astrojs/
+import {
+  transformerNotationHighlight,
+  transformerNotationDiff,
+  transformerNotationWordHighlight,
+  transformerNotationFocus,
+  transformerNotationErrorLevel
+  // transformerMetaWordHighlight, // Not working
+  // transformerMetaHighlight // Not working
+} from 'shikiji-transformers';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -18,7 +29,13 @@ export default defineConfig({
     shikiConfig: {
       // https://docs.astro.build/en/guides/markdown-content/#shiki-configuration
       // https://shikiji.netlify.app/packages/transformers
-      transformers: Object.values(transformers),
+      transformers: [
+        transformerNotationDiff(),
+        transformerNotationFocus(),
+        transformerNotationWordHighlight(),
+        transformerNotationErrorLevel(),
+        transformerNotationHighlight(),
+      ],
       theme: 'github-dark',
       // experimentalThemes: {
       //   light: 'github-dark',

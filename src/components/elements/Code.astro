@@ -10,13 +10,18 @@ delete props.class;
     {...props}
     aria-hidden
     tabindex="0"
-    class=`${className} relative p-4 pt-20 md:pt-4 max-w-screen-lg md:mx-auto shadow-xl dark:shadow-md rounded-2xl my-16 md:my-26 lg:my-32`>
+    class=`${className} group !overflow-x-hidden relative flex p-4 max-w-screen-lg md:mx-auto shadow-xl dark:shadow-md rounded-2xl my-16 md:my-26 lg:my-32`>
     <slot />
-    <button class="absolute top-0 right-0 text-gray-900 font-bold bg-amber-500 w-full md:w-36 md:rounded-bl-lg md:py-2 py-3 hover:bg-amber-600 hover:cursor-copy text-center">Copy code</button>
+    <button aria-label="copy code" class="bg-zinc-800 border group flex md:hidden md:group-hover:flex border-gray-600 items-center justify-center absolute top-2 right-2 w-12 h-12 p-3 text-gray-900 rounded-lg hover:cursor-copy hover:disabled:cursor-wait text-center">
+      <span class="absolute" style={{opacity: 0}}>Copied!</span>
+      <img src="/clipboard.svg" class="group-disabled:hidden block" alt="Copy code" />
+      <img src="/clipboard-check.svg" class="group-disabled:block hidden" alt="Copied code" />
+    </button>
   </pre>
 </pre-block>
 
 <script>
+  import anime from "animejs";
   // Inspiration: https://timneubauer.dev/blog/copy-code-button-in-astro/
   class PreBlock extends HTMLElement {
     constructor() {
@@ -24,7 +29,8 @@ delete props.class;
       const preElement = this.querySelector("pre");
       const copyButton = this.querySelector("button");
 
-      copyButton?.addEventListener("click", async () => {
+      if (!copyButton) return;
+      copyButton.addEventListener("click", async () => {
         if (!preElement || !copyButton) return;
 
         await this.copyCode(preElement, copyButton);
@@ -33,17 +39,41 @@ delete props.class;
 
     private async copyCode(element: HTMLPreElement, button: HTMLButtonElement) {
       const code = element.querySelector("code");
-      const text = code?.innerText ?? "unable to copy code";
+      button.disabled = true;
+
+      const text = code?.innerText ?? "Oops, I was unable to copy the code";
 
       await navigator.clipboard.writeText(text);
 
-      button.innerText = "Code copied";
+      button.ariaLabel = "Code copied";
 
-      setTimeout(() => {
-        button.innerText = "Copy code";
-      }, 3000);
+      const spanElement = button.querySelector("span")!;
+      const { width } = spanElement.getBoundingClientRect();
+
+      const animation = anime({
+        targets: spanElement,
+        opacity: 1,
+        marginLeft: -width * 2,
+        easing: "easeOutQuint",
+        duration: 800,
+      });
+
+      animation.finished.then(() => {
+        setTimeout(() => {
+          animation.seek(0);
+          button.ariaLabel = "Copy code";
+          button.disabled = false;
+        }, 200);
+      });
     }
   }
 
   customElements.define("pre-block", PreBlock);
 </script>
+
+<style>
+  pre button svg {
+    stroke: cyan;
+    fill: cyan;
+  }
+</style>

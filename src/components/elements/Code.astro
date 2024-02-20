@@ -58,12 +58,18 @@ delete props.class;
         duration: 800,
       });
 
+      const cancelAnimation = () => {
+        animation.pause();
+        animation.seek(0);
+        button.ariaLabel = "Copy code";
+        button.disabled = false;
+        button.removeEventListener("mouseleave", cancelAnimation);
+      };
+
+      button.addEventListener("mouseleave", cancelAnimation);
+
       animation.finished.then(() => {
-        setTimeout(() => {
-          animation.seek(0);
-          button.ariaLabel = "Copy code";
-          button.disabled = false;
-        }, 200);
+        setTimeout(cancelAnimation, 200);
       });
     }
   }

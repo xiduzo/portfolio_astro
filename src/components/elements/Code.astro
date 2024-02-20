@@ -12,7 +12,7 @@ delete props.class;
     tabindex="0"
     class=`${className} group !overflow-x-hidden relative flex p-4 max-w-screen-lg md:mx-auto shadow-xl dark:shadow-md rounded-2xl my-16 md:my-26 lg:my-32`>
     <slot />
-    <button aria-label="copy code" class="bg-zinc-800 border group flex md:hidden md:group-hover:flex border-gray-600 items-center justify-center absolute top-2 right-2 w-12 h-12 p-3 text-gray-900 rounded-lg hover:cursor-copy hover:disabled:cursor-wait text-center">
+    <button aria-label="copy code" class="bg-zinc-800 md:opacity-0 group-hover:opacity-100 transition-all group-hover:delay-150 duration-300 border group flex border-gray-600 items-center justify-center absolute top-2 right-2 w-12 h-12 p-3 text-gray-900 rounded-xl hover:cursor-copy hover:disabled:cursor-wait text-center">
       <span class="absolute" style={{opacity: 0}}>Copied!</span>
       <img src="/clipboard.svg" class="group-disabled:hidden block" alt="Copy code" />
       <img src="/clipboard-check.svg" class="group-disabled:block hidden" alt="Copied code" />

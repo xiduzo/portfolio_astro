@@ -93,9 +93,9 @@ In our case we will use a [text-classification model](https://huggingface.co/mod
 
 ```python
 from pywhispercpp.examples.assistant import Assistant # [!code word:text-classification]
-from transformers import pipeline # [!code focus]
+from transformers import pipeline
 
-model = "j-hartmann/emotion-english-distilroberta-base" # [!code focus]
+model = "j-hartmann/emotion-english-distilroberta-base"
 classifier = pipeline("text-classification", model=model, return_all_scores=True) # [!code focus]
 
 def commands_callback(model_output):
@@ -134,9 +134,9 @@ from transformers import pipeline
 import paho.mqtt.client as mqtt # [!code focus]
 
 client = mqtt.Client("talk-with-water" + str(random.randint(0, 1000))) # [!code focus]
-client.username_pw_set("*****", "*****") # [!code focus]
-client.connect("*****") # [!code focus]
-client.loop_start() # [!code focus]
+client.username_pw_set("*****", "*****")
+client.connect("*****")
+client.loop_start()
 
 model = "j-hartmann/emotion-english-distilroberta-base"
 classifier = pipeline("text-classification", model=model, return_all_scores=True)

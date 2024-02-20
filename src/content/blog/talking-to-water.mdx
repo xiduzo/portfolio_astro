@@ -50,7 +50,7 @@ Put simply the concept is to use sentiment analysis to detect the _emotions_ of 
 These emotions are then used as the input for generative art in the `AuraMotions` installation.
 
 ## The game plan
-In order to _talk to water_ I broke the problem down in 3 steps:
+In order to _talk to water_ the problem was broken down into:
 
 1. Speech-to-text; convert human voice into the words they speak
 2. Sentiment analysis; determine the _emotions_ of those words
@@ -88,9 +88,11 @@ A tool I have been wanting to play around with for a while now was [Hugging Face
 
 Hugging face allows you and me, as mere mortals, to use very sophisticated open-sourced machine learning models.
 
+In our case we will use a [text-classification model](https://huggingface.co/models?pipeline_tag=text-classification) to determine the _emotions_ of the words.
+
 
 ```python
-from pywhispercpp.examples.assistant import Assistant
+from pywhispercpp.examples.assistant import Assistant # [!code word:text-classification]
 from transformers import pipeline # [!code focus]
 
 model = "j-hartmann/emotion-english-distilroberta-base" # [!code focus]

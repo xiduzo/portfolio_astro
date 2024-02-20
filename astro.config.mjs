@@ -45,7 +45,10 @@ export default defineConfig({
   },
   integrations: [
     mdx(),
-    sitemap(),
+    sitemap({
+      lastmod: new Date(),
+      changefreq: "monthly",
+    }),
     tailwind(),
     compress({
       css: true,

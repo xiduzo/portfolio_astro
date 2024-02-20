@@ -16,6 +16,12 @@ main {
   @apply bg-slate-100 dark:bg-zinc-900;
 }
 
+@media (prefers-color-scheme: dark) {
+  a:focus .Typewriter__wrapper {
+    @apply text-slate-900;
+  }
+}
+
 @media (prefers-contrast: more) {
   * {
     @apply text-black dark:text-white;

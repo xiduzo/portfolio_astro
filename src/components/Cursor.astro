@@ -71,6 +71,7 @@
     const setHash = () => {
       window.location.hash = hash;
       window.removeEventListener("scrollend", setHash);
+      element.blur();
     };
 
     element.addEventListener("click", (e) => {

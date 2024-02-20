@@ -4,6 +4,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel/static";
 import compress from "astro-compress";
+import { remarkReadingTime } from './lib/remark-reading-time.mjs';
 
 // @shikijs/transformers is broken - for now
 // https://www.reddit.com/r/astrojs/comments/1atheyx/integrating_shiki_transformers_with_astrojs/
@@ -25,6 +26,7 @@ export default defineConfig({
   prefetch: true,
   markdown: {
     syntaxHighlight: "shiki",
+    remarkPlugins: [remarkReadingTime],
     shikiConfig: {
       // https://docs.astro.build/en/guides/markdown-content/#shiki-configuration
       // https://shikiji.netlify.app/packages/transformers

@@ -21,11 +21,11 @@ export async function getStaticPaths() {
 
 type Props = CollectionEntry<"page">;
 
-const page = Astro.props;
-const { Content } = await page.render();
+const { data, render } = Astro.props;
+const { Content, remarkPluginFrontmatter } = await render();
 ---
 
-<MarkdownContent {...page.data}>
+<MarkdownContent {...data} {...remarkPluginFrontmatter}>
   <Content
     components={{
       img: ImageWithTitle,

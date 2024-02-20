@@ -23,6 +23,7 @@ const {
   headerColor,
   contrastColor,
   showDates,
+  minutesRead,
 } = Astro.props;
 ---
 
@@ -61,6 +62,12 @@ const {
             </>
           )}
         </section>
+      )
+    }
+
+    {
+      minutesRead && (
+        <section class="text-center pt-12 opacity-50">{minutesRead}</section>
       )
     }
 

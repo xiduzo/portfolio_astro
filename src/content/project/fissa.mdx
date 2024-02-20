@@ -9,8 +9,10 @@ hidden: false
 ---
 import Cookie from '../../components/Cookie.astro'
 
-## Problem
-Having friends at a party with a bad taste in music stinks. This is what [Milan](https://www.linkedin.com/in/milan-van-der-maaten-307a1697) and myself have experienced countless times. Instead of complaining about it constantly we decided to do something about it.
+## Everyone can be the DJ
+Having friends at a party with a bad taste in music stinks. This is what [Milan](https://www.linkedin.com/in/milan-van-der-maaten-307a1697) and myself have experienced countless times.
+
+Instead of complaining about it constantly we decided to do something about it.
 
 As I am always looking for an excuse to start a new pet-project to learn and explore new technologies, Fissa seemed like a perfect opportunity to do so.
 
@@ -57,14 +59,15 @@ No more configuration[^1], just coding
 
 
 ## The great reset
-No, not [that one](https://www.weforum.org/great-reset/).
+No, not [that one](https://www.weforum.org/videos/series/the-great-reset-863c8ea2d4/).
 
-Working with TypeScript (for the past 5 years) has been a real game-changer and I would never go without, neither should any sane person. However, TypeScript still has it's quirks.
+Working with TypeScript (for the past 5 years) has been a real game-changer and I would never go without, neither should any sane person.
+
+However, TypeScript still has it's quirks.
 
 Luckily, our TypeScript wizard [Matt Pocock](https://www.youtube.com/@mattpocockuk) released an awesome tool right when we started with Fissa; [ts-reset](https://github.com/total-typescript/ts-reset)
 
 ```typescript
-// Import in a single file, then across your whole project...
 import "@total-typescript/ts-reset";
 
 // .filter got smarter!
@@ -78,7 +81,7 @@ const filteredArray = [1, 2, undefined].filter(Boolean); // number[]
 ## A colorful fissa
 Music is a blend of personal expression and social connection. By creating a collaborative playlist, and sharing your favorite tunes, we create a social experience.
 
-However, we also want to give the user a personal experience. This is why decided to give each Fissa their own color palette.
+We also want to give the user a personal experience. This is why decided to give each Fissa their own color palette.
 
 
 ### Tailwind
@@ -145,11 +148,16 @@ const Component = () => {
 ## Less === more
 Milan and myself are both big fans of Spotify and we recognize its strength. They focus on one thing, and they do it very well; explore and discover music.
 
-While building Fissa, Spotify introduced the [remote group session](https://support.spotify.com/us/article/remote-group-session/). However, this is always a hidden feature, changes constantly and does not seem to have any focus from Spotify.
+Although we want to keep users fully engaged in Fissa, we would never be able to do the exploration of music as well as Spotify does.
 
-Although we want to keep users fully engaged in Fissa, we would never be able to do the exploration of music as well as Spotify does. Therefore we put our focus on managing a collaborative playlist and utilize Spotify for the rest.
+Therefore we put our focus on managing a collaborative playlist and utilize Spotify for the rest.
 
 Do one thing, and do it well.
+
+### Group session
+While building Fissa, we noticed Spotify introduced the [remote group session](https://support.spotify.com/us/article/remote-group-session/). 
+
+This is still a hidden feature, changes constantly and does not seem to have any focus from Spotify.
 
 ---
 ![three different explorations of how we could add songs to a fissa](/project/fissa/add_songs.png "Explorations on how we could add songs to a fissa via Spotify")

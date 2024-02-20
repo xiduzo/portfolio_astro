@@ -2,7 +2,6 @@ import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
-import react from "@astrojs/react";
 import vercel from "@astrojs/vercel/static";
 import compress from "astro-compress";
 
@@ -52,7 +51,6 @@ export default defineConfig({
       priority: 0.7,
     }),
     tailwind(),
-    react(),
     compress({
       css: true,
       html: true,

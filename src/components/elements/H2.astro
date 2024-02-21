@@ -1,0 +1,17 @@
+---
+import Typewriter from "../Typewriter.astro";
+import AnchorLinkIcon from "./AnchorLinkIcon.astro";
+const props = Astro.props;
+---
+
+<h2 {...props} class="max-w-screen-md mx-auto mt-16 md:mt-24 lg:mt-48 mb-4">
+  <a
+    href={`#${props.id}`}
+    class="text-3xl -translate-x-6 md:-translate-x-4 group flex items-center"
+  >
+    <AnchorLinkIcon />
+    <Typewriter>
+      <slot />
+    </Typewriter>
+  </a>
+</h2>

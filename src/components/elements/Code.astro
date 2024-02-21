@@ -1,0 +1,85 @@
+---
+const props = Astro.props;
+
+const className = props.class;
+delete props.class;
+---
+
+<pre-block>
+  <pre
+    {...props}
+    tabindex="0"
+    class=`${className} group !overflow-x-hidden relative flex p-4 max-w-screen-lg md:mx-auto shadow-xl dark:shadow-md rounded-2xl my-16 md:my-26 lg:my-32`>
+    <slot />
+    <button aria-label="Copy code" class="bg-zinc-800 md:opacity-0 md:translate-x-1 group-hover:translate-x-0 group-hover:opacity-100 transition-all group-hover:delay-75 duration-300 border group flex border-gray-600 items-center justify-center absolute top-2 right-2 w-12 h-12 p-3 text-gray-900 rounded-xl hover:cursor-copy hover:disabled:cursor-wait text-center">
+      <span aria-hidden="true" class="absolute" style={{opacity: 0}}>Copied!</span>
+      <img aria-hidden="true" src="/clipboard.svg" class="group-disabled:hidden block" alt="Copy code" />
+      <img aria-hidden="true" src="/clipboard-check.svg" class="group-disabled:block hidden" alt="Copied code" />
+    </button>
+  </pre>
+</pre-block>
+
+<script>
+  import anime from "animejs";
+  // Inspiration: https://timneubauer.dev/blog/copy-code-button-in-astro/
+  class PreBlock extends HTMLElement {
+    constructor() {
+      super();
+      const preElement = this.querySelector("pre");
+      const copyButton = this.querySelector("button");
+
+      if (!copyButton) return;
+      copyButton.addEventListener("click", async () => {
+        if (!preElement || !copyButton) return;
+
+        await this.copyCode(preElement, copyButton);
+      });
+    }
+
+    private async copyCode(element: HTMLPreElement, button: HTMLButtonElement) {
+      const code = element.querySelector("code");
+      const initialLabel = button.ariaLabel;
+      button.disabled = true;
+
+      const text = code?.innerText ?? "Oops, I was unable to copy the code";
+
+      await navigator.clipboard.writeText(text);
+
+      button.ariaLabel = "Code copied";
+
+      const spanElement = button.querySelector("span")!;
+      const { width } = spanElement.getBoundingClientRect();
+
+      const animation = anime({
+        targets: spanElement,
+        opacity: 1,
+        marginLeft: -width * 2,
+        easing: "easeOutQuint",
+        duration: 800,
+      });
+
+      const cancelAnimation = () => {
+        animation.pause();
+        animation.seek(0);
+        button.ariaLabel = initialLabel;
+        button.disabled = false;
+        button.removeEventListener("mouseleave", cancelAnimation);
+      };
+
+      button.addEventListener("mouseleave", cancelAnimation);
+
+      animation.finished.then(() => {
+        setTimeout(cancelAnimation, 200);
+      });
+    }
+  }
+
+  customElements.define("pre-block", PreBlock);
+</script>
+
+<style>
+  pre button svg {
+    stroke: cyan;
+    fill: cyan;
+  }
+</style>

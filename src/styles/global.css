@@ -16,6 +16,12 @@ main {
   @apply bg-slate-100 dark:bg-zinc-900;
 }
 
+@media (prefers-color-scheme: dark) {
+  a:focus .Typewriter__wrapper {
+    @apply text-slate-900;
+  }
+}
+
 @media (prefers-contrast: more) {
   * {
     @apply text-black dark:text-white;
@@ -48,6 +54,17 @@ a[target="_blank"]:hover {
   @apply py-1.5 px-2.5 -mx-1.5 text-2xl;
 }
 
+:not(footer).container ul li > a::before {
+  @apply inline-block pr-2 pl-0 duration-100 transition-all;
+  content: "👈 ";
+  transform-style: preserve-3d;
+}
+
+:not(footer).container ul li > a:hover::before {
+  @apply pl-2 pr-0 duration-200;
+  transform: rotateY(180deg);
+}
+
 .container h2 type-writer a {
   @apply py-1.5 px-2.5 -mx-2 text-3xl;
 }
@@ -57,6 +74,11 @@ a[target="_blank"]:hover {
 }
 .container p:nth-of-type(3n + 1) span img {
   @apply transform -scale-x-100;
+}
+
+.footnotes ol::before {
+  @apply mb-12 inline-block italic opacity-60;
+  content: "Footnotes";
 }
 
 .footnotes {
@@ -100,9 +122,58 @@ hr + hr + p:has(picture) {
 
 /* Make sure anchor links will end to the proper section */
 [id]::before {
+  @apply -mt-24 block h-24;
   content: "";
-  display: block;
-  height: 100px;
-  margin-top: -100px;
   visibility: hidden;
+}
+
+pre code {
+  @apply w-full;
+}
+
+pre code .line,
+pre code .line .highlighted-word {
+  @apply transition-all duration-500;
+}
+
+pre code .line.highlighted,
+pre code .line.diff.remove,
+pre code .line.diff.add {
+  @apply -mx-6 px-6 inline-block;
+  width: calc(100% + 48px);
+}
+
+pre code .line .highlighted-word {
+  @apply px-1 py-0.5 border rounded-md border-slate-500;
+}
+
+pre code .line .highlighted-word,
+pre code .line.highlighted {
+  @apply bg-white bg-opacity-10;
+}
+
+pre code .line.highlighted.warning {
+  @apply bg-amber-500 bg-opacity-15;
+}
+
+pre code .line.highlighted.error,
+pre code .line.diff.remove {
+  @apply bg-red-500 bg-opacity-15;
+}
+
+pre code .line.diff.remove::before {
+  @apply content-['-'] text-red-300 -ml-2.5;
+}
+
+pre code .line.diff.add {
+  @apply bg-green-500 bg-opacity-15;
+}
+
+pre code .line.diff.add::before {
+  @apply content-['+'] text-green-300 -ml-2.5;
+}
+
+pre.has-focused code .line:not(.focused) {
+  @apply opacity-80;
+  filter: blur(0.1rem);
 }

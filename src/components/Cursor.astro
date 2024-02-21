@@ -13,7 +13,10 @@
     radius: string;
   };
 
+  const CUSTOM_CURSOR_BASE_SIZE = 56;
   const cursor = document.querySelector("#custom-cursor") as HTMLElement;
+  const header = document.querySelector("header") as HTMLElement;
+
   let onElement: Element | null = null;
   let prevEvent: MouseEvent | null = null;
 
@@ -21,8 +24,8 @@
     const defaultState: State = {
       x: e instanceof MouseEvent ? e.clientX : prevEvent?.clientX ?? 0,
       y: e instanceof MouseEvent ? e.clientY : prevEvent?.clientY ?? 0,
-      width: 56,
-      height: 56,
+      width: CUSTOM_CURSOR_BASE_SIZE,
+      height: CUSTOM_CURSOR_BASE_SIZE,
       radius: "100px",
     };
 
@@ -58,21 +61,71 @@
     elem.style.setProperty("--radius", state.radius);
   };
 
-  const addProperTargetToExternalLinks = (e: HTMLAnchorElement) => {
-    const link = e.getAttribute("href");
-    if (link == null) return;
-    // internal links
-    if (link.startsWith("/")) return;
-    // anchor links
-    if (link.startsWith("#")) return;
+  const smoothScrollTo = (href: string, element: HTMLAnchorElement) => {
+    const hash = href.replace("#", "");
+    const target = document.getElementById(hash);
+
+    if (!target) return;
+    if (target?.tagName === "MAIN") return;
+
+    const setHash = () => {
+      window.location.hash = hash;
+      window.removeEventListener("scrollend", setHash);
+      element.blur();
+    };
+
+    element.addEventListener("click", (e) => {
+      e.preventDefault();
+      const { top } = target.getBoundingClientRect();
+      window.addEventListener("scrollend", setHash);
+      window.scrollTo({ top: top + window.scrollY, behavior: "smooth" });
+    });
+  };
+
+  const addPropertiesBasedOnHref = (e: HTMLAnchorElement) => {
+    const href = e.getAttribute("href");
+    if (href == null) return;
+    if (href.startsWith("/")) return; // internal links
+    if (href.startsWith("#")) return smoothScrollTo(href, e); // anchor links
 
     e.setAttribute("target", "_blank");
     e.setAttribute("rel", "noopener noreferrer");
   };
 
+  const setCursorZIndex = () => {
+    const { top, height } = header.getBoundingClientRect();
+    const { bottom } = cursor.getBoundingClientRect();
+    const isCloseToHeader = bottom - CUSTOM_CURSOR_BASE_SIZE < top + height;
+
+    cursor.style.zIndex = isCloseToHeader ? "40" : "30";
+  };
+
   const updateState = (e: MouseEvent | Event) => {
-    const state = createState(e);
-    updateProperties(cursor, state);
+    setCursorZIndex();
+    updateProperties(cursor, createState(e));
+  };
+
+  let audioTimeout: NodeJS.Timeout | null = null;
+  const playRandomHoverSound = (elem: HTMLAnchorElement) => {
+    // Check if element is inside of an <article>
+    if (elem.closest("article") == null) return;
+
+    if (elem.parentElement?.tagName !== "LI") return;
+
+    const audios = [
+      "/sound/bloop-1-184019.mp3",
+      "/sound/bloop-2-186531.mp3",
+      "/sound/bloop-3-186532.mp3",
+      "/sound/bloop-4-186533.mp3",
+    ];
+    const audio = new Audio(audios[Math.floor(Math.random() * audios.length)]);
+    audio.volume = 0.3;
+    audioTimeout && clearTimeout(audioTimeout);
+    // Prevent accidental playing when scrolling and hovering over item
+    audioTimeout = setTimeout(() => {
+      audio.play();
+      audioTimeout = null;
+    }, 30);
   };
 
   document.addEventListener("mousemove", updateState);
@@ -82,9 +135,15 @@
     if (document.readyState !== "complete") return;
 
     document.querySelectorAll("a, button").forEach((elem) => {
-      addProperTargetToExternalLinks(elem as HTMLAnchorElement);
-      elem.addEventListener("mouseenter", () => (onElement = elem));
-      elem.addEventListener("mouseleave", () => (onElement = null));
+      addPropertiesBasedOnHref(elem as HTMLAnchorElement);
+      elem.addEventListener("mouseenter", () => {
+        onElement = elem;
+        playRandomHoverSound(elem as HTMLAnchorElement);
+      });
+      elem.addEventListener("mouseleave", () => {
+        onElement = null;
+        audioTimeout && clearTimeout(audioTimeout);
+      });
     });
   };
 </script>
@@ -102,7 +161,7 @@
   }
 
   #custom-cursor {
-    @apply fixed top-0 left-0 transform-gpu ease-in-out z-50 pointer-events-none;
+    @apply fixed top-0 left-0 transform-gpu ease-in-out z-30 pointer-events-none;
     display: none;
     width: var(--width);
     height: var(--height);

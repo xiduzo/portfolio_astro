@@ -2,10 +2,21 @@ import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
-import react from "@astrojs/react";
 import vercel from "@astrojs/vercel/static";
 import compress from "astro-compress";
+import { remarkReadingTime } from './lib/remark-reading-time.mjs';
 
+// @shikijs/transformers is broken - for now
+// https://www.reddit.com/r/astrojs/comments/1atheyx/integrating_shiki_transformers_with_astrojs/
+import {
+  transformerNotationHighlight,
+  transformerNotationDiff,
+  transformerNotationWordHighlight,
+  transformerNotationFocus,
+  transformerNotationErrorLevel
+  // transformerMetaWordHighlight, // Not working
+  // transformerMetaHighlight // Not working
+} from 'shikiji-transformers';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -15,31 +26,32 @@ export default defineConfig({
   prefetch: true,
   markdown: {
     syntaxHighlight: "shiki",
+    remarkPlugins: [remarkReadingTime],
     shikiConfig: {
-      experimentalThemes: {
-        light: 'github-light',
-        dark: 'github-dark'
-      }
+      // https://docs.astro.build/en/guides/markdown-content/#shiki-configuration
+      // https://shikiji.netlify.app/packages/transformers
+      transformers: [
+        transformerNotationDiff(),
+        transformerNotationFocus(),
+        transformerNotationWordHighlight(),
+        transformerNotationErrorLevel(),
+        transformerNotationHighlight(),
+      ],
+      theme: 'github-dark',
+      // experimentalThemes: {
+      //   light: 'github-dark',
+      //   dark: 'github-light'
+      // },
+      wrap: true,
     },
   },
   integrations: [
-    mdx({
-      syntaxHighlight: "shiki",
-      shikiConfig: {
-        // experimentalThemes: {
-        //   light: 'github-light',
-        //   dark: 'github-dark'
-        // },
-        theme: "github-dark",
-      }
-    }),
+    mdx(),
     sitemap({
+      lastmod: new Date(),
       changefreq: "monthly",
-      lastmod: new Date().toISOString(),
-      priority: 0.7,
     }),
     tailwind(),
-    react(),
     compress({
       css: true,
       html: true,
@@ -50,7 +62,14 @@ export default defineConfig({
   ],
   output: "static",
   outDir: "./.vercel/output/static",
-  experimental: {},
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'viewport',
+  },
+  experimental: {
+    optimizeHoistedScript: true,
+    clientPrerender: true,
+  },
   adapter: vercel({
     analytics: isProduction,
     imageService: isProduction,

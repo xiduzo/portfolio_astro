@@ -1,41 +1,45 @@
 ---
-import { type CollectionEntry } from "astro:content";
-import Image from "./Image.astro";
+import { type CollectionEntry, type ContentCollectionKey } from "astro:content";
+import Image from "./elements/Image.astro";
 import FormattedDate from "./FormattedDate.astro";
 
-type Collections = "project" | "blog";
-type Props = Pick<CollectionEntry<Collections>, "data" | "slug"> & {
-  baseHref: Collections;
+type Props = Pick<CollectionEntry<ContentCollectionKey>, "data" | "slug"> & {
+  baseHref: ContentCollectionKey;
 };
 
 const { slug, data, baseHref } = Astro.props;
-const { title, description, heroImage, pubDate, headerColor } = data;
+const { title, description, heroImage, pubDate, headerColor, contrastColor } =
+  data;
 ---
 
 <li aria-label={`${title}, ${description}`}>
   <a
     href={`/${baseHref}/${slug}/`}
     class="flex flex-col lg:space-x-4 stroke-white group lg:flex-row group"
+    data-big-title-item
   >
     <div
-      class="block transition-all opacity-100 pointer-events-none lg:max-w-screen-md w-fit lg:absolute lg:left-40 lg:opacity-0 group-hover:opacity-100 group-hover:left-60 lg:motion-reduce:left-60 lg:-mt-32"
+      aria-hidden="true"
+      class="block shadow-md sm:rounded-2xl transition-all lg:blur-3xl group-hover:blur-none mb-12 lg:mb-0 opacity-100 lg:w-[1280px] lg:h-[480px] pointer-events-none lg:max-w-screen-md lg:absolute lg:-translate-x-20 lg:opacity-20 dark:lg:opacity-10 group-hover:opacity-100 lg:group-hover:translate-x-20 lg:motion-reduce:translate-x-20 lg:motion-reduce:blur-xl lg:-mt-52"
+      style={{
+        background: contrastColor,
+      }}
     >
       <Image
-        width={1280}
-        height={960}
         src={heroImage}
         alt={description}
-        aria-hidden="true"
+        loading="eager"
+        class={`${contrastColor ? "px-12 max-w-sm mx-auto translate-y-12 lg:max-w-lg lg:translate-y-24" : ""}`}
       />
     </div>
     <h2
-      class="mb-4 text-6xl break-word font-extrabold tracking-widest lg:text-9xl mix-blend-multiply dark:mix-blend-difference group-focus:text-slate-900"
+      class="mb-4 mt-12 lg:mt-0 text-6xl break-word font-extrabold tracking-widest text-center lg:text-start lg:text-9xl mix-blend-multiply dark:mix-blend-difference group-focus:text-slate-900 max-w-5xl"
       style={{ color: headerColor }}
     >
       {title}
     </h2>
     <section
-      class="max-w-xs text-xl transition-all lg:group-hover:opacity-10 group-focus:text-slate-900"
+      class="lg:max-w-xs text-xl transition-all text-center lg:text-start lg:group-hover:opacity-10 group-focus:text-slate-900"
     >
       {description}
       <FormattedDate
@@ -46,3 +50,22 @@ const { title, description, heroImage, pubDate, headerColor } = data;
     </section>
   </a>
 </li>
+
+<script>
+  const items = document.querySelectorAll("[data-big-title-item]");
+
+  items.forEach((item) => {
+    item.addEventListener("mouseenter", () => {
+      const audios = [
+        "/sound/happy-pop-1-185286.mp3",
+        "/sound/happy-pop-2-185287.mp3",
+        "/sound/happy-pop-3-185288.mp3",
+      ];
+      const audio = new Audio(
+        audios[Math.floor(Math.random() * audios.length)]
+      );
+      audio.volume = 0.3;
+      audio.play();
+    });
+  });
+</script>

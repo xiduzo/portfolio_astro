@@ -1,16 +1,16 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import type { CollectionEntry, ContentCollectionKey } from "astro:content";
 import "@fontsource/space-grotesk";
 import "@fontsource/caveat";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { ScrollingText } from "../components/ScrollingText";
+import ScrollingText from "../components/ScrollingText.astro";
 import PageProgress from "../components/PageProgress.astro";
-import { PageTransition } from "../components/PageTransition";
+import PageTransition from "../components/PageTransition.astro";
 import OtherProjects from "../components/OtherProjects.astro";
-import Image from "../components/Image.astro";
+import Image from "../components/elements/Image.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 
-type Props = CollectionEntry<"project">["data"] & {
+type Props = CollectionEntry<ContentCollectionKey>["data"] & {
   showDates?: boolean;
 };
 
@@ -21,25 +21,40 @@ const {
   description,
   heroImage,
   headerColor,
+  contrastColor,
   showDates,
+  minutesRead,
 } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
-  <PageTransition background={headerColor} client:load />
-  <ScrollingText text={title} background={headerColor} client:only />
+  <PageTransition background={headerColor} />
+  <ScrollingText text={title} background={headerColor} />
   <article>
-    <Image
-      aria-hidden="true"
-      src={heroImage}
-      alt={description}
-      loading="eager"
-    />
+    {
+      heroImage && (
+        <section
+          aria-hidden="true"
+          class={`${contrastColor ? "mb-36" : ""}`}
+          style={{
+            background: contrastColor,
+          }}
+        >
+          <Image
+            src={heroImage}
+            alt={description}
+            loading="eager"
+            class={`${contrastColor ? "max-w-5xl mx-auto translate-y-24 px-5" : ""}`}
+          />
+        </section>
+      )
+    }
+
     <h1 class="sr-only">{title}</h1>
 
     {
       showDates && (
-        <section class="text-center">
+        <section class="text-center pt-12">
           Publised on <FormattedDate date={pubDate} />
           {updatedDate && (
             <>
@@ -50,16 +65,23 @@ const {
       )
     }
 
+    {
+      minutesRead && (
+        <section class="text-center pt-12 opacity-50">{minutesRead}</section>
+      )
+    }
+
     <section
       class="pt-40 pb-72 max-w-7xl m-auto px-4 font-extrabold text-center"
     >
+      <div aria-hidden="true" class="italic mb-2">{title},</div>
       <div class="text-6xl md:text-7xl">{description}</div>
     </section>
     <section class="pb-32 m-auto px-4 xl:px-0 container">
       <slot />
     </section>
   </article>
-  <ScrollingText text="More work" client:only direction="right" />
+  <ScrollingText text="More work" direction="right" />
   <OtherProjects currentProject={title} background={headerColor} />
   <PageProgress color={headerColor} />
 </BaseLayout>

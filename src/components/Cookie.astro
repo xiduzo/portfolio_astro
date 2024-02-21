@@ -1,0 +1,37 @@
+---
+export interface Props {
+  name: string;
+}
+---
+
+<yummy-cookie {...Astro.props} class="pl-1">🍪</yummy-cookie>
+
+<script>
+  class Cookie extends HTMLElement {
+    #eatenOpacity = "20%";
+    #audio = new Audio("/sound/eating-a-cracker-mouth-closed-102488.mp3");
+
+    constructor() {
+      super();
+
+      const name = this.attributes.getNamedItem("name")?.value;
+      if (!name) return;
+
+      const localStorageName = `eaten-cookie-${name}`;
+      const hasEaten = Boolean(localStorage.getItem(localStorageName));
+      if (hasEaten) {
+        this.style.opacity = this.#eatenOpacity;
+        return;
+      }
+
+      this.onclick = () => {
+        this.onclick = null;
+        localStorage.setItem(localStorageName, "true");
+        this.#audio.play();
+
+        this.style.opacity = this.#eatenOpacity;
+      };
+    }
+  }
+  customElements.define("yummy-cookie", Cookie);
+</script>

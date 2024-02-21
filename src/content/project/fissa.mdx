@@ -3,12 +3,16 @@ title: "Fissa"
 description: "Not only one person should decide what's playing on a party"
 pubDate: "Jun 02 2023"
 headerColor: "#5FB2FF"
-heroImage: "/project/fissa/showreel.png"
+contrastColor: "#FF5F5F"
+heroImage: "/project/fissa/header-icon.svg"
 hidden: false
 ---
+import Cookie from '../../components/Cookie.astro'
 
-## Problem
-Having friends at a party with a bad taste in music stinks. This is what [Milan](https://www.linkedin.com/in/milan-van-der-maaten-307a1697) and myself have experienced countless times. Instead of complaining about it constantly we decided to do something about it.
+## Everyone can be the DJ
+Having friends at a party with a bad taste in music stinks. This is what [Milan](https://www.linkedin.com/in/milan-van-der-maaten-307a1697) and myself have experienced countless times.
+
+Instead of complaining about it constantly we decided to do something about it.
 
 As I am always looking for an excuse to start a new pet-project to learn and explore new technologies, Fissa seemed like a perfect opportunity to do so.
 
@@ -28,14 +32,24 @@ Before starting the project we set some ground rules:
 ![Three screens for exploring a visual style for the fissa application](/project/fissa/design_exploration.png)
 
 
-## The journey to [expo]("https://docs.expo.dev/")
-I was wary of using any cross-platform framework after having some subpar experiences with [Phonegap](https://phonegap.com/), [Ionic](https://ionicframework.com/) and [Flutter](https://flutter.dev/).<br aria-hidden/> However, we never give up, technology moves forward, and there seems to be a _new kid on the block_; [React native](https://reactnative.dev/).
+## The journey to expo
+I was wary of using a new cross-platform framework like [expo]("https://docs.expo.dev/") after having some subpar experiences with [Phonegap](https://phonegap.com/), [Ionic](https://ionicframework.com/) and [Flutter](https://flutter.dev/).
 
-As with all the cross-platform tools I felt more like a _configurator_ than a developer. Constantly fighting the framework to get things done, and having to write platform specific code anyway.<br aria-hidden /><br aria-hidden />
+However, we never give up, technology moves forward, and there seems to be a _new kid on the block_; [React native](https://reactnative.dev/).
 
-What happened to the fun? Was this the end of the project?
+As with all the cross-platform tools I felt more like a _configurator_ than a developer. Constantly fighting the framework to get things done, and having to write platform specific code anyway.
 
-I take great inspiration from [Theo Browne](https://www.youtube.com/@t3dotgg/videos) which is how I stumbled upon the [T3-stack]("https://create.t3.gg/"). No more configuration[^1], just coding
+---
+
+What happened to the fun?
+
+Was this the end of the project?
+
+---
+
+I take great inspiration from [Theo Browne](https://www.youtube.com/@t3dotgg/videos) which is how I stumbled upon the [T3-stack]("https://create.t3.gg/").
+
+No more configuration[^1], just coding
 
 [^1]: Beside some minor [Expo Application Services]("https://docs.expo.dev/eas/") to make the release process easier.
 
@@ -45,17 +59,18 @@ I take great inspiration from [Theo Browne](https://www.youtube.com/@t3dotgg/vid
 
 
 ## The great reset
-No, not [that one](https://www.weforum.org/great-reset/).
+No, not [that one](https://www.weforum.org/videos/series/the-great-reset-863c8ea2d4/).
 
-Working with TypeScript (for the past 5 years) has been a real game-changer and I would never go without, neither should any sane person. However, TypeScript still has it's quirks.
+Working with TypeScript (for the past 5 years) has been a real game-changer and I would never go without, neither should any sane person.
+
+However, TypeScript still has it's quirks.
 
 Luckily, our TypeScript wizard [Matt Pocock](https://www.youtube.com/@mattpocockuk) released an awesome tool right when we started with Fissa; [ts-reset](https://github.com/total-typescript/ts-reset)
 
 ```typescript
-// Import in a single file, then across your whole project...
 import "@total-typescript/ts-reset";
 
-// .filter just got smarter!
+// .filter got smarter!
 const filteredArray = [1, 2, undefined].filter(Boolean); // number[]
 ```
 
@@ -65,8 +80,8 @@ const filteredArray = [1, 2, undefined].filter(Boolean); // number[]
 
 ## A colorful fissa
 Music is a blend of personal expression and social connection. By creating a collaborative playlist, and sharing your favorite tunes, we create a social experience.
-<br aria-hidden /><br aria-hidden />
-However, we also want to give the user a personal experience. This is why decided to give each Fissa their own color palette.
+
+We also want to give the user a personal experience. This is why decided to give each Fissa their own color palette.
 
 
 ### Tailwind
@@ -74,7 +89,6 @@ Tailwind offers a great way to [configure](https://tailwindcss.com/docs/configur
 
 ```typescript
 // Tailwind config.js
-
 const pinkey = {
   100: "#FFCAF7",
   500: "#FF5FE5",
@@ -117,12 +131,12 @@ We can then use this exposed variable within our components.
 
 ```tsx
 // Component.tsx
-
 import { theme } from "@fissa/tailwind-config";
 
 const Component = () => {
     return (
         <SafeAreaView style={{ backgroundColor: theme["900"] }}>
+          { /* ... */ }
         </SafeAreaView>
     )
 }
@@ -134,14 +148,26 @@ const Component = () => {
 ## Less === more
 Milan and myself are both big fans of Spotify and we recognize its strength. They focus on one thing, and they do it very well; explore and discover music.
 
-While building Fissa, Spotify introduced the [remote group session](https://support.spotify.com/us/article/remote-group-session/). However, this is always a hidden feature, changes constantly and does not seem to have any focus from Spotify.
+Although we want to keep users fully engaged in Fissa, we would never be able to do the exploration of music as well as Spotify does.
 
-Although we want to keep users fully engaged in Fissa, we would never be able to do the exploration of music as well as Spotify does. Therefore we put our focus on managing a collaborative playlist and utilize Spotify for the rest.
+Therefore we put our focus on managing a collaborative playlist and utilize Spotify for the rest.
 
 Do one thing, and do it well.
 
+### Group session
+While building Fissa, we noticed Spotify introduced the [remote group session](https://support.spotify.com/us/article/remote-group-session/). 
+
+This is still a hidden feature, changes constantly and does not seem to have any focus from Spotify.
+
 ---
 ![three different explorations of how we could add songs to a fissa](/project/fissa/add_songs.png "Explorations on how we could add songs to a fissa via Spotify")
+
+## Experience Fissa
+Before I lose you in the details, I would like to invite you to experience Fissa yourself.
+
+Make a Fissa and enjoy the tunes while you read the rest of the article.
+- [in the apple app store](https://apps.apple.com/nl/app/fissa-houseparty/id1632218985)
+- [in de google play store](https://play.google.com/store/apps/details?id=com.fissa.app)
 
 ## Free with limits
 Spotify provides us with an [awesome API](https://developer.spotify.com/documentation/web-api). Unfortunately, and understandably, it is [rate limited](https://developer.spotify.com/documentation/web-api/concepts/rate-limits).
@@ -203,22 +229,20 @@ Whenever the queue is about to get empty, Fissa will add recommended tracks. The
 
 ```typescript
 class FissaService {
-    // ...
-
     playNextTrack = async () => {
         // ...
 
-        if (nextTracks.length <= TRACKS_BEFORE_ADDING_RECOMMENDATIONS) {
-            const withPositiveScore = tracks.filter(({ totalScore }) => totalScore > 0);
-            const tracksToMap = withPositiveScore.length ? withPositiveScore : tracks;
+        if (nextTracks.length <= TRACKS_BEFORE_ADDING_RECOMMENDATIONS) { // [!code focus]
+            const withPositiveScore = tracks.filter(({ totalScore }) => totalScore > 0); // [!code focus]
+            const tracksToMap = withPositiveScore.length ? withPositiveScore : tracks; // [!code focus]
 
-            const trackIds = tracksToMap
-                .map(({ trackId }) => trackId)
-                .sort(randomSort)
-                .slice(0, TRACKS_BEFORE_ADDING_RECOMMENDATIONS);
+            const trackIds = tracksToMap // [!code focus]
+                .map(({ trackId }) => trackId) // [!code focus]
+                .sort(randomSort) // [!code focus]
+                .slice(0, TRACKS_BEFORE_ADDING_RECOMMENDATIONS); // [!code focus]
 
             try {
-                await this.trackService.addRecommendedTracks(pin, trackIds, access_token!);
+                await this.trackService.addRecommendedTracks(pin, trackIds, access_token!); // [!code focus]
             } catch (e) {
                 logger.error(`${fissa.pin}, failed adding recommended tracks`, e);
             }
@@ -235,13 +259,11 @@ As the Fissa is a collaborative playlist, users determine the order of the songs
 
 Strap-on your seatbelt, the next part will contain a lot of nerd info.
 
-Initially we just stored the index of the songs directly into the database. This way we put an unique index on the track for data integrity, and we could easily sort the tracks by their index.
+Initially we stored the index of the songs directly into the database. This way we put an unique index on the track for data integrity, and we could easily sort the tracks by their index.
 
 ```prisma
-// Initial model
-
 model Track {
-    index  Int @db.SmallInt
+    index  Int @db.SmallInt // [!code focus]
     trackId String @map("track_id") @db.VarChar(22)
 
     fissa Fissa @relation(fields: [pin], references: [pin], onDelete: Cascade)
@@ -261,8 +283,6 @@ Easy peasy, lemon squeezy right? Well, not quite. This approach has a few drawba
 
 ```typescript
 class FissaService {
-  // ...
-
   reorderPlaylist = async (pin: string) => {
     const { currentIndex, tracks } = await this.getRoomDetailedInformation(pin);
 
@@ -278,60 +298,21 @@ class FissaService {
           });
         }
 
-        // (1) Clear out the indexes
-        await transaction.room.update({
-          where: { pin },
-          data: { tracks: { updateMany: fakeUpdates } },
-        });
+        // (1) Clear out the indexes // [!code focus]
+        await transaction.room.update({ // [!code focus]
+          where: { pin }, // [!code focus]
+          data: { tracks: { updateMany: fakeUpdates } }, // [!code focus]
+        }); // [!code focus]
 
-        // (2) Set the correct indexes
-        await transaction.room.update({
-          where: { pin },
-          data: { tracks: { updateMany: updates } },
-        });
+        // (2) Set the correct indexes // [!code focus]
+        await transaction.room.update({ // [!code focus]
+          where: { pin }, // [!code focus]
+          data: { tracks: { updateMany: updates } }, // [!code focus]
+        }); // [!code focus]
       });
     } catch (e) {
       console.log(e);
     }
-  };
-
-  private generateTrackIndexUpdates = (
-    tracks: Track[],
-    currentIndex: number,
-  ) => {
-    const tracksWithScoreOrAfterIndex = tracks.filter(
-      ({ score, index }) => score !== 0 || index > currentIndex,
-    );
-    const tracksWithoutScoreAndBeforeIndex = tracks.filter(
-      ({ score, index }) => score === 0 && index <= currentIndex,
-    );
-
-    const sortedTracks = tracksWithScoreOrAfterIndex.sort(
-      (a, b) => b.score - a.score,
-    );
-
-    const sorted = tracksWithoutScoreAndBeforeIndex.concat(sortedTracks);
-    const newCurrentIndex = sorted.findIndex(
-      ({ index }) => index === currentIndex,
-    );
-
-    const updates = sorted
-      .map(({ trackId, index }, newIndex) => {
-        if (index === newIndex) return; // No need to update
-
-        return {
-          where: { trackId },
-          data: { index: newIndex },
-        };
-      })
-      .filter(Boolean);
-
-    const fakeUpdates = updates.map((update, index) => ({
-      ...update,
-      data: { ...update.data, index: index + tracks.length + 100 }, // Set to an non-existing index
-    }));
-
-    return { updates, fakeUpdates, newCurrentIndex };
   };
 }
 ```
@@ -341,17 +322,16 @@ And for the final nail in the coffin, Fissa is hosted serverless on [vercel](htt
 ### The path of least resistance
 Eventually we settled on inferring the position of a track based on its' score. The score is updated each time a user votes on a track and the score will be cleared whenever the song is being played.
 
-By using the logic which was already in Fissa, we could actually remove a lot of code and make the whole process a lot more stable.
+By using the logic which was already in Fissa, we could remove a lot of code and make the whole process a lot more stable.
 
 ```prisma
 model Track {
+    index Int @db.SmallInt // [!code --]
+    score Int @db.SmallInt @default(0) // [!code ++]
     trackId String @map("track_id") @db.VarChar(22)
 
     fissa Fissa @relation(fields: [pin], references: [pin], onDelete: Cascade)
     pin String @db.VarChar(4)
-
-    votes Vote[]
-    score Int @db.SmallInt @default(0) // Value used for ordering tracks in a fissa
 
     @@unique([pin, trackId])
     @@map("tracks")
@@ -372,7 +352,7 @@ const sortTrack = (date: keyof Dates) => (a: SortableTrack, b: SortableTrack) =>
   const aTime = a[date].getTime();
   const bTime = b[date].getTime();
 
-  if (a.score !== b.score) return b.score - a.score;
+  if (a.score !== b.score) return b.score - a.score;  // [!code focus]
   if (aTime === bTime) return a.trackId.localeCompare(b.trackId);
 
   return aTime - bTime;
@@ -404,15 +384,11 @@ export const sortFissaTracksOrder = <T extends SortableTrack>(
 };
 ```
 
-Phew, you made it all the way through the though end. That last part was code heavy. Here, have a 🍪.
+Phew, you made it all the way through the though end. That last part was code heavy. Here, have a <Cookie name="fissa"/>!
 
-Code can be scary right, but it's also fun.
+Code can be scary right, but it's also fun while making your imaginations come to life.
 
 ---
-
-## Experience fissa
-- [in the apple app store](https://apps.apple.com/nl/app/fissa-houseparty/id1632218985)
-- [in de google play store](https://play.google.com/store/apps/details?id=com.fissa.app)
 
 ## In collaboration with
 - [Milan van der Maaten](https://milanvdmaaten.netlify.app)

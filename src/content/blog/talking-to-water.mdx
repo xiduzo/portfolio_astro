@@ -1,0 +1,284 @@
+---
+title: "Talking to water"
+description: "The art of the bodge"
+pubDate: "Feb 21 2024"
+headerColor: "#EBA6A9"
+contrastColor: "#BDB2FF"
+heroImage: "/blog/talking-to-water/header-icon.svg"
+---
+import Cookie from '../../components/Cookie.astro'
+
+One of the things I like about my job at the [Master Digital Design](https://www.masterdigitaldesign.com) is the odd requests I get from students from time to time.
+
+This time a group of students came to me asking if I could guide them on how they could _talk to water_.
+
+But how does one _talk to water_? And what does it even mean to _talk to water_?
+
+---
+---
+![AuraMotions](/blog/talking-to-water/auramotions.jpeg "AuraMotions, picture by Bo N&eacute;meth")
+
+---
+
+> What we say to water can impact its crystals: positive words create intricate structures and negative words lead to collapse (Dr. Masaru Emoto).<br aria-hidden="true"/><br aria-hidden="true"/>
+> AuraMotions is an art project that processes what we say to make different colours and patterns of water.<br aria-hidden="true"/><br aria-hidden="true"/>
+> It applies sentiment analysis technology to detect emotions from what we say. Then, through MQTT, data is sent to TouchDesigner to create captivating effects on water.
+> <cite>[The students](#the-students)</cite>
+
+---
+
+In this post I would like to shed light on the technical aspects of this project.
+
+I will keep it straightforward and easy to follow, leaving out jargon until going [down the rabbit hole](#down-the-rabbit-hole).
+
+For the non-technical aspects, I would like to refer you to [the students](#the-students) themselves.
+
+
+## How does one talk to water?
+Well, that is an interesting question.
+
+Like how most of my answers start with _"I don't know, but let's figure it out together"_, this answer was no different.
+
+Luckily I am quite comfortable with [the art of the bodge](https://www.youtube.com/watch?v=lIFE7h3m40U).
+
+Making prototypes work just enough to convey a concept. No need for perfection, fault-proof code or future-proof solutions.
+
+### So, what is the concept?
+Put simply the concept is to use sentiment analysis to detect the _emotions_ of the words we say.
+
+These emotions are then used as the input for generative art in the `AuraMotions` installation.
+
+## The game plan
+In order to _talk to water_ the problem was broken down into:
+
+1. Speech-to-text; convert human voice into the words they speak
+2. Sentiment analysis; determine the _emotions_ of those words
+3. Stream results; connect with `AuraMotions`
+
+### 1. Speech-to-text
+We can not imagine our lives without the use of [ChatGPT](https://chat.openai.com/) anymore. But did you know OpenAI has a forgotten little brother, especially after the release of [sora](https://openai.com/sora)?
+
+[Whisper](https://openai.com/research/whisper) is <cite>"an open-sourced neural net that approaches human level robustness and accuracy on English speech recognition"</cite>.
+
+Some cool folks even build a [python wrapper](https://github.com/abdeladim-s/pywhispercpp) around the open-sourced model for easy, free and local use.
+
+
+```python
+from pywhispercpp.examples.assistant import Assistant
+
+def commands_callback(model_output):
+    print(f"user said: {model_output}")
+
+    # TODO: sentiment analysis
+
+my_assistant = Assistant(
+    commands_callback=commands_callback,
+    n_threads=8)
+
+my_assistant.start()
+```
+
+And just like that we have our speech-to-text working.
+
+### 2. Sentiment analysis
+Now that we have the text, we need to determine the _emotion_ of the words. Are they positive, negative, neutral or ...?
+
+A tool I have been wanting to play around with for a while now was [Hugging Face](https://huggingface.co/).
+
+Hugging face allows you and me, as mere mortals, to use very sophisticated open-sourced machine learning models.
+
+In our case we will use a [text-classification model](https://huggingface.co/models?pipeline_tag=text-classification) to determine the _emotions_ of the words.
+
+
+```python
+from pywhispercpp.examples.assistant import Assistant # [!code word:text-classification]
+from transformers import pipeline
+
+model = "j-hartmann/emotion-english-distilroberta-base"
+classifier = pipeline("text-classification", model=model, return_all_scores=True) # [!code focus]
+
+def commands_callback(model_output):
+    print(f"user said: {model_output}")
+
+    print("feels like:") # [!code focus]
+    for sentiment in classifier(model_output)[0]: # [!code focus]
+        print(f"{sentiment['label']}: {sentiment['score']}") # [!code focus]
+
+        # TODO: stream results # [!code focus]
+
+my_assistant = Assistant(
+    commands_callback=commands_callback,
+    n_threads=8)
+
+my_assistant.start()
+```
+
+Like magic 🪄,
+
+Reasonably accurate sentiment analysis with a few lines of code.
+
+### 3. Stream results
+In architecture rooms this would be a hot-topic. Having multiple sessions to discuss the up- and down-sides of different streaming protocols. Calculating throughput needs, determine latency requirements and write-up reliability specifications.
+
+But we are bodging things over here, we _just_ need to send some data from one tool to another tool.
+
+At the university we have set-up a [MQTT broker](https://mosquitto.org) to do just that.
+
+Even though [UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol) messaging would have been a better fit for the job we used MQTT as it was already there, configured, and known to work.
+
+
+```python
+from pywhispercpp.examples.assistant import Assistant
+from transformers import pipeline
+import paho.mqtt.client as mqtt # [!code focus]
+
+client = mqtt.Client("talking-to-water" + str(random.randint(0, 1000))) # [!code focus]
+client.username_pw_set("*****", "*****")
+client.connect("*****")
+client.loop_start()
+
+model = "j-hartmann/emotion-english-distilroberta-base"
+classifier = pipeline("text-classification", model=model, return_all_scores=True)
+
+def commands_callback(model_output):
+    print(f"user said: {model_output}")
+
+    print("feels like:")
+    for sentiment in classifier(model_output)[0]:
+        print(f"{sentiment['label']} {sentiment['score']}")
+
+        client.publish(f"AuraMotions/{sentiment['label']}", sentiment['score']) # [!code focus]
+
+my_assistant = Assistant(
+    commands_callback=commands_callback,
+    n_threads=8)
+
+my_assistant.start()
+```
+
+And thats it.
+
+We can now _talk to water_.
+
+From here on out the students could use _emotions_ sent by the MQTT messages to create any (generated) visual representation they need.
+
+### Magic with 30 lines of code
+By _standing on the shoulder of giants_, we can bodge together our wildest imaginations.
+
+Thank you random strangers on the internet ❤️.
+
+## Experience it yourself
+Before going [down the rabbit hole](#down-the-rabbit-hole) and I will lose you.
+
+You can experience the project yourself or use it as the basis for your next bodge project!
+
+- [Check out the code](https://github.com/xiduzo/whisper-sentiment-analysis)
+- [Run with docker](https://hub.docker.com/repository/docker/xiduzo/whisper-sentiment-analysis/general)
+
+---
+---
+![Visualization](/blog/talking-to-water/ai-generated-image.png "AI imagination when given the student's description as prompt using krea.ai")
+
+
+
+## Down the rabbit hole
+Awesome, you made it this far.
+
+Before you begin the next part, have a <Cookie name="talking-to-water"/>!
+
+### Works on my machine
+While the code presented above worked on my machine, and probably works on your machine with some technical knowledge, the bodged solution is not without its flaws.
+
+While the project runs fine when all tools and dependencies are available, it was breaking down when the students tried to run it on their own machines.
+
+Either (the correct version of) python was not installed or dependencies, like `ffmpeg`, were not available on the students' machines.
+
+![A meme depicting the "works on my machine" issue 600x](/blog/talking-to-water/works-on-my-machine.webp "The infamous works on my machine")
+
+### Docker to the rescue!
+Mismatching versions and missing dependencies is a common and solved problem in software development.
+
+We make a `Dockerfile` and ship it that way.
+
+```dockerfile
+FROM python:3.11.7
+
+# Get dependencies to make the container to work
+RUN apt update && apt install -y ffmpeg alsa-utils pulseaudio pulseaudio-utils libportaudio2 libasound-dev nano && apt clean
+
+# Install the required packages
+WORKDIR /usr/src/app
+RUN pip install --upgrade pip
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install pywhispercpp repository
+RUN git clone --recurse-submodules https://github.com/abdeladim-s/pywhispercpp.git
+
+# Build and install pywhispercpp
+WORKDIR /usr/src/app/pywhispercpp
+RUN python -m build --wheel
+RUN pip install dist/pywhispercpp-*.whl
+
+# Copy the main.py file
+WORKDIR /usr/src/app
+COPY main.py ./
+COPY src ./
+
+# Run the project
+CMD ["python3", "-u", "main.py"]
+```
+
+Voil&agrave;, packaging the whole project neatly in a docker container will solve all our problems right?
+
+Right?!
+
+![A meme depicting the "works on my docker" issue 600x](/blog/talking-to-water/works-on-my-docker.webp "New tool, new issue")
+
+### The final bodge
+While docker solved the problem of dependencies, it introduced a new problem.
+
+Audio was not being captured by the container, at least not on macOS machines.
+
+We don't have the luxury of running docker with `--device /dev/snd` as you would on a linux machine.
+
+After some googling I found a tool called [PulseAudio](https://www.freedesktop.org/wiki/Software/PulseAudio/) which could _"[...] transfer audio to a different machine [...]"_.
+
+This could be to a machine on the other side of the room, building, city, world or to a docker container running on the same machine.
+
+To make installing `PulseAudio` as easy as possible for the students, I wrote a small bash script.
+
+```bash
+#!/bin/bash
+if [ -z "$(brew -v)" ]; then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+brew install pulseaudio
+
+pulseaudio_version=$(echo "$(pulseaudio --version)" | awk '{print $2}')
+
+file="/opt/homebrew/Cellar/pulseaudio/$pulseaudio_version/etc/pulse/default.pa.d"
+if ! test -e "$file"; then
+    touch "$file"
+fi
+
+echo "$(cat .config/pulse/pulseaudio.conf)" >> /opt/homebrew/Cellar/pulseaudio/$pulseaudio_version/etc/pulse/default.pa.d
+
+brew services restart pulseaudio
+
+sleep 5
+pulseaudio --check -v # Make sure everything is working
+```
+
+So finally, the students (and you) can run the project with two simple commands:
+
+1. `./install-pulseaudio-for-mac.sh`
+2. `docker run --net=host --privileged -e PULSE_SERVER=<HOST_IP> xiduzo/whisper-sentiment-analysis:latest`
+
+## The students
+The concept and execution of the project were done by the following students from the [Master Digital Design](https://www.masterdigitaldesign.com) program.
+- [Hieu Nguyen](https://www.linkedin.com/in/hieu/)
+- [Bo N&eacute;meth](https://www.linkedin.com/in/bo-n%C3%A9meth-16960ab4)
+- [Ekta Gadekar](https://www.linkedin.com/in/ekta-gadekar)
+- [Viktoriya Marchenko](https://www.linkedin.com/in/viktoriya-marchenko/)

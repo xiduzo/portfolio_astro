@@ -23,7 +23,6 @@ const isProduction = process.env.NODE_ENV === 'production';
 // https://astro.build/config
 export default defineConfig({
   site: "https://www.sanderboer.nl/",
-  prefetch: true,
   markdown: {
     syntaxHighlight: "shiki",
     remarkPlugins: [remarkReadingTime],
@@ -71,10 +70,12 @@ export default defineConfig({
     clientPrerender: true,
   },
   adapter: vercel({
-    analytics: isProduction,
+    webAnalytics: {
+      enabled: isProduction,
+    },
+    imagesConfig: {
+      sizes: [320, 640, 1280, 1920],
+    },
     imageService: isProduction,
-    imageConfig: {
-      sizes: [320, 640, 1280, 1920]
-    }
   })
 });

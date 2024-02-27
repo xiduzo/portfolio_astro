@@ -20,9 +20,14 @@ import {
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+const imageSettings = {
+    domains: ['astro.build'],
+    remotePatterns: []
+  }
 // https://astro.build/config
 export default defineConfig({
   site: "https://www.sanderboer.nl/",
+  image: imageSettings,
   markdown: {
     syntaxHighlight: "shiki",
     remarkPlugins: [remarkReadingTime],
@@ -74,6 +79,7 @@ export default defineConfig({
       enabled: isProduction,
     },
     imagesConfig: {
+      ...imageSettings,
       sizes: [320, 640, 1280, 1920],
     },
     imageService: isProduction,

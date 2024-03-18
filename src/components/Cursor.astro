@@ -2,7 +2,7 @@
 // credits: https://codepen.io/electerious/pen/ZwKrmZ
 ---
 
-<div id="custom-cursor"></div>
+<div id="cursor"></div>
 
 <script>
   type State = {
@@ -14,7 +14,7 @@
   };
 
   const CUSTOM_CURSOR_BASE_SIZE = 56;
-  const cursor = document.querySelector("#custom-cursor") as HTMLElement;
+  const cursor = document.querySelector("#cursor") as HTMLElement;
   const header = document.querySelector("header") as HTMLElement;
 
   let onElement: Element | null = null;
@@ -151,18 +151,20 @@
 <style>
   body {
     @apply cursor-none;
-    cursor: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  body:not(body:hover) #custom-cursor::after {
-    @apply opacity-0 scale-0;
+  body:has(#wrapper) {
+    @apply cursor-pointer;
   }
 
-  #custom-cursor {
-    @apply fixed top-0 left-0 transform-gpu ease-in-out z-30 pointer-events-none;
-    display: none;
+  body:not(body:hover) #cursor::after {
+    @apply scale-0 opacity-0;
+  }
+
+  #cursor {
+    @apply pointer-events-none fixed left-0 top-0 z-30 transform-gpu ease-in-out;
     width: var(--width);
     height: var(--height);
     transform: translate(
@@ -175,12 +177,12 @@
   }
 
   @media (pointer: fine) {
-    #custom-cursor {
+    #cursor {
       @apply block;
     }
   }
 
-  #custom-cursor::after {
+  #cursor::after {
     @apply absolute inset-0 border-8 border-yellow-400;
     content: "";
     border-radius: var(--radius);

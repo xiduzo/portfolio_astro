@@ -85,3 +85,10 @@ const {
   <OtherProjects currentProject={title} background={headerColor} />
   <PageProgress color={headerColor} />
 </BaseLayout>
+
+<script>
+  const breaks = document.querySelectorAll("br");
+  breaks.forEach((br) => {
+    br.ariaHidden = "true";
+  });
+</script>

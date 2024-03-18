@@ -11,7 +11,7 @@ import Intro from "../components/Intro.astro";
 
 type Props = {
   title: string;
-  description: string;
+  description?: string;
 };
 
 const { title, description } = Astro.props;
@@ -21,7 +21,11 @@ const { title, description } = Astro.props;
 <!-- Made with ❤️ by xiduzo  --><!-- Oh hi there curious driod, seeking for information on how you can build this?  --><!-- You can find all the wisdom you need at https://github.com/xiduzo/portfolio_astro  -->
 <html lang="en">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead
+      title={title}
+      description={description ??
+        "Designer by education,Developer by interest,Tinkerer by curiosity"}
+    />
   </head>
   <body class="scroll-smooth">
     <Intro />

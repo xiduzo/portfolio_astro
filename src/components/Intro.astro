@@ -4,13 +4,13 @@
     a creative mind™.
   </div>
   <section
-    class="fixed inset-0 z-50 hidden p-2 bg-gray-950 scroll md:p-10 transition-all"
+    class="scroll fixed inset-0 z-50 hidden bg-gray-950 p-2 transition-all md:p-10"
     id="wrapper"
     aria-hidden="true"
   >
-    <div class="flex flex-col text-2xl space-y-3" id="content">
-      <div class="grid md:gap-3 gap-1 grid-cols-[1fr,10fr]">
-        <span class="text-green-600 font-extrabold px-2 md:px-4 uppercase"
+    <div class="flex flex-col space-y-3 text-2xl" id="content">
+      <div class="grid grid-cols-[1fr,10fr] gap-1 md:gap-3">
+        <span class="px-2 font-extrabold uppercase text-green-600 md:px-4"
           >Ok</span
         >
         <div class="text-slate-50">Oh hi there,</div>
@@ -27,19 +27,21 @@
 
   const closeIntro = () => {
     if (!isIntroDone) return;
+    if (!body) return;
+    if (!wrapper) return;
 
     document.removeEventListener("keydown", closeIntro);
-    body?.removeEventListener("click", closeIntro);
+    body.removeEventListener("click", closeIntro);
 
     // Scroll to top
     // Just in case the user scrolled down
     window.scrollTo(0, 0);
-    body?.classList.remove("overflow-hidden");
 
-    wrapper?.classList.add("opacity-0", "scale-0");
+    wrapper.classList.add("opacity-0", "scale-0");
+    body.classList.remove("overflow-hidden");
 
     setTimeout(() => {
-      wrapper?.remove();
+      wrapper.remove();
     }, 500);
   };
 
@@ -82,10 +84,11 @@
 
   const showIntro = () => {
     if (!wrapper) return;
+    if (!body) return;
 
-    body?.classList.add("overflow-hidden");
+    body.classList.add("overflow-hidden");
     wrapper.classList.remove("hidden");
-    wrapper?.focus();
+    wrapper.focus();
 
     texts.forEach((text, index) => {
       const textWrapper = document.createElement("div");
@@ -119,7 +122,9 @@
         () => {
           const content = document.getElementById("content");
           content?.appendChild(textWrapper);
-          if (index === texts.length - 1) isIntroDone = true;
+          if (index === texts.length - 1) {
+            isIntroDone = true;
+          }
         },
         (500 + Math.random() * 100) * (index + 1)
       );
@@ -127,7 +132,6 @@
   };
 
   const lastVisit = localStorage.getItem("lastVisit");
-
   if (lastVisit) {
     const date1 = new Date(lastVisit).valueOf();
     const date2 = new Date().valueOf();
@@ -135,6 +139,7 @@
     const differenceInHours = Math.ceil(timeDifference / (1000 * 60 * 60));
 
     if (differenceInHours > 6) showIntro();
+    else wrapper.remove();
   } else {
     showIntro();
   }

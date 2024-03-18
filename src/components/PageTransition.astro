@@ -6,10 +6,10 @@ export type Props = {
 const { background } = Astro.props;
 ---
 
-<page-transition aria-hidden="true" class="fixed top-0 bottom-0 z-20 inset-0">
+<page-transition aria-hidden="true" class="fixed inset-0 bottom-0 top-0 z-20">
   <section
     data-page-transition-background
-    class="fixed bg-slate-100 dark:bg-stone-900 motion-reduce:hidden inset-0"
+    class="fixed inset-0 bg-slate-100 motion-reduce:hidden dark:bg-stone-900"
   >
   </section>
   <section
@@ -27,7 +27,6 @@ const { background } = Astro.props;
     constructor() {
       super();
 
-      document.body.classList.add("overflow-hidden");
       const reduceMotion =
         window?.matchMedia(`(prefers-reduced-motion: reduce)`).matches ||
         window?.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
@@ -68,7 +67,6 @@ const { background } = Astro.props;
         delay: 575,
       }).finished.then(() => {
         this.remove();
-        document.body.classList.remove("overflow-hidden");
       });
     }
   }

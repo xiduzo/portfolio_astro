@@ -37,9 +37,9 @@ const { title, description } = Astro.props;
     <Header />
     <main id="main-content" class="z-10 mb-[100vh] shadow-xl">
       <slot />
+      <Cursor />
     </main>
     <Footer />
-    <Cursor />
     <script>
       setTimeout(() => {
         localStorage.setItem("lastVisit", new Date().toString());

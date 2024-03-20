@@ -1,10 +1,13 @@
----
-// credits: https://codepen.io/electerious/pen/ZwKrmZ
----
-
-<div id="cursor"></div>
+<section aria-hidden="true" id="cursors">
+  <div id="my-cursor"></div>
+  <!-- This will be filled with other peoples cursors -->
+</section>
 
 <script>
+  import mqtt from "mqtt";
+  import { uniqueNamesGenerator, animals } from "unique-names-generator";
+  import { Buffer } from "buffer";
+
   type State = {
     x: number;
     y: number;
@@ -13,8 +16,225 @@
     radius: string;
   };
 
+  type PublishState = {
+    name: string;
+    horizontalPercent: number;
+    verticalPercent: number;
+  };
+
   const CUSTOM_CURSOR_BASE_SIZE = 56;
-  const cursor = document.querySelector("#cursor") as HTMLElement;
+
+  const colorNames = [
+    "aliceblue",
+    "antiquewhite",
+    "aqua",
+    "aquamarine",
+    "azure",
+    "beige",
+    "bisque",
+    "black",
+    "blanchedalmond",
+    "blue",
+    "blueviolet",
+    "brown",
+    "burlywood",
+    "cadetblue",
+    "chartreuse",
+    "chocolate",
+    "coral",
+    "cornflowerblue",
+    "cornsilk",
+    "crimson",
+    "cyan",
+    "darkblue",
+    "darkcyan",
+    "darkgoldenrod",
+    "darkgray",
+    "darkgreen",
+    "darkgrey",
+    "darkkhaki",
+    "darkmagenta",
+    "darkolivegreen",
+    "darkorange",
+    "darkorchid",
+    "darkred",
+    "darksalmon",
+    "darkseagreen",
+    "darkslateblue",
+    "darkslategray",
+    "darkslategrey",
+    "darkturquoise",
+    "darkviolet",
+    "deeppink",
+    "deepskyblue",
+    "dimgray",
+    "dimgrey",
+    "dodgerblue",
+    "firebrick",
+    "floralwhite",
+    "forestgreen",
+    "fuchsia",
+    "gainsboro",
+    "ghostwhite",
+    "gold",
+    "goldenrod",
+    "gray",
+    "green",
+    "greenyellow",
+    "grey",
+    "honeydew",
+    "hotpink",
+    "indianred",
+    "indigo",
+    "ivory",
+    "khaki",
+    "lavender",
+    "lavenderblush",
+    "lawngreen",
+    "lemonchiffon",
+    "lightblue",
+    "lightcoral",
+    "lightcyan",
+    "lightgoldenrodyellow",
+    "lightgray",
+    "lightgreen",
+    "lightgrey",
+    "lightpink",
+    "lightsalmon",
+    "lightseagreen",
+    "lightskyblue",
+    "lightslategray",
+    "lightslategrey",
+    "lightsteelblue",
+    "lightyellow",
+    "lime",
+    "limegreen",
+    "linen",
+    "magenta",
+    "maroon",
+    "mediumaquamarine",
+    "mediumblue",
+    "mediumorchid",
+    "mediumpurple",
+    "mediumseagreen",
+    "mediumslateblue",
+    "mediumspringgreen",
+    "mediumturquoise",
+    "mediumvioletred",
+    "midnightblue",
+    "mintcream",
+    "mistyrose",
+    "moccasin",
+    "navajowhite",
+    "navy",
+    "oldlace",
+    "olive",
+    "olivedrab",
+    "orange",
+    "orangered",
+    "orchid",
+    "palegoldenrod",
+    "palegreen",
+    "paleturquoise",
+    "palevioletred",
+    "papayawhip",
+    "peachpuff",
+    "peru",
+    "pink",
+    "plum",
+    "powderblue",
+    "purple",
+    "red",
+    "rosybrown",
+    "royalblue",
+    "saddlebrown",
+    "salmon",
+    "sandybrown",
+    "seagreen",
+    "seashell",
+    "sienna",
+    "silver",
+    "skyblue",
+    "slateblue",
+    "slategray",
+    "slategrey",
+    "snow",
+    "springgreen",
+    "steelblue",
+    "tan",
+    "teal",
+    "thistle",
+    "tomato",
+    "turquoise",
+    "violet",
+    "wheat",
+    "white",
+    "whitesmoke",
+    "yellow",
+    "yellowgreen",
+  ];
+
+  let name = uniqueNamesGenerator({
+    dictionaries: [colorNames, animals],
+    separator: " ",
+  });
+  localStorage.setItem("cursor-name", name);
+
+  const pageTopic = window.location.host + window.location.pathname;
+  const endTopic = pageTopic + "/end";
+  const client = mqtt.connect("wss://test.mosquitto.org:8081", {
+    will: {
+      topic: endTopic,
+      payload: Buffer.from(name),
+    },
+  });
+
+  client.subscribe(pageTopic);
+  client.subscribe(endTopic);
+  client.on("disconnect", () => {
+    client.publish(endTopic, name);
+  });
+  client.on("end", () => {
+    client.publish(endTopic, name);
+  });
+
+  client.on("message", (topic, message) => {
+    switch (topic) {
+      case endTopic:
+        console.log(message, message.toString());
+        const cursor = document.querySelector(
+          `[data-name="${message.toString()}"]`
+        ) as HTMLDivElement;
+        if (cursor) cursor.remove();
+        break;
+      case pageTopic:
+        const data = JSON.parse(message.toString()) as PublishState;
+
+        if (data.name === name) return;
+
+        const [color] = data.name.split(" ");
+
+        let otherCursor = document.querySelector(
+          `[data-name="${data.name}"]`
+        ) as HTMLDivElement;
+        if (!otherCursor) {
+          otherCursor = document.createElement("div");
+          otherCursor.setAttribute("data-name", data.name);
+          document.querySelector("#cursors")?.prepend(otherCursor);
+        }
+
+        otherCursor.style.borderColor = `${color}`;
+        const { clientWidth, scrollHeight } = document.documentElement;
+
+        const x = (data.horizontalPercent * clientWidth) / 100;
+        const y = (data.verticalPercent * scrollHeight) / 100;
+        otherCursor.style.setProperty("transform", `translate(${x}px, ${y}px)`);
+        otherCursor.classList.add("other-cursor");
+        break;
+    }
+  });
+
+  const cursor = document.querySelector("#my-cursor") as HTMLElement;
   const header = document.querySelector("header") as HTMLElement;
 
   let onElement: Element | null = null;
@@ -82,14 +302,14 @@
     });
   };
 
-  const addPropertiesBasedOnHref = (e: HTMLAnchorElement) => {
-    const href = e.getAttribute("href");
+  const addPropertiesBasedOnHref = (event: HTMLAnchorElement) => {
+    const href = event.getAttribute("href");
     if (href == null) return;
     if (href.startsWith("/")) return; // internal links
-    if (href.startsWith("#")) return smoothScrollTo(href, e); // anchor links
+    if (href.startsWith("#")) return smoothScrollTo(href, event); // anchor links
 
-    e.setAttribute("target", "_blank");
-    e.setAttribute("rel", "noopener noreferrer");
+    event.setAttribute("target", "_blank");
+    event.setAttribute("rel", "noopener noreferrer");
   };
 
   const setCursorZIndex = () => {
@@ -100,9 +320,35 @@
     cursor.style.zIndex = isCloseToHeader ? "40" : "30";
   };
 
-  const updateState = (e: MouseEvent | Event) => {
+  let debounce: NodeJS.Timeout | null = null;
+  const updateState = (event: MouseEvent | Event) => {
     setCursorZIndex();
-    updateProperties(cursor, createState(e));
+    if (debounce) clearTimeout(debounce);
+    debounce =
+      event instanceof MouseEvent
+        ? setTimeout(() => {
+            if (!client.connected) return;
+            const { clientX, clientY } = event;
+            const { clientWidth, scrollHeight, scrollTop } =
+              document.documentElement;
+
+            client.publish(
+              pageTopic,
+              JSON.stringify({
+                horizontalPercent:
+                  ((clientX - CUSTOM_CURSOR_BASE_SIZE / 2) / clientWidth) * 100,
+                // TODO: when position if after the main content it doesn't work
+                // it has some weird behavior in the footer area
+                verticalPercent:
+                  ((clientY + scrollTop - CUSTOM_CURSOR_BASE_SIZE / 2) /
+                    scrollHeight) *
+                  100,
+                name,
+              } satisfies PublishState)
+            );
+          }, 60)
+        : null;
+    updateProperties(cursor, createState(event));
   };
 
   let audioTimeout: NodeJS.Timeout | null = null;
@@ -159,30 +405,33 @@
     @apply cursor-pointer;
   }
 
-  body:not(body:hover) #cursor::after {
+  body:not(body:hover) #my-cursor::after {
     @apply scale-0 opacity-0;
   }
 
-  #cursor {
+  #my-cursor {
     @apply pointer-events-none fixed left-0 top-0 z-30 transform-gpu ease-in-out;
+    transition-timing-function: cubic-bezier(0.25, 0.25, 0.42, 1);
+    transition-property: width, height, transform;
+    will-change: transform;
+  }
+
+  #my-cursor {
     width: var(--width);
     height: var(--height);
     transform: translate(
       calc(var(--x) - var(--width) / 2),
       calc(var(--y) - var(--height) / 2)
     );
-    transition-timing-function: cubic-bezier(0.25, 0.25, 0.42, 1);
-    transition-property: width, height, transform;
-    will-change: transform;
   }
 
   @media (pointer: fine) {
-    #cursor {
+    #my-cursor {
       @apply block;
     }
   }
 
-  #cursor::after {
+  #my-cursor::after {
     @apply absolute inset-0 border-8 border-yellow-400;
     content: "";
     border-radius: var(--radius);

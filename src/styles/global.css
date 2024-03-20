@@ -177,3 +177,9 @@ pre.has-focused code .line:not(.focused) {
   @apply opacity-80;
   filter: blur(0.1rem);
 }
+
+.other-cursor {
+  @apply absolute left-0 top-0 z-30 transform-gpu ease-in-out w-14 h-14 border-8 rounded-full  border-opacity-25 flex justify-center;
+  transition: all 0.3s ease-in-out;
+  will-change: transform;
+}

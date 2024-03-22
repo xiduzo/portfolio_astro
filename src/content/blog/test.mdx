@@ -1,25 +1,187 @@
 ---
-title: "Tests"
-description: "Nobody likes them, most of us need them"
+title: "Testing with TypeScript"
+description: "And become a better engineer"
 pubDate: "Mar 21 2024"
 headerColor: "#7fd8be"
 contrastColor: "#f48498"
 heroImage: "/blog/test/header-icon.svg"
-hidden: true
 ---
 
-## WORK IN PROGRESS, how did you find me? 🤔
+import Cookie from '../../components/Cookie.astro'
 
----
-
----
+Although there are [many forms of testing](https://medium.com/codex/types-of-testing-de4cdd98df77), in this article I will focus on unit-testing. I believe they are the easiest to setup, should be easy to write and maintain and when doing properly and then [you might not even need end-to-end tests](https://www.youtube.com/watch?v=QFCHSEHgqFE).
 
 ---
 
-Are there people who enjoy writing tests for the software they write?
+> Engineers conduct tests and experiments to evaluate the performance, safety, and reliability of products or systems. This may involve using specialized equipment, conducting simulations, or performing real-world trials.
+>
+> <cite>[ChatGPT](https://chat.openai.com/share/97ddf631-1171-4c18-9f70-40e2b6f30e8b)</cite>
 
-I don't.
+## The software engineer
 
-## The software _engineer_
+In the physical world we rely on engineers to be due diligence in their work. We wouldn't like to have a bridge collapse because it was not tested properly, right?
 
-A lot of people like to call themselves software _engineers_. I don't. I'm a software _developer_.
+So how come I come across many _software engineers_ that do not test their code?
+
+It is our job that the code we write works as intended, and preferably keeps on working as intended after changes have been made. This is, to me, the _engineering_ mindset.
+
+### Some 🚩🚩🚩
+
+Every project (-team) is different, but there are some common pitfalls that I have seen over and over again.
+
+#### No tests runner has been setup
+
+This one is kind of obvious, but when a project has no test runner setup it does not motivate (new) team members to write tests.
+
+Why would you bother writing tests as this project cleary does not find them important?
+
+#### Tests are treated as second class citizens
+
+When tests are stored away in a seperate a folder it makes them harder to find and easier to forget about.
+
+```
+project-root/
+│
+├── src/
+│   ├── app.ts
+│   └── utils.ts
+│
+└── test/
+    ├── app.test.ts
+    └── utils.test.ts
+```
+
+Try placing the tests as part of the source code, next to the code they are testing. This way the project structure itself tells you _"we care about tests"_ just by working on it.
+
+```
+project-root/
+│
+└── src/
+    ├── app.ts
+    ├── app.test.ts
+    ├── utils.ts
+    └── utils.test.ts
+```
+
+#### Test code is not <em class="ml-2">clean</em>
+
+We tend to forget that we are writing code for humans, not for computers.
+
+So why do we go to great lengths to write clean, maintainable code, but throw all of this out of the window when writing tests? Test code should adhere to the same standards of quality as the code it is testing.
+
+> Indeed, the ratio of time spent reading versus writing is well over 10 to 1. We are constantly reading old code as part of the effort to write new code. ...[Therefore,] making it easy to read makes it easier to write.
+>
+> <cite>Robert C. Martin, Clean Code: A Handbook of Agile Software Craftsmanship</cite>
+
+> Any fool can write code that a computer can understand. Good programmers write code that humans can understand.
+>
+> <cite>Refactoring: Improving the Design of Existing Code</cite>
+
+Some indicators I have found that you throw out clean code principles when writing tests:
+
+**Ignoring test files in your linting**
+
+Sure, this makes your life easier in the short term. But over the life-span of a project you will end up with a lot of technical debt you created unnecessarily.
+
+```typescript
+{
+    "ignorePatterns": ["**/*.test.ts"],
+}
+```
+
+**Making the test (file) a puzzle by itself**
+
+Tests files can be considered documentation itself when written properly. So why make it harder for the next person, which is most likey going to be you, to understand what is going on?
+
+```typescript
+it("should do the thing", () => {
+  const a = [1, 10];
+  const b = [2, 50];
+
+  // @ts-ignore
+  const d = calculateDistance(a, b);
+  const c = plotCurve(d, {} as unknown as MyOptions);
+
+  expect(c).toBe([1, 7, 3]);
+});
+```
+
+**Test have too many responsibilities**
+
+When a test is testing too many things at once it becomes harder to pinpoint what is going wrong when the test fails.
+
+```typescript
+it("should test everything", () => {
+  expect(somethingUnrelated).toBe(true);
+
+  const result = doSomething("foo", "bar");
+
+  expect(result).toBe(false);
+  expect(myMethod).toHaveBeenCalledWith({ foo: "foo", bar: "bar" });
+  expect(myOtherMethods).not.toHaveBeenCalled();
+});
+```
+
+#### Coverage !== Confidence
+
+Hitting a certain percentage of coverage does not mean your software is properly tested.
+
+The following code has a `80%` coverage, as this seems to be the general (mandatory) coverage goal.
+
+```typescript
+// src/test-me.ts
+import { deleteImportantData } from "./utils";
+
+class TestMe {
+  private shouldDeleteData: boolean = false;
+
+  constructor(
+    public readonly foo: number,
+    public readonly bar: string,
+    public readonly baz: boolean
+  ) {
+    if (foo > 10) {
+      this.shouldDeleteData(true);
+    }
+  }
+
+  public myFunction(): void {
+    if (this.shouldDeleteData) {
+      deleteImportantData();
+    }
+  }
+}
+
+// src/test-me.test.ts
+import { TestMe } from "./test-me";
+
+describe(TestMe.name, () => {
+  it("initializes properly", () => {
+    const testMe = new TestMe(11, "bar", true);
+
+    expect(testMe.foo).toBe(11);
+    expect(testMe.bar).toBe("bar");
+    expect(testMe.baz).toBe(true);
+  });
+});
+```
+
+But what are we actually testing here? If the JavaScript constructor still works?
+
+Setting a (mandatory) coverage percentage is a bad idea. More often than not this will lead to poorer tests just for the sake of increasing the coverage.
+
+I would not go as far as to [not write any unit tests](https://www.youtube.com/watch?v=ZGKGb109-I4) though. Just be thoughtful of _what_ you are testing.
+
+---
+
+Wow, you made it this far, have a <Cookie name="testing" /> before we continue.
+
+---
+
+## Using specialized equipment
+
+[`@total-typescript/shoehorn`](https://www.npmjs.com/package/@total-typescript/shoehorn)
+
+## Conducting simulations
+
+## Performing real-world trials

@@ -5,7 +5,7 @@ const props = Astro.props;
 <blockquote
   cite="http://www.worldwildlife.org/who/index.html"
   {...props}
-  class="max-w-screen-md m-auto"
+  class="max-w-screen-md m-auto mb-36"
 >
   <slot />
 </blockquote>
@@ -17,7 +17,7 @@ const props = Astro.props;
   }
 
   blockquote::before {
-    @apply leading-4;
+    @apply leading-4 mt-36;
     content: "“";
   }
 

@@ -6,6 +6,7 @@ import { Code } from "astro/components";
 import BlockQuote from "../../components/elements/BlockQuote.astro";
 import H2 from "../../components/elements/H2.astro";
 import H3 from "../../components/elements/H3.astro";
+import H4 from "../../components/elements/H4.astro";
 import Hr from "../../components/elements/Hr.astro";
 import OrderedList from "../../components/elements/OrderedList.astro";
 import Paragraph from "../../components/elements/Paragraph.astro";
@@ -35,6 +36,7 @@ const { Content, remarkPluginFrontmatter } = await render();
       p: Paragraph,
       h2: H2,
       h3: H3,
+      h4: H4,
       hr: Hr,
       blockquote: BlockQuote,
     }}

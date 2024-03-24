@@ -1,5 +1,5 @@
 ---
-title: "Testing with TypeScript"
+title: "Testing (with TypeScript)"
 description: "And become a better engineer"
 pubDate: "Mar 21 2024"
 headerColor: "#7fd8be"
@@ -21,23 +21,25 @@ Although there are [many forms of testing](https://medium.com/codex/types-of-tes
 
 In the physical world we rely on engineers to be due diligence in their work. We wouldn't like to have a bridge collapse because it was not tested properly, right?
 
-So how come I come across many _software engineers_ that do not test their code?
+So how is it that I come across many _software engineers_ that do not test their code?
 
-It is our job that the code we write works as intended, and preferably keeps on working as intended after changes have been made. This is, to me, the _engineering_ mindset.
+It is our job that the code we write works as intended, and -preferably- keeps on working as intended after changes have been made.
+
+This is, to me, part of the _engineering_ mindset.
 
 ### Some 🚩🚩🚩
 
-Every project (-team) is different, but there are some common pitfalls that I have seen over and over again.
+Every project (-team) is different, but there are some common pitfalls that I have seen over and over again which should raise some red flags to you.
 
-#### No tests runner has been setup
+#### 🚩 No tests runner has been setup
 
-This one is kind of obvious, but when a project has no test runner setup it does not motivate (new) team members to write tests.
+This one is kind of obvious, but when a project has no test runner setup it does not motivate (new) team members to write tests. This goes for both a local setup as well as a test runner in your CI/CD pipeline.
 
 Why would you bother writing tests as this project cleary does not find them important?
 
-#### Tests are treated as second class citizens
+#### 🚩 Tests are treated as second class citizens
 
-When tests are stored away in a seperate a folder it makes them harder to find and easier to forget about.
+When tests are stored away in a seperate a folder it makes them harder to find and easier to forget about. There is not constant nudge to write tests.
 
 ```
 project-root/
@@ -63,11 +65,13 @@ project-root/
     └── utils.test.ts
 ```
 
-#### Test code is not <em class="ml-2">clean</em>
+#### 🚩 Test code is not <em class="ml-2">clean</em>
 
 We tend to forget that we are writing code for humans, not for computers.
 
-So why do we go to great lengths to write clean, maintainable code, but throw all of this out of the window when writing tests? Test code should adhere to the same standards of quality as the code it is testing.
+So why do we go to great lengths to write clean, maintainable code, but throw all of this out of the window when writing tests?
+
+Test code should adhere to the same standards of quality as the code it is testing.
 
 > Indeed, the ratio of time spent reading versus writing is well over 10 to 1. We are constantly reading old code as part of the effort to write new code. ...[Therefore,] making it easy to read makes it easier to write.
 >
@@ -77,11 +81,15 @@ So why do we go to great lengths to write clean, maintainable code, but throw al
 >
 > <cite>Refactoring: Improving the Design of Existing Code</cite>
 
+---
+
 Some indicators I have found that you throw out clean code principles when writing tests:
 
-**Ignoring test files in your linting**
+---
 
-Sure, this makes your life easier in the short term. But over the life-span of a project you will end up with a lot of technical debt you created unnecessarily.
+1. Ignoring test files in your linting
+
+Sure, this makes your life easier in the short term. But over the life-span of a project you will end up with a lot of unmaintainable tests (read technical debt) you have created yourself unnecessarily.
 
 ```typescript
 {
@@ -89,7 +97,7 @@ Sure, this makes your life easier in the short term. But over the life-span of a
 }
 ```
 
-**Making the test (file) a puzzle by itself**
+2. Making the test (file) a puzzle by itself
 
 Tests files can be considered documentation itself when written properly. So why make it harder for the next person, which is most likey going to be you, to understand what is going on?
 
@@ -106,23 +114,102 @@ it("should do the thing", () => {
 });
 ```
 
-**Test have too many responsibilities**
-
-When a test is testing too many things at once it becomes harder to pinpoint what is going wrong when the test fails.
+Try to make the test as readable as possible. This way you can easily scim over the tests to see what is being tested and what the expected outcome is.
 
 ```typescript
-it("should test everything", () => {
-  expect(somethingUnrelated).toBe(true);
+it("should plot a curce between two data points", () => {
+  const pointA = [1, 10];
+  const pointB = [2, 50];
 
-  const result = doSomething("foo", "bar");
+  const distance = calculateDistance(pointA, pointB, true);
+  const result = plotCurve(distance, { step: 3 });
 
-  expect(result).toBe(false);
-  expect(myMethod).toHaveBeenCalledWith({ foo: "foo", bar: "bar" });
-  expect(myOtherMethods).not.toHaveBeenCalled();
+  expect(result).toEqual([1, 7, 3]);
 });
 ```
 
-#### Coverage !== Confidence
+3. The test has too many responsibilities
+
+When a test is _doing_ too many things at once it becomes harder to pinpoint what is going wrong when the tests start failing.
+
+```typescript
+it("should test everything", () => {
+  // Should set global `someGlobalValue` to `true`
+  const result = doSomething("foo", process.env.BAR);
+
+  expect(result).toBe(false);
+  expect(myMethod).toHaveBeenCalledWith({ foo: "foo", bar: "bar" });
+  expect(myOtherMethod).not.toHaveBeenCalled();
+});
+
+it("should test some other thing", () => {
+  // Only works when the previous test has been run
+  expect(someGlobalValue).toBe(true);
+
+  const result = doSomeOtherThing(someGlobalValue, 5);
+
+  expect(result).toBe("foo");
+});
+```
+
+Tests should be
+
+- a) **independant** - `it("should not rely on the outcome of another test")`
+- b) **repeatable** - `it("should be runnable in any environment")`
+- c) **self-validating** - `it("should return a clear pass or fail result")`
+
+```typescript
+describe(doSomething.name, () => {
+  it.each`
+    input1   | input2   | expected
+    ${"foo"} | ${"bar"} | ${false}
+    ${"bar"} | ${"foo"} | ${true}
+  `(
+    "Returns $expected for $input1 and $input2",
+    ({ input1, input2, expected }) => {
+      const result = doSomething(input1, input2);
+
+      expect(result).toBe(expected);
+    }
+  );
+
+  it(`does should call ${myMethod.name}`, () => {
+    doSomething("foo", "bar");
+
+    expect(myMethod).toHaveBeenCalledWith({ foo: "foo", bar: "bar" });
+  });
+
+  it(`does not call ${myOtherMethod.name} when passing "foo" and "bar"`, () => {
+    doSomething("foo", "bar");
+
+    expect(myOtherMethod).not.toHaveBeenCalled();
+  });
+
+  it(`does call ${myOtherMethod.name} when passing "bar" and "foo"`, () => {
+    doSomething("bar", "foo");
+
+    expect(myOtherMethod).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe(doSomeOtherThing.name, () => {
+  it.each`
+    someGlobalValue | expected
+    ${true}         | ${"foo"}
+    ${false}        | ${"bar"}
+  `(
+    "Returns '$expected' when `someGlobalValue` is $someGlobalValue",
+    ({ expected, $someGlobalValue }) => {
+      jest.spyOn(global, "someGlobalValue").mockReturnValue(someGlobalValue);
+      const result = doSomeOtherThing(someGlobalValue, 5);
+
+      expect(result).toBe(expected);
+    }
+  );
+});
+```
+
+#### 🚩 Coverage !== Confidence
 
 Hitting a certain percentage of coverage does not mean your software is properly tested.
 
@@ -141,11 +228,11 @@ class TestMe {
     public readonly baz: boolean
   ) {
     if (foo > 10) {
-      this.shouldDeleteData(true);
+      this.shouldDeleteData = true;
     }
   }
 
-  public myFunction(): void {
+  public importantMethodToTest(): void {
     if (this.shouldDeleteData) {
       deleteImportantData();
     }
@@ -168,9 +255,29 @@ describe(TestMe.name, () => {
 
 But what are we actually testing here? If the JavaScript constructor still works?
 
-Setting a (mandatory) coverage percentage is a bad idea. More often than not this will lead to poorer tests just for the sake of increasing the coverage.
+Let's have a look at the next example:
 
-I would not go as far as to [not write any unit tests](https://www.youtube.com/watch?v=ZGKGb109-I4) though. Just be thoughtful of _what_ you are testing.
+```typescript
+// add.ts
+function add(array: number[]) => {
+  return array[0] + array[1];
+}
+
+// add.test.ts
+describe(add.name, () => {
+  it("should add two numbers", () => {
+    const result = add([1, 2]);
+
+    expect(result).toBe(3);
+  });
+});
+```
+
+And boom, we have `100%` coverage. But we are missing out on testing the edge cases. What if the array is empty? What if the array only has one element?
+
+Setting a (mandatory) coverage percentage is a ~stupid~ bad idea. More often than not this will lead to poorer tests just for the sake of increasing the coverage.
+
+I would not go as far as to [not write any unit tests](https://www.youtube.com/watch?v=ZGKGb109-I4) though, just be [thoughtful on _what_ you are testing](https://www.youtube.com/watch?v=IInciWyU74U).
 
 ---
 
@@ -180,7 +287,11 @@ Wow, you made it this far, have a <Cookie name="testing" /> before we continue.
 
 ## Using specialized equipment
 
+[vitest](https://vitest.dev/)
+
 [`@total-typescript/shoehorn`](https://www.npmjs.com/package/@total-typescript/shoehorn)
+
+[`@testing-library`](https://testing-library.com/)
 
 ## Conducting simulations
 

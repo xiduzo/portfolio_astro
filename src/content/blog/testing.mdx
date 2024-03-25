@@ -149,7 +149,7 @@ it("should do the thing", () => {
 
 Act like you are writing _"normal"_ code.
 
-This makes it easier to scim over the tests to see what is being tested and what the expected outcome is.
+This makes it easier to skim over the tests to see what is being tested and what the expected outcome is.
 
 A good pattern to follow is the [_Arrange, Act, Assert_](https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/) pattern.
 
@@ -468,17 +468,17 @@ Some of you might be familiar with [`storybook`](https://storybook.js.org/docs/w
 
 These tools are powerfull in their own right, but I think they are bloatware when writing unit tests.
 
-[`@testing-library`](https://testing-library.com) are _"simple and complete testing utilities that encourage good testing practices"_.
+[`@testing-library`](https://testing-library.com) are _"simple and complete testing utilities that encourage good testing practices"_ which allows you to test the your DOM.
 
 ### Codecov
 
 Altough I am [against setting coverage targets](#-coverage--confidence), it is valuable to know what parts of your code are tested and which are not.
 
-[codecov](https://about.codecov.io) will give you these insights and you can use it to make educated decisions on the state of your codebase.
+[codecov](https://about.codecov.io) will give you these insights. You can use it to make educated decisions on the state of your codebase and determine where to focus your testing efforts.
 
 ## Conducting simulations
 
-The beaty of testing is that you can simulate (mock) almost everything. This allows you to put your system under stress and force it into states that are hard to reproduce in real life.
+The beaty of testing is that you can simulate (mock) almost everything. This allows you to put your system under stress and force it into states that are hard(er) to reproduce in real life.
 
 ```typescript
 const fetchData = async (triesLeft = 1) => {

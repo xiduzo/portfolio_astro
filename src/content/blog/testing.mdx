@@ -35,9 +35,32 @@ Every project (-team) is different, but there are some common pitfalls that I ha
 
 This one is kind of obvious, but when a project has no test runner setup it does not motivate (new) team members to write tests.
 
-This is true for both a local setup as well as a test runner in your CI/CD pipeline.
-
 Why would you bother writing tests as this project cleary does not find them important?
+
+This is true for a local setup which enables developers to validate their code locally. But it is equaly important to have a test runner in your CI/CD pipeline.
+
+```yml
+# Simple github-actions example
+name: Node.js CI
+
+on:
+  pull_request:
+    branches: [main] # Can extend to other branches
+
+jobs:
+  is-code-okay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 18
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+      - run: npm ci
+      - run: npm run test
+```
+
+This way you can ensure no old code is broken unintentionally. Even when you forget about running the tests locally.
 
 #### 🚩 Tests are treated as second class citizens
 
@@ -116,7 +139,11 @@ it("should do the thing", () => {
   const d = calculateDistance(a, b);
   const c = plotCurve(d, {} as unknown as MyOptions);
 
-  expect(c).toBe([1, 7, 3]);
+  expect(c).toBe([
+    [1, 20],
+    [7, 18],
+    [3, 49],
+  ]);
 });
 ```
 
@@ -124,15 +151,25 @@ Act like you are writing _"normal"_ code.
 
 This makes it easier to scim over the tests to see what is being tested and what the expected outcome is.
 
+A good pattern to follow is the [_Arrange, Act, Assert_](https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/) pattern.
+
 ```typescript
 it("should plot a curce between two data points", () => {
+  // Arrange
   const pointA = [1, 10];
   const pointB = [2, 50];
+  const expectedCurve = [
+    [1, 20],
+    [7, 18],
+    [3, 49],
+  ];
 
+  // Act
   const distance = calculateDistance(pointA, pointB, true);
   const result = plotCurve(distance, { step: 3 });
 
-  expect(result).toEqual([1, 7, 3]);
+  // Assert
+  expect(result).toEqual(expectedCurve);
 });
 ```
 
@@ -308,6 +345,8 @@ Wow, you made it this far, have a <Cookie name="testing" /> before we continue.
 [`@total-typescript/shoehorn`](https://www.npmjs.com/package/@total-typescript/shoehorn)
 
 [`@testing-library`](https://testing-library.com)
+
+[codecov](https://about.codecov.io)
 
 ## Conducting simulations
 

@@ -4,12 +4,12 @@ description: "And become a better engineer"
 pubDate: "Mar 21 2024"
 headerColor: "#7fd8be"
 contrastColor: "#f48498"
-heroImage: "/blog/test/header-icon.svg"
+heroImage: "/blog/testing/header-icon.svg"
 ---
 
 import Cookie from '../../components/Cookie.astro'
 
-Although there are [many forms of testing](https://medium.com/codex/types-of-testing-de4cdd98df77), in this article I will focus on unit-testing. I believe they are the easiest to setup, easy to write/maintain and when done properly [end-to-end testing may become obsolete](https://www.youtube.com/watch?v=QFCHSEHgqFE).
+Although there are [many forms of testing](https://medium.com/codex/types-of-testing-de4cdd98df77), in this article I will focus on unit testing. I believe they are the easiest to setup, easy to write/maintain and when done properly [end-to-end testing may become obsolete](https://www.youtube.com/watch?v=QFCHSEHgqFE).
 
 ---
 
@@ -102,7 +102,7 @@ Test code should adhere to the same standards of quality as the code it is testi
 
 > Indeed, the ratio of time spent reading versus writing is well over 10 to 1. We are constantly reading old code as part of the effort to write new code. ...[Therefore,] making it easy to read makes it easier to write.
 >
-> <cite>Robert C. Martin, Clean Code: A Handbook of Agile Software Craftsmanship</cite>
+> <cite>Clean Code: A Handbook of Agile Software Craftsmanship</cite>
 
 > Any fool can write code that a computer can understand. Good programmers write code that humans can understand.
 >
@@ -202,7 +202,7 @@ Tests should be
 - c) **self-validating** - `it("should return a clear pass or fail result")`
 
 ```typescript
-jest.mock("myLocaDbAdapter"); // Make sure the tests can run anywhere
+jest.mock("myLocalDbAdapter"); // Make sure the tests can run anywhere
 
 describe(doSomething.name, () => {
   it.each`
@@ -330,38 +330,215 @@ I would not go as far as to [not write any unit tests](https://www.youtube.com/w
 
 ---
 
-Wow, you made it this far, have a <Cookie name="testing" /> before we continue.
+Wow, you made it this far, have a <Cookie name="testing" /> before we continue with more practical tips.
 
 ---
 
 ## Using specialized equipment
 
-... blurp about tools I use
+Being new in testing, or development for that matter, can be overwhelming. And although you can [generate your tests with AI ](https://www.jetbrains.com/help/idea/generate-tests.html). I think there are other tools out there which enable you to write better tests youself.
 
-[zod](https://zod.dev)
+### Vitest
 
-[vitest](https://vitest.dev)
+Time moves on, and so do our tools.
 
-[`@total-typescript/shoehorn`](https://www.npmjs.com/package/@total-typescript/shoehorn)
+Most of us do not use [`chai`](https://www.chaijs.com) or [`mocha`](https://mochajs.org/) anymore to write and run our tests. It is quite common to see [`jest`](https://jestjs.io/) being the work-horse nowadays.
 
-[`@testing-library`](https://testing-library.com)
+> Test should be fast. They should run quickly. When tests run slow, you won't want to run them frequently. If you don't run them frequently, you won't find problems early enough to fix them easily. You won't feel as free to clean up the code. Eventually the code will begin to rot.
+>
+> <cite>Clean Code: A Handbook of Agile Software Craftsmanship</cite>
 
-[codecov](https://about.codecov.io)
+[Vitest](https://vitest.dev) is a drop-in replacement for Jest all while being faster.
+
+### Zod
+
+A common way your code can break is when the data you receive is not what you expect. You should treat all external data as untrusted.
+
+Given the following example
+
+```typescript
+fetch("https://api.example.com")
+  .then((response) => response.json())
+  .then((data) => {
+    if (!data.property) {
+      throw new Error("Property is missing");
+    }
+
+    if (typeof data.anotherThing !== "number") {
+      throw new Error("Another thing is not a number");
+    }
+
+    // ... etc
+
+    return data as MyType;
+  })
+  .catch((error) => {
+    // Error handling
+  });
+```
+
+We can write a lot safe-guards and unit tests to validate the data we receive is of `MyType` and otherwise it should throw an error.
+
+```typescript
+describe("fetchData", () => {
+  it("should throw and error when `property` is missing", async () => {
+    jest.spyOn(global, "fetch").mockResolvedValue({
+      json: () => Promise.resolve({}),
+    });
+
+    expect(fetchData()).rejects.toThrow("Property is missing");
+  });
+
+  it("should throw an error when `anotherThing` is not a number", () => {
+    jest.spyOn(global, "fetch").mockResolvedValue({
+      json: () => Promise.resolve({ property: "foo", anotherThing: "bar" }),
+    });
+
+    expect(fetchData()).rejects.toThrow("Another thing is not a number");
+  });
+});
+```
+
+We could also use [`zod`](https://zod.dev) to validate the data we receive.
+
+```typescript
+import { z } from "zod";
+
+const MyType = z.object({
+  property: z.string(),
+  anotherThing: z.number(),
+});
+
+fetch("https://api.example.com")
+  .then((response) => response.json())
+  .then((data) => MyType.parse(data))
+  .catch((error) => {
+    // Error handling
+  });
+```
+
+This will save a lot of effort in validating the data itself and, in my opinion, does not require any unit tests besides the error handling anymore.
+
+### Shoehorn
+
+Writing clean tests can become tedious when you have to write a lot of boilerplate code just to pass in some variables/objects to a method.
+
+What is see happening a lot is the following:
+
+```typescript
+describe("Annoying boilerplate", () => {
+  it("can type-cast to make the test work", () => {
+    const result = new MyTest({
+      property: "foo",
+    } as any as MyType);
+
+    expect(result).toBe(true);
+  });
+
+  it("can @ts-ignore to make the test work", () => {
+    // @ts-ignore
+    const result = new MyTest({
+      property: "foo",
+    });
+
+    expect(result).toBe(true);
+  });
+});
+```
+
+But sometimes we just need _to force something into a space_. [`@total-typescript/shoehorn`](https://www.npmjs.com/package/@total-typescript/shoehorn) is the tool you are looking for. It will allow you to pass partial data in tests while keeping TypeScript happy.
+
+```typescript
+import { fromPartial } from "@total-typescript/shoehorn";
+
+describe("No more boilerplate", () => {
+  it("can pass partial data", () => {
+    const result = new MyTest(fromPartial({ property: "foo" }));
+
+    expect(result).toBe(true);
+  });
+});
+```
+
+### Testing-library
+
+As you are working with Typescript, there is a big change you will need to test some frontend code as well.
+
+Some of you might be familiar with [`storybook`](https://storybook.js.org/docs/writing-tests/test-runner), [`cypress`](https://www.cypress.io) or [`playwright`](https://playwright.dev).
+
+These tools are powerfull in their own right, but I think they are bloatware when writing unit tests.
+
+[`@testing-library`](https://testing-library.com) are _"simple and complete testing utilities that encourage good testing practices"_.
+
+### Codecov
+
+Altough I am [against setting coverage targets](#-coverage--confidence), it is valuable to know what parts of your code are tested and which are not.
+
+[codecov](https://about.codecov.io) will give you these insights and you can use it to make educated decisions on the state of your codebase.
 
 ## Conducting simulations
 
-... testing can force your system into states
+The beaty of testing is that you can simulate (mock) almost everything. This allows you to put your system under stress and force it into states that are hard to reproduce in real life.
 
-1. throwing errors
-2. unexpected inputs
-3. ....?
+```typescript
+const fetchData = async (triesLeft = 1) => {
+  try {
+    const response = await fetch("https://api.example.com");
+    const data = await response.json();
+    const parsed = MyType.parse(data);
+    saveMyData(parsed);
+  } catch (error) {
+    if (triesLeft > 0) {
+      return fetchData(triesLeft - 1);
+    }
+    // Error handling
+  }
+};
+
+describe("simulate your software", () => {
+  it("can throw errors", async () => {
+    jest.spyOn(global, "fetch").mockRejectedValue(new Error("Network error"));
+
+    await fetchData(0);
+
+    expect(saveMyData).not.toHaveBeenCalled();
+  });
+
+  it("can pass unexpected inputs", async () => {
+    jest.spyOn(global, "fetch").mockResolvedValue({
+      json: () => Promise.resolve({ foo: "bar", bar: "baz" }),
+    });
+
+    await fetchData(0);
+
+    expect(saveMyData).not.toHaveBeenCalled();
+  });
+
+  it("can validate retry mechanisms", async () => {
+    jest
+      .spyOn(global, "fetch")
+      .mockResolvedValueOnce({
+        json: () => throw new Error("Network error"),
+      })
+      .mockResolvedValue ({
+        json: () => Promise.resolve({ foo: "bar", bar: 42 }),
+      });
+
+    await fetchData(1);
+
+    expect(saveData).toHaveBeenCalledWith({ foo: "bar", bar: 42 });
+  });
+});
+```
+
+You can go even deeper by [mocking any interface or object ](https://www.npmjs.com/package/vitest-mock-extended) to give you full control over the simulation.
 
 ## Performing real-world trials
 
-... unit testing is not all, bla bla bla
+Testing is great, but you are conducting unit test they are placed in a vacuum.
 
-Unit testing is great, but you are testing in a vacuum. Software does not exist in a vacuum.
+Software does not exist in a vacuum, and things **will** break.
 
-Either do use e2e, smoke, integration tests or have a good QA team.
-
-And if a issue is found, make a test for it so it does not happen again.
+> When you get a bug report, start by writing a unit test that exposes the bug.
+>
+> <cite>Refactoring: Improving the Design of Existing Code</cite>

@@ -37,7 +37,12 @@ main {
 }
 
 a {
-  @apply inline-block p-6 text-lg transition-all focus:bg-yellow-400 focus:outline-none md:p-4 dark:focus:text-slate-900;
+  @apply inline-block p-6 text-lg transition-all focus:bg-yellow-400 focus:outline-none active:bg-yellow-400 md:p-4 dark:focus:text-slate-900 dark:active:text-slate-900;
+}
+
+a:active > *,
+a:focus > * {
+  @apply bg-yellow-400 dark:text-slate-900;
 }
 
 a[target="_blank"]:hover {
@@ -188,10 +193,10 @@ pre.has-focused code .line:not(.focused) {
 }
 
 .other-cursor::before {
-  @apply absolute whitespace-nowrap top-[100%] mt-0.5 font-black opacity-0 transition-all duration-150 ease-out;
+  @apply absolute top-[100%] mt-0.5 whitespace-nowrap font-black opacity-0 transition-all duration-150 ease-out;
   content: var(--name);
 }
 
 .other-cursor:hover:before {
-  @apply opacity-100 mt-2 duration-300 ease-in;
+  @apply mt-2 opacity-100 duration-300 ease-in;
 }

@@ -1,5 +1,5 @@
 ---
-title: "Testing (with TypeScript)"
+title: "Testing"
 description: "And become a better engineer"
 pubDate: "Mar 21 2024"
 headerColor: "#7fd8be"
@@ -9,7 +9,7 @@ heroImage: "/blog/test/header-icon.svg"
 
 import Cookie from '../../components/Cookie.astro'
 
-Although there are [many forms of testing](https://medium.com/codex/types-of-testing-de4cdd98df77), in this article I will focus on unit-testing. I believe they are the easiest to setup, should be easy to write and maintain and when doing properly and then [you might not even need end-to-end tests](https://www.youtube.com/watch?v=QFCHSEHgqFE).
+Although there are [many forms of testing](https://medium.com/codex/types-of-testing-de4cdd98df77), in this article I will focus on unit-testing. I believe they are the easiest to setup, easy to write/maintain and when done properly [end-to-end testing may become obsolete](https://www.youtube.com/watch?v=QFCHSEHgqFE).
 
 ---
 
@@ -27,19 +27,23 @@ It is our job that the code we write works as intended, and -preferably- keeps o
 
 This is, to me, part of the _engineering_ mindset.
 
-### Some 🚩🚩🚩
+### Some 🚩🚩🚩🚩
 
 Every project (-team) is different, but there are some common pitfalls that I have seen over and over again which should raise some red flags to you.
 
 #### 🚩 No tests runner has been setup
 
-This one is kind of obvious, but when a project has no test runner setup it does not motivate (new) team members to write tests. This goes for both a local setup as well as a test runner in your CI/CD pipeline.
+This one is kind of obvious, but when a project has no test runner setup it does not motivate (new) team members to write tests.
+
+This is true for both a local setup as well as a test runner in your CI/CD pipeline.
 
 Why would you bother writing tests as this project cleary does not find them important?
 
 #### 🚩 Tests are treated as second class citizens
 
-When tests are stored away in a seperate a folder it makes them harder to find and easier to forget about. There is not constant nudge to write tests.
+When tests are stored away in a seperate a folder it makes them harder to find and easier to forget about.
+
+There is no constant nudge to write tests.
 
 ```
 project-root/
@@ -53,7 +57,9 @@ project-root/
     └── utils.test.ts
 ```
 
-Try placing the tests as part of the source code, next to the code they are testing. This way the project structure itself tells you _"we care about tests"_ just by working on it.
+Try placing the tests as part of the source code, next to the code they are testing.
+
+This way the project itself tells you _"we care about tests"_ just by working on it.
 
 ```
 project-root/
@@ -67,9 +73,7 @@ project-root/
 
 #### 🚩 Test code is not <em class="ml-2">clean</em>
 
-We tend to forget that we are writing code for humans, not for computers.
-
-So why do we go to great lengths to write clean, maintainable code, but throw all of this out of the window when writing tests?
+Why do we go to great lengths to write clean, maintainable code, but throw all of this out of the window when writing tests?
 
 Test code should adhere to the same standards of quality as the code it is testing.
 
@@ -99,7 +103,9 @@ Sure, this makes your life easier in the short term. But over the life-span of a
 
 2. Making the test (file) a puzzle by itself
 
-Tests files can be considered documentation itself when written properly. So why make it harder for the next person, which is most likey going to be you, to understand what is going on?
+Tests can be considered documentation itself when written properly.
+
+Why make it harder for the next person, which is most likey going to be you, to understand what is going on?
 
 ```typescript
 it("should do the thing", () => {
@@ -114,7 +120,9 @@ it("should do the thing", () => {
 });
 ```
 
-Try to make the test as readable as possible. This way you can easily scim over the tests to see what is being tested and what the expected outcome is.
+Act like you are writing _"normal"_ code.
+
+This makes it easier to scim over the tests to see what is being tested and what the expected outcome is.
 
 ```typescript
 it("should plot a curce between two data points", () => {
@@ -135,7 +143,7 @@ When a test is _doing_ too many things at once it becomes harder to pinpoint wha
 ```typescript
 it("should test everything", () => {
   // Should set global `someGlobalValue` to `true`
-  const result = doSomething("foo", process.env.BAR);
+  const result = doSomething("foo", process.env.BAR); // Relies on local DB
 
   expect(result).toBe(false);
   expect(myMethod).toHaveBeenCalledWith({ foo: "foo", bar: "bar" });
@@ -144,8 +152,6 @@ it("should test everything", () => {
 
 it("should test some other thing", () => {
   // Only works when the previous test has been run
-  expect(someGlobalValue).toBe(true);
-
   const result = doSomeOtherThing(someGlobalValue, 5);
 
   expect(result).toBe("foo");
@@ -159,6 +165,8 @@ Tests should be
 - c) **self-validating** - `it("should return a clear pass or fail result")`
 
 ```typescript
+jest.mock("myLocaDbAdapter"); // Make sure the tests can run anywhere
+
 describe(doSomething.name, () => {
   it.each`
     input1   | input2   | expected
@@ -200,7 +208,9 @@ describe(doSomeOtherThing.name, () => {
   `(
     "Returns '$expected' when `someGlobalValue` is $someGlobalValue",
     ({ expected, $someGlobalValue }) => {
+      // We don't rely on the outcome of the previous test
       jest.spyOn(global, "someGlobalValue").mockReturnValue(someGlobalValue);
+
       const result = doSomeOtherThing(someGlobalValue, 5);
 
       expect(result).toBe(expected);
@@ -208,6 +218,8 @@ describe(doSomeOtherThing.name, () => {
   );
 });
 ```
+
+Yes, the test file is significantly longer than the original example. But it is easier to follow the intents of each test. And as a bonus, when a test fails you can pinpoint the issue much faster.
 
 #### 🚩 Coverage !== Confidence
 
@@ -258,12 +270,12 @@ But what are we actually testing here? If the JavaScript constructor still works
 Let's have a look at the next example:
 
 ```typescript
-// add.ts
+// src/add.ts
 function add(array: number[]) => {
   return array[0] + array[1];
 }
 
-// add.test.ts
+// src/add.test.ts
 describe(add.name, () => {
   it("should add two numbers", () => {
     const result = add([1, 2]);
@@ -287,12 +299,30 @@ Wow, you made it this far, have a <Cookie name="testing" /> before we continue.
 
 ## Using specialized equipment
 
-[vitest](https://vitest.dev/)
+... blurp about tools I use
+
+[zod](https://zod.dev)
+
+[vitest](https://vitest.dev)
 
 [`@total-typescript/shoehorn`](https://www.npmjs.com/package/@total-typescript/shoehorn)
 
-[`@testing-library`](https://testing-library.com/)
+[`@testing-library`](https://testing-library.com)
 
 ## Conducting simulations
 
+... testing can force your system into states
+
+1. throwing errors
+2. unexpected inputs
+3. ....?
+
 ## Performing real-world trials
+
+... unit testing is not all, bla bla bla
+
+Unit testing is great, but you are testing in a vacuum. Software does not exist in a vacuum.
+
+Either do use e2e, smoke, integration tests or have a good QA team.
+
+And if a issue is found, make a test for it so it does not happen again.

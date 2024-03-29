@@ -21,9 +21,9 @@ I believe they are the easiest to setup, easy to write/maintain and when done pr
 
 ## The software engineer
 
-In the physical world you rely on engineers to be due diligence in their work. You wouldn't like to have a bridge collapse because it was not tested properly, right?
+In the physical world, you rely on engineers to be due diligent in their work. You wouldn't like to have a bridge collapse because it was not tested properly, right?
 
-So how is it that I come across many _software engineers_ that do not test their code?
+So how is it that I come across many _software engineers_ who not test their code?
 
 It is our job that the code we write works as intended, and -preferably- keeps on working as intended after changes have been made.
 
@@ -31,18 +31,18 @@ This is, to me, part of the _engineering_ mindset.
 
 ### Some 🚩🚩🚩🚩
 
-Every project (-team) is different, but there are some common pitfalls that I have seen over and over again which should raise some red flags to you.
+Every project (-team) is different, but there are some common pitfalls that I have seen over and over again which should raise some red flags for you.
 
-#### 🚩 No tests runner has been setup
+#### 🚩 No test runner has been setup
 
 This one is kind of obvious, but when a project has no test runner setup it does not motivate (new) team members to write tests.
 
-Why would you bother writing tests as this project cleary does not find them important?
+Why would you bother writing tests as this project clearly does not find them important?
 
-This is true for a local setup which enables developers to validate their code locally. But it is equaly important to have a test runner in your CI/CD pipeline.
+This is true for a local setup which enables developers to validate their code locally. However, it is equally important to have a test runner in your CI/CD pipeline.
 
 ```yml
-# Simple github-actions example
+# Simple GitHub-actions example
 name: Node.js CI
 
 on:
@@ -64,9 +64,9 @@ jobs:
 
 This way you can ensure no old code is broken unintentionally. Even when you forget about running the tests locally.
 
-#### 🚩 Tests are treated as second class citizens
+#### 🚩 Tests are treated as second-class citizens
 
-When tests are stored away in a seperate a folder it makes them harder to find and easier to forget about.
+When tests are stored away in a separate folder it makes them harder to find and easier to forget about.
 
 There is no constant nudge to write tests.
 
@@ -118,7 +118,7 @@ Some indicators I have found that you throw out clean code principles when writi
 
 1. Ignoring test files in your linting
 
-Sure, this makes your life easier in the short term. But over the life-span of a project you will end up with a lot of unmaintainable tests (read technical debt) you have created yourself unnecessarily.
+Sure, this makes your life easier in the short term. But over the lifespan of a project you will end up with a lot of unmaintainable tests (read technical debt) you have created yourself unnecessarily.
 
 ```typescript
 {
@@ -130,7 +130,7 @@ Sure, this makes your life easier in the short term. But over the life-span of a
 
 Tests can be considered documentation itself when written properly.
 
-Why make it harder for the next person, which is most likey going to be you, to understand what is going on?
+Why make it harder for the next person, which is most likely going to be you, to understand what is going on?
 
 ```typescript
 it("should do the thing", () => {
@@ -156,7 +156,7 @@ This makes it easier to skim over the tests to see what is being tested and what
 A good pattern to follow is the [_Arrange, Act, Assert_](https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/) pattern.
 
 ```typescript
-it("should plot a curce between two data points", () => {
+it("should plot a curve between two data points", () => {
   // Arrange
   const pointA = [1, 10];
   const pointB = [2, 50];
@@ -199,7 +199,7 @@ it("should test some other thing", () => {
 
 Tests should be
 
-- a) **independant** - `it("should not rely on the outcome of another test")`
+- a) **independent** - `it("should not rely on the outcome of another test")`
 - b) **repeatable** - `it("should be runnable in any environment")`
 - c) **self-validating** - `it("should return a clear pass or fail result")`
 
@@ -258,13 +258,13 @@ describe(doSomeOtherThing.name, () => {
 });
 ```
 
-Yes, the test file is significantly longer than the original example. But it is easier to follow the intents of each test. And as a bonus, when a test fails you can pinpoint the issue much faster.
+Yes, the test file is significantly longer than the original example but it is easier to follow the intent of each test. And as a bonus, when a test fails you can pinpoint the issue much faster.
 
 #### 🚩 Coverage !== Confidence
 
 Hitting a certain percentage of coverage does not mean your software is properly tested.
 
-The following code has a **80% coverage**, as this seems to be the general (mandatory) coverage goal.
+The following code has **80% coverage**, as this seems to be the general (mandatory) coverage goal.
 
 ```typescript
 // src/test-me.ts
@@ -304,7 +304,7 @@ describe(TestMe.name, () => {
 });
 ```
 
-But what are you actually testing here? If the JavaScript constructor still works?
+But what are you testing here? Does the JavaScript constructor still work?
 
 Let's have a look at the next example:
 
@@ -328,7 +328,7 @@ And boom, you have **100% coverage**! But you are missing out on testing the edg
 
 Setting a (mandatory) coverage percentage is a ~stupid~ bad idea. More often than not this will lead to poorer tests just for the sake of increasing the coverage.
 
-I would not go as far as to [not write any unit tests](https://www.youtube.com/watch?v=ZGKGb109-I4) though, just be [thoughtful on _what_ you are testing](https://www.youtube.com/watch?v=IInciWyU74U).
+I would not go as far as to [not write any unit tests](https://www.youtube.com/watch?v=ZGKGb109-I4) though, just be [thoughtful about _what_ you are testing](https://www.youtube.com/watch?v=IInciWyU74U).
 
 ---
 
@@ -338,9 +338,9 @@ Wow, you made it this far, have a <Cookie name="testing" /> before I continue wi
 
 ## Using specialized equipment
 
-Being new in testing, or development for that matter, can be overwhelming. And although you can [generate your tests with AI ](https://www.jetbrains.com/help/idea/generate-tests.html). I think there are other tools out there which enable you to write better tests youself.
+Being new in testing, or development for that matter, can be overwhelming. And although you can [generate your tests with AI ](https://www.jetbrains.com/help/idea/generate-tests.html). I think there are other tools out there which enable you to write better tests yourself.
 
-The list below is not exhaustive, but they will give you a good starting point.
+The list below is not exhaustive, but it will give you a good starting point.
 
 ### Build for speed
 
@@ -348,7 +348,7 @@ Time moves on, and so do our tools.
 
 Most of us do not use [`chai`](https://www.chaijs.com) or [`mocha`](https://mochajs.org/) anymore to write and run our tests. It is quite common to see [`jest`](https://jestjs.io/) being the work-horse nowadays.
 
-> Test should be fast. They should run quickly. When tests run slow, you won't want to run them frequently. If you don't run them frequently, you won't find problems early enough to fix them easily. You won't feel as free to clean up the code. Eventually the code will begin to rot.
+> Tests should be fast. They should run quickly. When tests run slow, you won't want to run them frequently. If you don't run them frequently, you won't find problems early enough to fix them easily. You won't feel as free to clean up the code. Eventually, the code will begin to rot.
 >
 > <cite>Clean Code: A Handbook of Agile Software Craftsmanship</cite>
 
@@ -381,7 +381,7 @@ fetch("https://api.example.com")
   });
 ```
 
-You can write a lot safe-guards and unit tests to validate the data you receive is of `MyType` and otherwise it should throw an error.
+You can write a lot of safeguards and unit tests to validate the data you receive is of `MyType` otherwise it should throw an error.
 
 ```typescript
 describe("fetchData", () => {
@@ -405,7 +405,7 @@ describe("fetchData", () => {
 });
 ```
 
-But instead you can use a schema validator like [`zod`](https://zod.dev) or [yup](https://github.com/jquense/yup) to parse and validate the data you receive.
+Instead, you can use a schema validator like [`zod`](https://zod.dev) or [yup](https://github.com/jquense/yup) to parse and validate the data you receive.
 
 ```typescript
 import { z } from "zod";
@@ -427,9 +427,9 @@ This will save a lot of effort in validating the data itself and, in my opinion,
 
 ### Passing objects
 
-Writing clean tests can become tedious when you have to pass a whole object while your tests only needs one on the properties.
+Writing clean tests can become tedious when you have to pass a whole object while your tests only need one of the properties.
 
-What is see happening a lot is the following:
+What is seen happening a lot is the following:
 
 ```typescript
 describe("Annoying boilerplate", () => {
@@ -463,7 +463,7 @@ describe("Annoying boilerplate", () => {
 });
 ```
 
-A sollution I used before was to make use of the [builder pattern](https://refactoring.guru/design-patterns/builder) to generate the objects for the tests.
+A solution I used before was to make use of the [builder pattern](https://refactoring.guru/design-patterns/builder) to generate the objects for the tests.
 
 ```typescript
 class MyTestBuilder {
@@ -491,7 +491,7 @@ class MyTestBuilder {
 }
 ```
 
-This allows you to create a `MyType` object with default values and override them when needed. This can be used in the following way:
+This allows you to create a `MyType` object with default values and override them when needed. This can be used in the following ways:
 
 ```typescript
 describe("Building your tests", () => {
@@ -542,19 +542,19 @@ As you are working with Typescript, there is a big change you will need to test 
 
 You might be familiar with tools such as [`storybook`](https://storybook.js.org/docs/writing-tests/test-runner), [`cypress`](https://www.cypress.io) or [`playwright`](https://playwright.dev).
 
-These tools are powerfull in their own right, but I think they are _bloatware_ when writing unit tests.
+These tools are powerful in their own right, but I think they are _bloatware_ when writing unit tests.
 
-[`@testing-library`](https://testing-library.com) are _"simple and complete testing utilities that encourage good testing practices"_ which allows you to test the your DOM.
+[`@testing-library`](https://testing-library.com) are _"simple and complete testing utilities that encourage good testing practices"_ which allow you to test the DOM.
 
 ### Code coverage
 
-Altough I am [against setting coverage targets](#-coverage--confidence), it is valuable to know what parts of your code are tested and which are not.
+Although I am [against setting coverage targets](#-coverage--confidence), it is valuable to know what parts of your code are tested and which are not.
 
 [Codecov](https://about.codecov.io) or [Sonarqube](https://www.sonarsource.com/products/sonarqube/) can give you these insights. You can use it to make educated decisions on the state of your codebase and determine where to focus your testing efforts.
 
 ## Conducting simulations
 
-The beaty of testing is that you can _mock_ (simulate) almost everything. This allows you to put your system under stress and force it into states that are hard(er) to reproduce in real life.
+The beauty of testing is that you can _mock_ (simulate) almost everything. This allows you to put your system under stress and force it into states that are hard(er) to reproduce in real life.
 
 ```typescript
 const fetchData = async (triesLeft = 1) => {
@@ -612,9 +612,9 @@ You can go even deeper by [mocking any interface or object ](https://www.npmjs.c
 
 ## Performing real-world trials
 
-Testing is great, but you are conducting unit test they are placed in a vacuum.
+Testing is great, but if you are conducting unit tests they are placed in a vacuum.
 
-Software does not exist in a vacuum, and things **will** break.
+Software does not exist in a vacuum, and things **will** break when placed in the real world. You should make sure to have some form of strategy for this.
 
 > When you get a bug report, start by writing a unit test that exposes the bug.
 >

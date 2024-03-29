@@ -279,7 +279,7 @@
 
 <style>
   body {
-    @apply cursor-none;
+    @apply md:cursor-none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -297,9 +297,6 @@
     transition-timing-function: cubic-bezier(0.25, 0.25, 0.42, 1);
     transition-property: width, height, transform;
     will-change: transform;
-  }
-
-  #my-cursor {
     width: var(--width);
     height: var(--height);
     transform: translate(
@@ -315,7 +312,7 @@
   }
 
   #my-cursor::after {
-    @apply absolute inset-0 border-8 border-yellow-400;
+    @apply absolute inset-0 hidden border-8 border-yellow-400 md:block;
     content: "";
     border-radius: var(--radius);
     opacity: var(--scale);

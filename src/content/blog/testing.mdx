@@ -385,7 +385,7 @@ You can write a lot of safeguards and unit tests to validate the data you receiv
 
 ```typescript
 describe("fetchData", () => {
-  it("should throw and error when `property` is missing", async () => {
+  it("should throw an error when `property` is missing", async () => {
     jest.spyOn(global, "fetch").mockResolvedValue({
       json: () => Promise.resolve({}),
     });

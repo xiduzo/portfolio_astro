@@ -184,6 +184,10 @@ pre.has-focused code .line:not(.focused) {
   filter: blur(0.1rem);
 }
 
+p > code {
+  @apply rounded-md bg-zinc-300 px-2 py-1 dark:bg-zinc-800;
+}
+
 .other-cursor {
   @apply absolute left-0 top-0 z-30 flex h-10 w-10 transform-gpu justify-center rounded-full border-4 ease-in-out;
   transition: transform 0.3s ease-in-out;

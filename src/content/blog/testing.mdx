@@ -19,7 +19,7 @@ Although there are [many forms of testing](https://medium.com/codex/types-of-tes
 
 ## The software engineer
 
-In the physical world we rely on engineers to be due diligence in their work. We wouldn't like to have a bridge collapse because it was not tested properly, right?
+In the physical world you rely on engineers to be due diligence in their work. You wouldn't like to have a bridge collapse because it was not tested properly, right?
 
 So how is it that I come across many _software engineers_ that do not test their code?
 
@@ -96,7 +96,7 @@ project-root/
 
 #### 🚩 Test code is not <em class="ml-2">clean</em>
 
-Why do we go to great lengths to write clean, maintainable code, but throw all of this out of the window when writing tests?
+Why do you go to great lengths to write clean, maintainable code, but throw all of this out of the window when writing tests?
 
 Test code should adhere to the same standards of quality as the code it is testing.
 
@@ -245,7 +245,7 @@ describe(doSomeOtherThing.name, () => {
   `(
     "Returns '$expected' when `someGlobalValue` is $someGlobalValue",
     ({ expected, $someGlobalValue }) => {
-      // We don't rely on the outcome of the previous test
+      // No more coupling on the outcome of the previous test
       jest.spyOn(global, "someGlobalValue").mockReturnValue(someGlobalValue);
 
       const result = doSomeOtherThing(someGlobalValue, 5);
@@ -262,7 +262,7 @@ Yes, the test file is significantly longer than the original example. But it is 
 
 Hitting a certain percentage of coverage does not mean your software is properly tested.
 
-The following code has a `80%` coverage, as this seems to be the general (mandatory) coverage goal.
+The following code has a **80% coverage**, as this seems to be the general (mandatory) coverage goal.
 
 ```typescript
 // src/test-me.ts
@@ -302,7 +302,7 @@ describe(TestMe.name, () => {
 });
 ```
 
-But what are we actually testing here? If the JavaScript constructor still works?
+But what are you actually testing here? If the JavaScript constructor still works?
 
 Let's have a look at the next example:
 
@@ -322,7 +322,7 @@ describe(add.name, () => {
 });
 ```
 
-And boom, we have `100%` coverage. But we are missing out on testing the edge cases. What if the array is empty? What if the array only has one element?
+And boom, you have **100% coverage**! But you are missing out on testing the edge cases. What if the array is empty? What if the array only has one element?
 
 Setting a (mandatory) coverage percentage is a ~stupid~ bad idea. More often than not this will lead to poorer tests just for the sake of increasing the coverage.
 
@@ -330,7 +330,7 @@ I would not go as far as to [not write any unit tests](https://www.youtube.com/w
 
 ---
 
-Wow, you made it this far, have a <Cookie name="testing" /> before we continue with more practical tips.
+Wow, you made it this far, have a <Cookie name="testing" /> before I continue with more practical tips.
 
 ---
 
@@ -338,7 +338,9 @@ Wow, you made it this far, have a <Cookie name="testing" /> before we continue w
 
 Being new in testing, or development for that matter, can be overwhelming. And although you can [generate your tests with AI ](https://www.jetbrains.com/help/idea/generate-tests.html). I think there are other tools out there which enable you to write better tests youself.
 
-### Vitest
+The list below is not exhaustive, but they will give you a good starting point.
+
+### Build for speed
 
 Time moves on, and so do our tools.
 
@@ -350,7 +352,7 @@ Most of us do not use [`chai`](https://www.chaijs.com) or [`mocha`](https://moch
 
 [Vitest](https://vitest.dev) is a drop-in replacement for Jest all while being faster.
 
-### Zod
+### Validation
 
 A common way your code can break is when the data you receive is not what you expect. You should treat all external data as untrusted.
 
@@ -377,7 +379,7 @@ fetch("https://api.example.com")
   });
 ```
 
-We can write a lot safe-guards and unit tests to validate the data we receive is of `MyType` and otherwise it should throw an error.
+You can write a lot safe-guards and unit tests to validate the data you receive is of `MyType` and otherwise it should throw an error.
 
 ```typescript
 describe("fetchData", () => {
@@ -396,10 +398,12 @@ describe("fetchData", () => {
 
     expect(fetchData()).rejects.toThrow("Another thing is not a number");
   });
+
+  // ... etc
 });
 ```
 
-We could also use [`zod`](https://zod.dev) to validate the data we receive.
+But instead you can use a schema validator like [`zod`](https://zod.dev) or [yup](https://github.com/jquense/yup) to parse and validate the data you receive.
 
 ```typescript
 import { z } from "zod";
@@ -419,16 +423,16 @@ fetch("https://api.example.com")
 
 This will save a lot of effort in validating the data itself and, in my opinion, does not require any unit tests besides the error handling anymore.
 
-### Shoehorn
+### Passing objects
 
-Writing clean tests can become tedious when you have to write a lot of boilerplate code just to pass in some variables/objects to a method.
+Writing clean tests can become tedious when you have to pass a whole object while your tests only needs one on the properties.
 
 What is see happening a lot is the following:
 
 ```typescript
 describe("Annoying boilerplate", () => {
   it("can type-cast to make the test work", () => {
-    const result = new MyTest({
+    const result = testMe({
       property: "foo",
     } as any as MyType);
 
@@ -437,8 +441,19 @@ describe("Annoying boilerplate", () => {
 
   it("can @ts-ignore to make the test work", () => {
     // @ts-ignore
-    const result = new MyTest({
+    const result = testMe({
       property: "foo",
+    });
+
+    expect(result).toBe(true);
+  });
+
+  it("Can put the whole object to make the test work", () => {
+    const result = testMe({
+      property: "foo", // Test only requires this property-
+      nestedProperty: {
+        anotherProperty: "bar",
+      },
     });
 
     expect(result).toBe(true);
@@ -446,7 +461,64 @@ describe("Annoying boilerplate", () => {
 });
 ```
 
-But sometimes we just need _to force something into a space_. [`@total-typescript/shoehorn`](https://www.npmjs.com/package/@total-typescript/shoehorn) is the tool you are looking for. It will allow you to pass partial data in tests while keeping TypeScript happy.
+A sollution I used before was to make use of the [builder pattern](https://refactoring.guru/design-patterns/builder) to generate the objects for the tests.
+
+```typescript
+class MyTestBuilder {
+  private property: string = "foo";
+  private nestedProperty: { anotherProperty: string } = {
+    anotherProperty: "bar",
+  };
+
+  public withProperty(property: string): MyTestBuilder {
+    this.property = property;
+    return this;
+  }
+
+  public withNestedProperty(nestedProperty: { anotherProperty: string }) {
+    this.nestedProperty = nestedProperty;
+    return this;
+  }
+
+  public build(): MyType {
+    return {
+      property: this.property,
+      nestedProperty: this.nestedProperty,
+    };
+  }
+}
+```
+
+This allows you to create a `MyType` object with default values and override them when needed. This can be used in the following way:
+
+```typescript
+describe("Building your tests", () => {
+  it("can pass the default values", () => {
+    const result = testMe(new MyTestBuilder().build());
+
+    expect(result).toBe(true);
+  });
+
+  it("can set specific properties for your test", () => {
+    const result = testMe(new MyTestBuilder().withProperty("bar").build());
+
+    expect(result).toBe(false);
+  });
+
+  it("can set multuple properties", () => {
+    const result = testMe(
+      new MyTestBuilder()
+        .withProperty("bar")
+        .withNestedProperty({ anotherProperty: "foo" })
+        .build()
+    );
+
+    expect(result).toBe(false);
+  });
+});
+```
+
+But sometimes you just need _to force something into a space_. [`@total-typescript/shoehorn`](https://www.npmjs.com/package/@total-typescript/shoehorn) is the tool you are looking for. It will allow you to pass partial data in tests while keeping TypeScript happy.
 
 ```typescript
 import { fromPartial } from "@total-typescript/shoehorn";
@@ -460,25 +532,27 @@ describe("No more boilerplate", () => {
 });
 ```
 
-### Testing-library
+This removes all the boilerplate code and allows you to focus on the actual test.
+
+### UI testing
 
 As you are working with Typescript, there is a big change you will need to test some frontend code as well.
 
-Some of you might be familiar with [`storybook`](https://storybook.js.org/docs/writing-tests/test-runner), [`cypress`](https://www.cypress.io) or [`playwright`](https://playwright.dev).
+You might be familiar with tools such as [`storybook`](https://storybook.js.org/docs/writing-tests/test-runner), [`cypress`](https://www.cypress.io) or [`playwright`](https://playwright.dev).
 
-These tools are powerfull in their own right, but I think they are bloatware when writing unit tests.
+These tools are powerfull in their own right, but I think they are _bloatware_ when writing unit tests.
 
 [`@testing-library`](https://testing-library.com) are _"simple and complete testing utilities that encourage good testing practices"_ which allows you to test the your DOM.
 
-### Codecov
+### Code coverage
 
 Altough I am [against setting coverage targets](#-coverage--confidence), it is valuable to know what parts of your code are tested and which are not.
 
-[codecov](https://about.codecov.io) will give you these insights. You can use it to make educated decisions on the state of your codebase and determine where to focus your testing efforts.
+[Codecov](https://about.codecov.io) or [Sonarqube](https://www.sonarsource.com/products/sonarqube/) can give you these insights. You can use it to make educated decisions on the state of your codebase and determine where to focus your testing efforts.
 
 ## Conducting simulations
 
-The beaty of testing is that you can simulate (mock) almost everything. This allows you to put your system under stress and force it into states that are hard(er) to reproduce in real life.
+The beaty of testing is that you can _mock_ (simulate) almost everything. This allows you to put your system under stress and force it into states that are hard(er) to reproduce in real life.
 
 ```typescript
 const fetchData = async (triesLeft = 1) => {
@@ -486,6 +560,7 @@ const fetchData = async (triesLeft = 1) => {
     const response = await fetch("https://api.example.com");
     const data = await response.json();
     const parsed = MyType.parse(data);
+
     saveMyData(parsed);
   } catch (error) {
     if (triesLeft > 0) {

@@ -9,7 +9,9 @@ heroImage: "/blog/testing/header-icon.svg"
 
 import Cookie from '../../components/Cookie.astro'
 
-Although there are [many forms of testing](https://medium.com/codex/types-of-testing-de4cdd98df77), in this article I will focus on unit testing. I believe they are the easiest to setup, easy to write/maintain and when done properly [end-to-end testing may become obsolete](https://www.youtube.com/watch?v=QFCHSEHgqFE).
+Although there are [many forms of testing](https://medium.com/codex/types-of-testing-de4cdd98df77), in this article I will focus on unit testing -- in TypeScript.
+
+I believe they are the easiest to setup, easy to write/maintain and when done properly [end-to-end testing may become obsolete](https://www.youtube.com/watch?v=QFCHSEHgqFE).
 
 ---
 
@@ -179,7 +181,7 @@ When a test is _doing_ too many things at once it becomes harder to pinpoint wha
 
 ```typescript
 it("should test everything", () => {
-  // Should set global `someGlobalValue` to `true`
+  // should set global `someGlobalValue` to `true`
   const result = doSomething("foo", process.env.BAR); // Relies on local DB
 
   expect(result).toBe(false);
@@ -210,7 +212,7 @@ describe(doSomething.name, () => {
     ${"foo"} | ${"bar"} | ${false}
     ${"bar"} | ${"foo"} | ${true}
   `(
-    "Returns $expected for $input1 and $input2",
+    "should return $expected for $input1 and $input2",
     ({ input1, input2, expected }) => {
       const result = doSomething(input1, input2);
 
@@ -218,19 +220,19 @@ describe(doSomething.name, () => {
     }
   );
 
-  it(`does should call ${myMethod.name}`, () => {
+  it(`should call ${myMethod.name}`, () => {
     doSomething("foo", "bar");
 
     expect(myMethod).toHaveBeenCalledWith({ foo: "foo", bar: "bar" });
   });
 
-  it(`does not call ${myOtherMethod.name} when passing "foo" and "bar"`, () => {
+  it(`should not call ${myOtherMethod.name} when passing "foo" and "bar"`, () => {
     doSomething("foo", "bar");
 
     expect(myOtherMethod).not.toHaveBeenCalled();
   });
 
-  it(`does call ${myOtherMethod.name} when passing "bar" and "foo"`, () => {
+  it(`should call ${myOtherMethod.name} when passing "bar" and "foo"`, () => {
     doSomething("bar", "foo");
 
     expect(myOtherMethod).toHaveBeenCalledTimes(1);
@@ -243,7 +245,7 @@ describe(doSomeOtherThing.name, () => {
     ${true}         | ${"foo"}
     ${false}        | ${"bar"}
   `(
-    "Returns '$expected' when `someGlobalValue` is $someGlobalValue",
+    "should return $expected when `someGlobalValue` is $someGlobalValue",
     ({ expected, $someGlobalValue }) => {
       // No more coupling on the outcome of the previous test
       jest.spyOn(global, "someGlobalValue").mockReturnValue(someGlobalValue);

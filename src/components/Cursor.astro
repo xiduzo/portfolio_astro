@@ -288,6 +288,10 @@
     @apply cursor-pointer;
   }
 
+  body:has(#wrapper) #my-cursor {
+    @apply !z-50;
+  }
+
   body:not(body:hover) #my-cursor::after {
     @apply scale-0 opacity-0;
   }

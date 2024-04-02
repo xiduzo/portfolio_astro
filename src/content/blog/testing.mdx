@@ -39,7 +39,9 @@ This one is kind of obvious, but when a project has no test runner setup it does
 
 Why would you bother writing tests as this project clearly does not find them important?
 
-This is true for a local setup which enables developers to validate their code locally. However, it is equally important to have a test runner in your CI/CD pipeline.
+This is true for a local setup which enables developers to validate their code locally.
+
+It is equally important to have a test runner in your CI/CD pipeline.
 
 ```yml
 # Simple GitHub-actions example
@@ -62,7 +64,7 @@ jobs:
       - run: npm run test
 ```
 
-This way you can ensure no old code is broken unintentionally. Even when you forget about running the tests locally.
+This way you can ensure no old code is broken unintentionally. Even when you or a team member forgot about running the tests locally.
 
 #### 🚩 Tests are treated as second-class citizens
 
@@ -118,11 +120,11 @@ Some indicators I have found that you throw out clean code principles when writi
 
 1. Ignoring test files in your linting
 
-Sure, this makes your life easier in the short term. But over the lifespan of a project you will end up with a lot of unmaintainable tests (read technical debt) you have created yourself unnecessarily.
+Sure, this makes your life easier in the short term. But over the lifespan of a project you will end up with a lot of unmaintainable tests (read technical debt) that you have created yourself unnecessarily.
 
 ```typescript
 {
-    "ignorePatterns": ["**/*.test.ts"],
+    "ignorePatterns": ["**/*.test.ts"], // Don't do this
 }
 ```
 
@@ -153,7 +155,7 @@ Act like you are writing _"normal"_ code.
 
 This makes it easier to skim over the tests to see what is being tested and what the expected outcome is.
 
-A good pattern to follow is the [_Arrange, Act, Assert_](https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/) pattern.
+The [_Arrange, Act, Assert_](https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/) pattern can help you structure your tests.
 
 ```typescript
 it("should plot a curve between two data points", () => {
@@ -204,7 +206,9 @@ Tests should be
 - c) **self-validating** - `it("should return a clear pass or fail result")`
 
 ```typescript
-jest.mock("myLocalDbAdapter"); // Make sure the tests can run anywhere
+// Make sure the tests can run anywhere,
+// even without a local DB
+jest.mock("myLocalDbAdapter");
 
 describe(doSomething.name, () => {
   it.each`
@@ -342,6 +346,8 @@ Being new in testing, or development for that matter, can be overwhelming. And a
 
 The list below is not exhaustive, but it will give you a good starting point.
 
+The examples given below are for testing in JavaScript (TypeScript). However, the principles can be applied to any language.
+
 ### Build for speed
 
 Time moves on, and so do our tools.
@@ -352,7 +358,7 @@ Most of us do not use [`chai`](https://www.chaijs.com) or [`mocha`](https://moch
 >
 > <cite>Clean Code: A Handbook of Agile Software Craftsmanship</cite>
 
-[Vitest](https://vitest.dev) is a drop-in replacement for Jest all while being faster.
+In order to go even faster you can use [Vitest](https://vitest.dev) as a drop-in replacement for Jest. This is expecialy useful for when your test suite grows.
 
 ### Validation
 
@@ -463,30 +469,41 @@ describe("Annoying boilerplate", () => {
 });
 ```
 
-A solution I used before was to make use of the [builder pattern](https://refactoring.guru/design-patterns/builder) to generate the objects for the tests.
+And this works just fine, untill you start changing the `MyType`. A solution I used before was to make use of the [builder pattern](https://refactoring.guru/design-patterns/builder) to generate the objects for the tests.
 
 ```typescript
-class MyTestBuilder {
-  private property: string = "foo";
-  private nestedProperty: { anotherProperty: string } = {
-    anotherProperty: "bar",
-  };
+class Builder<T> {
+  constructor(protected readonly obj: T) {}
 
-  public withProperty(property: string): MyTestBuilder {
-    this.property = property;
+  public build() {
+    return this.obj;
+  }
+}
+
+class MyTypeBuilder extends Builder<MyType> {
+  constructor() {
+    super({
+      property: "foo",
+      nestedProperty: {
+        anotherProperty: "bar",
+      },
+    });
+  }
+
+  public withProperty(property: string) {
+    this.obj.property = property;
     return this;
   }
 
   public withNestedProperty(nestedProperty: { anotherProperty: string }) {
-    this.nestedProperty = nestedProperty;
+    this.obj.nestedProperty = nestedProperty;
     return this;
   }
 
-  public build(): MyType {
-    return {
-      property: this.property,
-      nestedProperty: this.nestedProperty,
-    };
+  public withExplicitCustomState() {
+    this.obj.property = "baz";
+    this.obj.nestedProperty = { anotherProperty: "boo" };
+    return this;
   }
 }
 ```
@@ -513,6 +530,14 @@ describe("Building your tests", () => {
         .withProperty("bar")
         .withNestedProperty({ anotherProperty: "foo" })
         .build()
+    );
+
+    expect(result).toBe(false);
+  });
+
+  it("can set a custom explicit state", () => {
+    const result = testMe(
+      new MyTestBuilder().withExplicitCustomState().build()
     );
 
     expect(result).toBe(false);

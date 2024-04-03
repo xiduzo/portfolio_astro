@@ -4,7 +4,7 @@
 }
 
 body {
-  @apply bg-slate-100 dark:bg-stone-900 overflow-x-hidden;
+  @apply overflow-x-hidden bg-slate-100 dark:bg-stone-900;
   font-family: "Space Grotesk", "Arial", "Helvetica", "sans-serif", sans-serif;
 }
 
@@ -37,7 +37,12 @@ main {
 }
 
 a {
-  @apply inline-block p-6 text-lg transition-all focus:bg-yellow-400 md:p-4 focus:outline-none dark:focus:text-slate-900;
+  @apply inline-block p-6 text-lg transition-all focus:bg-yellow-400 focus:outline-none active:bg-yellow-400 md:p-4 dark:focus:text-slate-900 dark:active:text-slate-900;
+}
+
+a:active > *,
+a:focus > * {
+  @apply bg-yellow-400 dark:text-slate-900;
 }
 
 a[target="_blank"]:hover {
@@ -51,11 +56,11 @@ a[target="_blank"]:hover {
 
 .container p a,
 .container li a {
-  @apply py-1.5 px-2.5 -mx-1.5 text-2xl;
+  @apply -mx-1.5 px-2.5 py-1.5 text-2xl;
 }
 
 :not(footer).container ul li > a::before {
-  @apply inline-block pr-2 pl-0 duration-100 transition-all;
+  @apply inline-block pl-0 pr-2 transition-all duration-100;
   content: "👈 ";
   transform-style: preserve-3d;
 }
@@ -66,14 +71,15 @@ a[target="_blank"]:hover {
 }
 
 .container h2 type-writer a {
-  @apply py-1.5 px-2.5 -mx-2 text-3xl;
+  @apply -mx-2 px-2.5 py-1.5 text-3xl;
 }
 
 .container p span:has(img) {
   @apply mt-32;
 }
+
 .container p:nth-of-type(3n + 1) span img {
-  @apply transform -scale-x-100;
+  @apply -scale-x-100 transform;
 }
 
 .footnotes ol::before {
@@ -116,7 +122,7 @@ li::marker {
 }
 
 hr + hr + p:has(picture) {
-  @apply w-screen max-w-[100vw] relative;
+  @apply relative w-screen max-w-[100vw];
   left: calc(-50vw + 50%);
 }
 
@@ -139,12 +145,12 @@ pre code .line .highlighted-word {
 pre code .line.highlighted,
 pre code .line.diff.remove,
 pre code .line.diff.add {
-  @apply -mx-6 px-6 inline-block;
+  @apply -mx-6 inline-block px-6;
   width: calc(100% + 48px);
 }
 
 pre code .line .highlighted-word {
-  @apply px-1 py-0.5 border rounded-md border-slate-500;
+  @apply rounded-md border border-slate-500 px-1 py-0.5;
 }
 
 pre code .line .highlighted-word,
@@ -162,7 +168,7 @@ pre code .line.diff.remove {
 }
 
 pre code .line.diff.remove::before {
-  @apply content-['-'] text-red-300 -ml-2.5;
+  @apply -ml-2.5 text-red-300 content-['-'];
 }
 
 pre code .line.diff.add {
@@ -170,7 +176,7 @@ pre code .line.diff.add {
 }
 
 pre code .line.diff.add::before {
-  @apply content-['+'] text-green-300 -ml-2.5;
+  @apply -ml-2.5 text-green-300 content-['+'];
 }
 
 pre.has-focused code .line:not(.focused) {
@@ -178,8 +184,23 @@ pre.has-focused code .line:not(.focused) {
   filter: blur(0.1rem);
 }
 
+p > code {
+  @apply rounded-md bg-zinc-300 px-2 py-1 dark:bg-zinc-800;
+}
+
 .other-cursor {
-  @apply absolute left-0 top-0 z-30 transform-gpu ease-in-out w-14 h-14 border-8 rounded-full  border-opacity-25 flex justify-center;
-  transition: all 0.3s ease-in-out;
+  @apply absolute left-0 top-0 z-30 flex h-10 w-10 transform-gpu justify-center rounded-full border-4 ease-in-out;
+  transition: transform 0.3s ease-in-out;
   will-change: transform;
+  border-color: var(--color);
+  color: var(--color);
+}
+
+.other-cursor::before {
+  @apply absolute top-[100%] mt-0.5 whitespace-nowrap font-black opacity-0 transition-all duration-150 ease-out;
+  content: var(--name);
+}
+
+.other-cursor:hover:before {
+  @apply mt-2 opacity-100 duration-300 ease-in;
 }

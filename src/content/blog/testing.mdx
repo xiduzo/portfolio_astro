@@ -1,0 +1,646 @@
+---
+title: "Testing"
+description: "And become a better engineer"
+pubDate: "Apr 3 2024"
+headerColor: "#7fd8be"
+contrastColor: "#f48498"
+heroImage: "/blog/testing/header-icon.svg"
+---
+
+import Cookie from '../../components/Cookie.astro'
+
+Although there are [many forms of testing](https://medium.com/codex/types-of-testing-de4cdd98df77), in this article I will focus on unit testing -- in TypeScript.
+
+I believe they are the easiest to setup, easy to write/maintain and when done properly [end-to-end testing may become obsolete](https://www.youtube.com/watch?v=QFCHSEHgqFE).
+
+---
+
+> Engineers conduct tests and experiments to evaluate the performance, safety, and reliability of products or systems. This may involve using specialized equipment, conducting simulations, or performing real-world trials.
+>
+> <cite>[ChatGPT](https://chat.openai.com/share/97ddf631-1171-4c18-9f70-40e2b6f30e8b)</cite>
+
+## The software engineer
+
+In the physical world, you rely on engineers to be due diligent in their work. You wouldn't like to have a bridge collapse because it was not tested properly, right?
+
+So how is it that I come across many _software engineers_ who not test their code?
+
+It is our job that the code we write works as intended, and -preferably- keeps on working as intended after changes have been made.
+
+This is, to me, part of the _engineering_ mindset.
+
+### Some 🚩🚩🚩🚩
+
+Every project (-team) is different, but there are some common pitfalls that I have seen over and over again which should raise some red flags for you.
+
+#### 🚩 No test runner has been setup
+
+This one is kind of obvious, but when a project has no test runner setup it does not motivate (new) team members to write tests.
+
+Why would you bother writing tests as this project clearly does not find them important?
+
+This is true for a local setup which enables developers to validate their code locally.
+
+It is equally important to have a test runner in your CI/CD pipeline.
+
+```yml
+# Simple GitHub-actions example
+name: Node.js CI
+
+on:
+  pull_request:
+    branches: [main] # Can extend to other branches
+
+jobs:
+  is-code-okay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 18
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+      - run: npm ci
+      - run: npm run test
+```
+
+This way you can ensure no old code is broken unintentionally. Even when you or a team member forgot about running the tests locally.
+
+#### 🚩 Tests are treated as second-class citizens
+
+When tests are stored away in a separate folder it makes them harder to find and easier to forget about.
+
+There is no constant nudge to write tests.
+
+```
+project-root/
+│
+├── src/
+│   ├── app.ts
+│   └── utils.ts
+│
+└── test/
+    ├── app.test.ts
+    └── utils.test.ts
+```
+
+Try placing the tests as part of the source code, next to the code they are testing.
+
+This way the project itself tells you _"we care about tests"_ just by working on it.
+
+```
+project-root/
+│
+└── src/
+    ├── app.ts
+    ├── app.test.ts
+    ├── utils.ts
+    └── utils.test.ts
+```
+
+#### 🚩 Test code is not <em class="ml-2">clean</em>
+
+Why do you go to great lengths to write clean, maintainable code, but throw all of this out of the window when writing tests?
+
+Test code should adhere to the same standards of quality as the code it is testing.
+
+> Indeed, the ratio of time spent reading versus writing is well over 10 to 1. We are constantly reading old code as part of the effort to write new code. ...[Therefore,] making it easy to read makes it easier to write.
+>
+> <cite>Clean Code: A Handbook of Agile Software Craftsmanship</cite>
+
+> Any fool can write code that a computer can understand. Good programmers write code that humans can understand.
+>
+> <cite>Refactoring: Improving the Design of Existing Code</cite>
+
+---
+
+Some indicators I have found that you throw out clean code principles when writing tests:
+
+---
+
+1. Ignoring test files in your linting
+
+Sure, this makes your life easier in the short term. But over the lifespan of a project you will end up with a lot of unmaintainable tests (read technical debt) that you have created yourself unnecessarily.
+
+```typescript
+{
+    "ignorePatterns": ["**/*.test.ts"], // Don't do this
+}
+```
+
+2. Making the test (file) a puzzle by itself
+
+Tests can be considered documentation itself when written properly.
+
+Why make it harder for the next person, which is most likely going to be you, to understand what is going on?
+
+```typescript
+it("should do the thing", () => {
+  const a = [1, 10];
+  const b = [2, 50];
+
+  // @ts-ignore
+  const d = calculateDistance(a, b);
+  const c = plotCurve(d, {} as unknown as MyOptions);
+
+  expect(c).toBe([
+    [1, 20],
+    [7, 18],
+    [3, 49],
+  ]);
+});
+```
+
+Act like you are writing _"normal"_ code.
+
+This makes it easier to skim over the tests to see what is being tested and what the expected outcome is.
+
+The [_Arrange, Act, Assert_](https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/) pattern can help you structure your tests.
+
+```typescript
+it("should plot a curve between two data points", () => {
+  // Arrange
+  const pointA = [1, 10];
+  const pointB = [2, 50];
+  const expectedCurve = [
+    [1, 20],
+    [7, 18],
+    [3, 49],
+  ];
+
+  // Act
+  const distance = calculateDistance(pointA, pointB, true);
+  const result = plotCurve(distance, { step: 3 });
+
+  // Assert
+  expect(result).toEqual(expectedCurve);
+});
+```
+
+3. The test has too many responsibilities
+
+When a test is _doing_ too many things at once it becomes harder to pinpoint what is going wrong when the tests start failing.
+
+```typescript
+it("should test everything", () => {
+  // should set global `someGlobalValue` to `true`
+  const result = doSomething("foo", process.env.BAR); // Relies on local DB
+
+  expect(result).toBe(false);
+  expect(myMethod).toHaveBeenCalledWith({ foo: "foo", bar: "bar" });
+  expect(myOtherMethod).not.toHaveBeenCalled();
+});
+
+it("should test some other thing", () => {
+  // Only works when the previous test has been run
+  const result = doSomeOtherThing(someGlobalValue, 5);
+
+  expect(result).toBe("foo");
+});
+```
+
+Tests should be
+
+- a) **independent** - `it("should not rely on the outcome of another test")`
+- b) **repeatable** - `it("should be runnable in any environment")`
+- c) **self-validating** - `it("should return a clear pass or fail result")`
+
+```typescript
+// Make sure the tests can run anywhere,
+// even without a local DB
+jest.mock("myLocalDbAdapter");
+
+describe(doSomething.name, () => {
+  it.each`
+    input1   | input2   | expected
+    ${"foo"} | ${"bar"} | ${false}
+    ${"bar"} | ${"foo"} | ${true}
+  `(
+    "should return $expected for $input1 and $input2",
+    ({ input1, input2, expected }) => {
+      const result = doSomething(input1, input2);
+
+      expect(result).toBe(expected);
+    }
+  );
+
+  it(`should call ${myMethod.name}`, () => {
+    doSomething("foo", "bar");
+
+    expect(myMethod).toHaveBeenCalledWith({ foo: "foo", bar: "bar" });
+  });
+
+  it(`should not call ${myOtherMethod.name} when passing "foo" and "bar"`, () => {
+    doSomething("foo", "bar");
+
+    expect(myOtherMethod).not.toHaveBeenCalled();
+  });
+
+  it(`should call ${myOtherMethod.name} when passing "bar" and "foo"`, () => {
+    doSomething("bar", "foo");
+
+    expect(myOtherMethod).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe(doSomeOtherThing.name, () => {
+  it.each`
+    someGlobalValue | expected
+    ${true}         | ${"foo"}
+    ${false}        | ${"bar"}
+  `(
+    "should return $expected when `someGlobalValue` is $someGlobalValue",
+    ({ expected, $someGlobalValue }) => {
+      // No more coupling on the outcome of the previous test
+      jest.spyOn(global, "someGlobalValue").mockReturnValue(someGlobalValue);
+
+      const result = doSomeOtherThing(someGlobalValue, 5);
+
+      expect(result).toBe(expected);
+    }
+  );
+});
+```
+
+Yes, the test file is significantly longer than the original example but it is easier to follow the intent of each test. And as a bonus, when a test fails you can pinpoint the issue much faster.
+
+#### 🚩 Coverage !== Confidence
+
+Hitting a certain percentage of coverage does not mean your software is properly tested.
+
+The following code has **80% coverage**, as this seems to be the general (mandatory) coverage goal.
+
+```typescript
+// src/test-me.ts
+import { deleteImportantData } from "./utils";
+
+class TestMe {
+  private shouldDeleteData: boolean = false;
+
+  constructor(
+    public readonly foo: number,
+    public readonly bar: string,
+    public readonly baz: boolean
+  ) {
+    if (foo > 10) {
+      this.shouldDeleteData = true;
+    }
+  }
+
+  public importantMethodToTest(): void {
+    if (this.shouldDeleteData) {
+      deleteImportantData();
+    }
+  }
+}
+
+// src/test-me.test.ts
+import { TestMe } from "./test-me";
+
+describe(TestMe.name, () => {
+  it("initializes properly", () => {
+    const testMe = new TestMe(11, "bar", true);
+
+    expect(testMe.foo).toBe(11);
+    expect(testMe.bar).toBe("bar");
+    expect(testMe.baz).toBe(true);
+  });
+});
+```
+
+But what are you testing here? Does the JavaScript constructor still work?
+
+Let's have a look at the next example:
+
+```typescript
+// src/add.ts
+function add(array: number[]) => {
+  return array[0] + array[1];
+}
+
+// src/add.test.ts
+describe(add.name, () => {
+  it("should add two numbers", () => {
+    const result = add([1, 2]);
+
+    expect(result).toBe(3);
+  });
+});
+```
+
+And boom, you have **100% coverage**! But you are missing out on testing the edge cases. What if the array is empty? What if the array only has one element?
+
+Setting a (mandatory) coverage percentage is a ~stupid~ bad idea. More often than not this will lead to poorer tests just for the sake of increasing the coverage.
+
+I would not go as far as to [not write any unit tests](https://www.youtube.com/watch?v=ZGKGb109-I4) though, just be [thoughtful about _what_ you are testing](https://www.youtube.com/watch?v=IInciWyU74U).
+
+---
+
+Wow, you made it this far, have a <Cookie name="testing" /> before I continue with more practical tips.
+
+---
+
+## Using specialized equipment
+
+Being new in testing, or development for that matter, can be overwhelming. And although you can [generate your tests with AI ](https://www.jetbrains.com/help/idea/generate-tests.html). I think there are other tools out there which enable you to write better tests yourself.
+
+The list below is not exhaustive, but it will give you a good starting point.
+
+The examples given below are for testing in JavaScript (TypeScript). However, the principles can be applied to any language.
+
+### Build for speed
+
+Time moves on, and so do our tools.
+
+Most of us do not use [`chai`](https://www.chaijs.com) or [`mocha`](https://mochajs.org/) anymore to write and run our tests. It is quite common to see [`jest`](https://jestjs.io/) being the work-horse nowadays.
+
+> Tests should be fast. They should run quickly. When tests run slow, you won't want to run them frequently. If you don't run them frequently, you won't find problems early enough to fix them easily. You won't feel as free to clean up the code. Eventually, the code will begin to rot.
+>
+> <cite>Clean Code: A Handbook of Agile Software Craftsmanship</cite>
+
+In order to go even faster you can use [Vitest](https://vitest.dev) as a drop-in replacement for Jest. This is expecialy useful for when your test suite grows.
+
+### Validation
+
+A common way your code can break is when the data you receive is not what you expect. You should treat all external data as untrusted.
+
+Given the following example
+
+```typescript
+fetch("https://api.example.com")
+  .then((response) => response.json())
+  .then((data) => {
+    if (!data.property) {
+      throw new Error("Property is missing");
+    }
+
+    if (typeof data.anotherThing !== "number") {
+      throw new Error("Another thing is not a number");
+    }
+
+    // ... etc
+
+    return data as MyType;
+  })
+  .catch((error) => {
+    // Error handling
+  });
+```
+
+You can write a lot of safeguards and unit tests to validate the data you receive is of `MyType` otherwise it should throw an error.
+
+```typescript
+describe("fetchData", () => {
+  it("should throw an error when `property` is missing", async () => {
+    jest.spyOn(global, "fetch").mockResolvedValue({
+      json: () => Promise.resolve({}),
+    });
+
+    expect(fetchData()).rejects.toThrow("Property is missing");
+  });
+
+  it("should throw an error when `anotherThing` is not a number", () => {
+    jest.spyOn(global, "fetch").mockResolvedValue({
+      json: () => Promise.resolve({ property: "foo", anotherThing: "bar" }),
+    });
+
+    expect(fetchData()).rejects.toThrow("Another thing is not a number");
+  });
+
+  // ... etc
+});
+```
+
+Instead, you can use a schema validator like [`zod`](https://zod.dev) or [yup](https://github.com/jquense/yup) to parse and validate the data you receive.
+
+```typescript
+import { z } from "zod";
+
+const MyType = z.object({
+  property: z.string(),
+  anotherThing: z.number(),
+});
+
+fetch("https://api.example.com")
+  .then((response) => response.json())
+  .then((data) => MyType.parse(data))
+  .catch((error) => {
+    // Error handling
+  });
+```
+
+This will save a lot of effort in validating the data itself and, in my opinion, does not require any unit tests besides the error handling anymore.
+
+### Passing objects
+
+Writing clean tests can become tedious when you have to pass a whole object while your tests only need one of the properties.
+
+What is seen happening a lot is the following:
+
+```typescript
+describe("Annoying boilerplate", () => {
+  it("can type-cast to make the test work", () => {
+    const result = testMe({
+      property: "foo",
+    } as any as MyType);
+
+    expect(result).toBe(true);
+  });
+
+  it("can @ts-ignore to make the test work", () => {
+    // @ts-ignore
+    const result = testMe({
+      property: "foo",
+    });
+
+    expect(result).toBe(true);
+  });
+
+  it("Can put the whole object to make the test work", () => {
+    const result = testMe({
+      property: "foo", // Test only requires this property-
+      nestedProperty: {
+        anotherProperty: "bar",
+      },
+    });
+
+    expect(result).toBe(true);
+  });
+});
+```
+
+And this works just fine, untill you start changing the `MyType`. A solution I used before was to make use of the [builder pattern](https://refactoring.guru/design-patterns/builder) to generate the objects for the tests.
+
+```typescript
+class Builder<T> {
+  constructor(protected readonly obj: T) {}
+
+  public build() {
+    return this.obj;
+  }
+}
+
+class MyTypeBuilder extends Builder<MyType> {
+  constructor() {
+    super({
+      property: "foo",
+      nestedProperty: {
+        anotherProperty: "bar",
+      },
+    });
+  }
+
+  public withProperty(property: string) {
+    this.obj.property = property;
+    return this;
+  }
+
+  public withNestedProperty(nestedProperty: { anotherProperty: string }) {
+    this.obj.nestedProperty = nestedProperty;
+    return this;
+  }
+
+  public withExplicitCustomState() {
+    this.obj.property = "baz";
+    this.obj.nestedProperty = { anotherProperty: "boo" };
+    return this;
+  }
+}
+```
+
+This allows you to create a `MyType` object with default values and override them when needed. This can be used in the following ways:
+
+```typescript
+describe("Building your tests", () => {
+  it("can pass the default values", () => {
+    const result = testMe(new MyTestBuilder().build());
+
+    expect(result).toBe(true);
+  });
+
+  it("can set specific properties for your test", () => {
+    const result = testMe(new MyTestBuilder().withProperty("bar").build());
+
+    expect(result).toBe(false);
+  });
+
+  it("can set multuple properties", () => {
+    const result = testMe(
+      new MyTestBuilder()
+        .withProperty("bar")
+        .withNestedProperty({ anotherProperty: "foo" })
+        .build()
+    );
+
+    expect(result).toBe(false);
+  });
+
+  it("can set a custom explicit state", () => {
+    const result = testMe(
+      new MyTestBuilder().withExplicitCustomState().build()
+    );
+
+    expect(result).toBe(false);
+  });
+});
+```
+
+But sometimes you just need _to force something into a space_. [`@total-typescript/shoehorn`](https://www.npmjs.com/package/@total-typescript/shoehorn) is the tool you are looking for. It will allow you to pass partial data in tests while keeping TypeScript happy.
+
+```typescript
+import { fromPartial } from "@total-typescript/shoehorn";
+
+describe("No more boilerplate", () => {
+  it("can pass partial data", () => {
+    const result = new MyTest(fromPartial({ property: "foo" }));
+
+    expect(result).toBe(true);
+  });
+});
+```
+
+This removes all the boilerplate code and allows you to focus on the actual test.
+
+### UI testing
+
+As you are working with Typescript, there is a big change you will need to test some frontend code as well.
+
+You might be familiar with tools such as [`storybook`](https://storybook.js.org/docs/writing-tests/test-runner), [`cypress`](https://www.cypress.io) or [`playwright`](https://playwright.dev).
+
+These tools are powerful in their own right, but I think they are _bloatware_ when writing unit tests.
+
+[`@testing-library`](https://testing-library.com) are _"simple and complete testing utilities that encourage good testing practices"_ which allow you to test the DOM.
+
+### Code coverage
+
+Although I am [against setting coverage targets](#-coverage--confidence), it is valuable to know what parts of your code are tested and which are not.
+
+[Codecov](https://about.codecov.io) or [Sonarqube](https://www.sonarsource.com/products/sonarqube/) can give you these insights. You can use it to make educated decisions on the state of your codebase and determine where to focus your testing efforts.
+
+## Conducting simulations
+
+The beauty of testing is that you can _mock_ (simulate) almost everything. This allows you to put your system under stress and force it into states that are hard(er) to reproduce in real life.
+
+```typescript
+const fetchData = async (triesLeft = 1) => {
+  try {
+    const response = await fetch("https://api.example.com");
+    const data = await response.json();
+    const parsed = MyType.parse(data);
+
+    saveMyData(parsed);
+  } catch (error) {
+    if (triesLeft > 0) {
+      return fetchData(triesLeft - 1);
+    }
+    // Error handling
+  }
+};
+
+describe("simulate your software", () => {
+  it("can throw errors", async () => {
+    jest.spyOn(global, "fetch").mockRejectedValue(new Error("Network error"));
+
+    await fetchData(0);
+
+    expect(saveMyData).not.toHaveBeenCalled();
+  });
+
+  it("can pass unexpected inputs", async () => {
+    jest.spyOn(global, "fetch").mockResolvedValue({
+      json: () => Promise.resolve({ foo: "bar", bar: "baz" }),
+    });
+
+    await fetchData(0);
+
+    expect(saveMyData).not.toHaveBeenCalled();
+  });
+
+  it("can validate retry mechanisms", async () => {
+    jest
+      .spyOn(global, "fetch")
+      .mockResolvedValueOnce({
+        json: () => throw new Error("Network error"),
+      })
+      .mockResolvedValue ({
+        json: () => Promise.resolve({ foo: "bar", bar: 42 }),
+      });
+
+    await fetchData(1);
+
+    expect(saveData).toHaveBeenCalledWith({ foo: "bar", bar: 42 });
+  });
+});
+```
+
+You can go even deeper by [mocking any interface or object ](https://www.npmjs.com/package/vitest-mock-extended) to give you full control over the simulation.
+
+## Performing real-world trials
+
+Testing is great, but if you are conducting unit tests they are placed in a vacuum.
+
+Software does not exist in a vacuum, and things **will** break when placed in the real world. You should make sure to have some form of strategy for this.
+
+> When you get a bug report, start by writing a unit test that exposes the bug.
+>
+> <cite>Refactoring: Improving the Design of Existing Code</cite>

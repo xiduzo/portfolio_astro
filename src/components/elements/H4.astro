@@ -1,0 +1,15 @@
+---
+import AnchorLinkIcon from "./AnchorLinkIcon.astro";
+
+const props = Astro.props;
+---
+
+<h3 {...props} class="mx-auto mb-4 mt-24 max-w-screen-md">
+  <a
+    href={`#${props.id}`}
+    class="group flex -translate-x-6 items-center text-xl font-bold md:-translate-x-4"
+  >
+    <AnchorLinkIcon />
+    <slot />
+  </a>
+</h3>

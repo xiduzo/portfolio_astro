@@ -12,9 +12,10 @@ import Intro from "../components/Intro.astro";
 type Props = {
   title: string;
   description?: string;
+  image?: string;
 };
 
-const { title, description } = Astro.props;
+const { title, description, image } = Astro.props;
 ---
 
 <!doctype html>
@@ -24,14 +25,15 @@ const { title, description } = Astro.props;
     <BaseHead
       title={title}
       description={description ??
-        "Designer by education,Developer by interest,Tinkerer by curiosity"}
+        "Designer by education, Developer by interest, Tinkerer by curiosity"}
+      image={image}
     />
   </head>
   <body class="scroll-smooth">
     <Intro />
     <HiFromConsole />
     <a
-      class="absolute left-0 z-50 p-3 m-3 transition -translate-y-16 motion-reduce:translate-y-0 motion-reduce:opacity-0 motion-reduce:-z-10 motion-reduce:focus:z-50 bg-primary focus:translate-y-0 focus:opacity-100"
+      class="bg-primary absolute left-0 z-50 m-3 -translate-y-16 p-3 transition focus:translate-y-0 focus:opacity-100 motion-reduce:-z-10 motion-reduce:translate-y-0 motion-reduce:opacity-0 motion-reduce:focus:z-50"
       href="#main-content">Jump to content</a
     >
     <Header />

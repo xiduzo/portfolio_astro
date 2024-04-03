@@ -20,6 +20,7 @@ const {
   updatedDate,
   description,
   heroImage,
+  shareImage,
   headerColor,
   contrastColor,
   showDates,
@@ -27,7 +28,11 @@ const {
 } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout
+  title={title}
+  description={description}
+  image={shareImage ?? heroImage}
+>
   <PageTransition background={headerColor} />
   <ScrollingText text={title} background={headerColor} />
   <article>
@@ -44,7 +49,7 @@ const {
             src={heroImage}
             alt={description}
             loading="eager"
-            class={`${contrastColor ? "max-w-5xl mx-auto translate-y-24 px-5" : ""}`}
+            class={`${contrastColor ? "mx-auto max-w-5xl translate-y-24 px-5" : ""}`}
           />
         </section>
       )
@@ -54,7 +59,7 @@ const {
 
     {
       showDates && (
-        <section class="text-center pt-12">
+        <section class="pt-12 text-center">
           Publised on <FormattedDate date={pubDate} />
           {updatedDate && (
             <>
@@ -67,17 +72,17 @@ const {
 
     {
       minutesRead && (
-        <section class="text-center pt-12 opacity-50">{minutesRead}</section>
+        <section class="pt-12 text-center opacity-50">{minutesRead}</section>
       )
     }
 
     <section
-      class="pt-40 pb-72 max-w-7xl m-auto px-4 font-extrabold text-center"
+      class="m-auto max-w-7xl px-4 pb-72 pt-40 text-center font-extrabold"
     >
-      <div aria-hidden="true" class="italic mb-2">{title},</div>
+      <div aria-hidden="true" class="mb-2 italic">{title},</div>
       <div class="text-6xl md:text-7xl">{description}</div>
     </section>
-    <section class="pb-32 m-auto px-4 xl:px-0 container">
+    <section class="container m-auto px-4 pb-32 xl:px-0">
       <slot />
     </section>
   </article>

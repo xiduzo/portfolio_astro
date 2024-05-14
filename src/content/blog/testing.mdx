@@ -2,6 +2,7 @@
 title: "Testing"
 description: "And become a better engineer"
 pubDate: "Apr 4 2024"
+updatedDate: "May 15 2024"
 headerColor: "#7fd8be"
 contrastColor: "#f48498"
 heroImage: "/blog/testing/header-icon.svg"
@@ -107,7 +108,11 @@ project-root/
 
 Why do you go to great lengths to write clean, maintainable code, but throw all of this out of the window when writing tests?
 
-Test code should adhere to the same standards of quality as the code it is testing.
+Before we start this section I would like to define what I consider as `source code`. `Source code` is all the code which is part of the project. This can be broken down into `test code` and `production code`.
+
+The `production code` is the part of your project that is actually running in production. Where the `test code` is the part of your project that is validating the logic of your `production code`.
+
+`Test code` should adhere to the same standards of quality as the `production code` it is testing.
 
 > Indeed, the ratio of time spent reading versus writing is well over 10 to 1. We are constantly reading old code as part of the effort to write new code. ...[Therefore,] making it easy to read makes it easier to write.
 >
@@ -182,7 +187,54 @@ it("should plot a curve between two data points", () => {
 });
 ```
 
-3. The test has too many responsibilities
+3. Don't use constant, enums, types or interfaces defined in your production code
+
+In our production code we tend use constants, enums, interfaces and types to try and make the code more self-explanatory.
+
+```typescript
+// sendCommand.ts
+enum CommandType {
+  FOO = "foo",
+  BAR = "bar",
+}
+
+interface Command {
+  command: Record<string, unknown>;
+  type: CommandType;
+}
+
+async function sendCommand(command: Command) {
+  await mySender.send(command.type, command.command);
+}
+```
+
+Why do we forget about this when writing tests?
+
+```typescript
+// sendCommand.test.ts
+it("should log the constant", async () => {
+  const spy = jest.spyOn(mySender, "send");
+  await sendCommand({ command: {}, type: "foo" }); // This will break when constant changes
+
+  expect(spy).toHaveBeenCalledWith("foo", expect.any(Object));
+});
+```
+
+We can easily use constants, enums, types and interfaces in our tests as well. This makes the tests more robust and less likely to break when the production code changes.
+
+```typescript
+// sendCommand.test.ts
+it("should log the constant", async () => {
+  const spy = jest.spyOn(mySender, "send");
+  await sendCommand({ command: {}, type: CommandType.FOO });
+
+  expect(spy).toHaveBeenCalledWith(CommandType.FOO, expect.any(Object));
+});
+```
+
+4. The test has too many responsibilities
+
+This one is a bit more subtle, and hard(er) to get right.
 
 When a test is _doing_ too many things at once it becomes harder to pinpoint what is going wrong when the tests start failing.
 

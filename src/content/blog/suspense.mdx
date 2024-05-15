@@ -6,6 +6,7 @@ headerColor: "#5DD4F4"
 contrastColor: "#262626"
 heroImage: "/blog/suspense/header-icon.svg"
 ---
+
 import Cookie from '../../components/Cookie.astro'
 
 While trying to answer [this question](https://stackoverflow.com/q/77479989/4655177) on StackOverflow, I realized that I didn't know enough about the workings of Suspense myself to give a good answer. So I decided to do some research and write this article.
@@ -24,6 +25,7 @@ While trying to answer [this question](https://stackoverflow.com/q/77479989/4655
 ```
 
 ## But how does it work?
+
 Neat, but _how_ does it actually works? _How_ does `Suspense` know when to show the fallback and when to show the child component?
 
 When I asked around I just got the answer that _"it's magic"_.
@@ -31,18 +33,27 @@ When I asked around I just got the answer that _"it's magic"_.
 But I don't like magic code, so let's find out how it works
 
 ## TL;DR
+
 `Suspense` acts as a fancy `try/catch` block.
 
 `Suspense` will <i>`try`</i> to render your component and whenever a `Promise` is being thrown it will <i>`catch`</i> it and render the fallback component until the promise resolves.
 
 ```jsx
-<Suspense fallback={{/* Catch */}}> 
+<Suspense
+  fallback={
+    {
+      /* Catch */
+    }
+  }
+>
   {/* Try */}
 </Suspense>
 ```
 
 ---
+
 ---
+
 ![an animated gif showing a popular 'magic' meme](/blog/suspense/magic.gif "How people perceive the Suspense component")
 
 ---
@@ -53,14 +64,14 @@ This means you are interested in how things works instead of accepting the magic
 
 ---
 
-As seen in the TL;DR - whenever _something_ throws a promise from within the `Suspense` component, it will render the fallback component until the promise resolves. 
+As seen in the TL;DR - whenever _something_ throws a promise from within the `Suspense` component, it will render the fallback component until the promise resolves.
 
 ```jsx
 function ComponentWhichThrows() {
   throw new Promise(() => {}); // This will trigger the fallback state // [!code highlight]
 
   return "hi there";
-};
+}
 
 export default function App() {
   return (
@@ -77,7 +88,7 @@ Simple as that, A fancy `try/catch` for React.
 
 Let's see if we can make it a bit more interesting and make an async call using suspense.
 
-First we need to create something we need to wait for. In this example we will create some fake data fetching function as this is a common use case. In reality, `Suspense` can work with any asynchronous operation.
+First you'll need to create something you'll need to wait for. In this example you can create some fake data fetching function as this is a common use case. In reality, `Suspense` can work with any asynchronous operation.
 
 ```javascript
 export function fakeApi(name) {
@@ -86,13 +97,12 @@ export function fakeApi(name) {
       resolve("Hello " + name);
     }, 2000);
   });
-};
+}
 ```
 
+To play nice with `Suspense` you need to have a method in which you can wrap our promise.
 
-To play nice with `Suspense` we need to have a method in which we can wrap our promise.
-
-For this we can create a poor-mans implementation of Reacts [use](https://react.dev/reference/react/use) hook[^1].
+For this, create a poor-mans implementation of Reacts [use](https://react.dev/reference/react/use) hook[^1].
 
 [^1]: As of writing this article, Reacts `use` hook is still experimental and not available in the stable release.
 
@@ -123,14 +133,14 @@ export function use(promise) {
 }
 ```
 
-And finally we can use this inside of our component
+And finally use this inside of your component
 
 ```jsx
 function YourComponent() {
-  const data = use(fakeApi("xiduzo")) // [!code highlight]
+  const data = use(fakeApi("xiduzo")); // [!code highlight]
 
   return <div>{data}</div>;
-};
+}
 
 export default function App() {
   return (
@@ -145,35 +155,44 @@ export default function App() {
 
 See [this codesandbox](https://codesandbox.io/s/use-example-7rhlnv) for a working example.
 
-
 ## Why would you use `<Suspense>`
+
 Suspense is a great way to handle asynchronous data fetching. It is a great alternative to the [traditional way](https://react.dev/reference/react/useEffect#fetching-data-with-effects) of handling data fetching in React.
 
 ### More than lazy loading
+
 Suspense was initially added to React to support [lazy loading of components](https://legacy.reactjs.org/docs/code-splitting.html#reactlazy). But currently can also be used to await data fetching and adding of [error boundaries](https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary).
 
 ### User Experience (UX)
+
 In order to create a better UX it is important to show the user something while we are waiting for data to load. It is also possible to [nest `Suspense` components](https://codesandbox.io/s/66nw34?file=/ArtistPage.js&utm_medium=sandpack) for a more fine-grained experience.
 
 ### Be a step ahead
+
 Even though `Suspense` is still experimental, libraries like [Relay](https://relay.dev/docs/migration-and-compatibility/suspense-compatibility/), [SWR](https://swr.vercel.app/docs/suspense) or [@tanstack/react-query](https://tanstack.com/query/latest/docs/react/guides/suspense) have added support for it.
 
 ## Why wouldn't you use `Suspense`
+
 `Suspense` adds another layer of abstraction to your code. This can make it harder to understand what is going on. If your team is already comfortable with existing patterns for data fetching, the introduction of Suspense might require additional training and adjustment.
 
 ### More than lazy loading
+
 For simple applications with straightforward data fetching requirements, using Suspense might introduce unnecessary complexity. In such cases, simpler solutions like data fetching libraries might be more suitable.
 
 ### User Experience (UX)
+
 In scenarios where finer control over loading states or error handling is crucial, a more manual approach using traditional patterns like `useEffect` and `useState` might be preferred
 
 ### Be a step ahead
+
 The whole concept of `Suspense` might also get overshadowed by [server components](https://react.dev/reference/react/use-server) in the future. Where [the documentation](https://react.dev/reference/react/use#caveats) mentions: _When fetching data in a Server Component, prefer `async` and `await` over `use`._
 
 ## Conclusion
+
 `Suspense` can be a powerful tool in your toolbox, especially if you truly understand how it functions. Don't treat it as your new shiny hammer and start hitting everything with it. Use it wisely and it will be a great addition to your work.
 
 ## Unmentioned resources
+
 Here are some other resources I found while researching `Suspense` which might be interesting to you.
 
 - [Reacts codesandbox example](https://codesandbox.io/s/ymcj43)

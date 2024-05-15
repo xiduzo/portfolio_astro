@@ -1,0 +1,128 @@
+---
+title: "Zod"
+description: "Stronger interfaces, cleaner code, fewer bugs"
+pubDate: "May 15 2024"
+headerColor: "#3068B7"
+contrastColor: "#41B983"
+heroImage: "/blog/zod/header-icon.svg"
+shareImage: "/blog/zod/bridge.png"
+---
+
+I am a big fan of TypeScript, but one thing that is lacking compared to _real_ strongly type languages: the runtime validation of the data.
+
+While our static type checker has validated everything _works_, eventually we have to interact with the scary outside world.
+
+This can be user input, a response from an API, streamed data, reading data from disk or even loading environment variables.
+
+## Lying interfaces
+
+One thing that is more harmful than no interface, is a lying interface. This will set you --and your team-- up for a world of unnecessary debug sessions.
+
+---
+
+Let's say you have a neat generic function that fetches data from an API:
+
+```typescript
+// utils.ts
+async function fetchData<T>(url: string): Promise<T> {
+  const response = await fetch(url);
+  return response as T;
+}
+```
+
+You have properly declared an interface for the data you expect:
+
+```typescript
+// types.ts
+interface ApiData {
+  foo: string;
+  bar: number;
+}
+```
+
+And when you call the function you expect to get the data you want:
+
+```typescript
+// main.ts
+const response = await fetchData<ApiData>("example.api.org");
+//    ^? `ApiData`
+```
+
+At first glance the interface looks fine, the function has explicit type inputs and outputs.
+
+But there are at least 2 lies with this inferface:
+
+1. The return type is a lie. The function can return anything, not just `ApiData`.
+2. The function can throw an error, but you don't know that from the interface.
+
+You can easily spot those lies in source code whenever you see an `as MY_LAZY_LIE`.
+
+---
+
+We can fix the interface by adding a runtime validation library like [Zod](https://zod.dev/). This will require some initial extra typing.
+
+Instead of an IDE which is constantly lying to you, you will gain some new type-safe superpowers.
+
+```typescript
+// utils.ts
+import { SafeParseReturnType } from "zod";
+
+type Response<T extends ZodSchema> =
+  | SafeParseReturnType<T, z.output<T>>
+  | { success: false; error: unknown };
+
+async function fetchData<T extends ZodSchema>(
+  url: string,
+  schema: T
+): Promise<Response<T>> {
+  try {
+    const response = await fetch(url);
+    return schema.safeParse(response);
+  } catch (error) {
+    return { success: false, error };
+  }
+}
+```
+
+Instead of defining an interface, we define a schema with Zod and infer the interface from it.
+
+```typescript
+// types.ts
+import { z } from "zod";
+
+const apiData = z.object({
+  foo: z.string(),
+  bar: z.number(),
+});
+
+// Not required for this example but is a direct replacement for the previous interface
+type ApiData = z.infer<typeof apiData>;
+```
+
+Now when you call the function you are sure that the data you get is according to the schema. And if not you get proper typing for error handling for fine grained error handling.
+
+```typescript
+// main.ts
+const response = await fetchData("example.api.org", apiData);
+
+if (response.success) {
+  console.log(response.data);
+  //                   ^? `{ foo: string, bar: number }`
+  console.log(response.error);
+  //                   ^? `undefined`
+} else {
+  console.log(response.data);
+  //                   ^? `undefined`
+  console.log(response.error);
+  if (response.error instanceof ZodError) {
+    // The data we got from the API is not according to the schema
+    return;
+  }
+
+  // The API request failed
+}
+```
+
+---
+
+I will give you a real world example on how we implemented Zod in our project.

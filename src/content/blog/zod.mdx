@@ -8,6 +8,8 @@ heroImage: "/blog/zod/header-icon.svg"
 shareImage: "/blog/zod/bridge.png"
 ---
 
+import Cookie from '../../components/Cookie.astro'
+
 I am a big fan of TypeScript, but one thing that is lacking compared to _real_ strongly type languages: the runtime validation of the data.
 
 While our static type checker has validated everything _works_, eventually we have to interact with the scary outside world.
@@ -23,7 +25,6 @@ One thing that is more harmful than no interface, is a lying interface. This wil
 Let's say you have a neat generic function that fetches data from an API:
 
 ```typescript
-// utils.ts
 async function fetchData<T>(url: string): Promise<T> {
   const response = await fetch(url);
   return response as T;
@@ -33,7 +34,6 @@ async function fetchData<T>(url: string): Promise<T> {
 You have properly declared an interface for the data you expect:
 
 ```typescript
-// types.ts
 interface ApiData {
   foo: string;
   bar: number;
@@ -43,7 +43,6 @@ interface ApiData {
 And when you call the function you expect to get the data you want:
 
 ```typescript
-// main.ts
 const response = await fetchData<ApiData>("example.api.org");
 //    ^? `ApiData`
 ```
@@ -59,12 +58,13 @@ You can easily spot those lies in source code whenever you see an `as MY_LAZY_LI
 
 ---
 
-We can fix the interface by adding a runtime validation library like [Zod](https://zod.dev/). This will require some initial extra typing.
+We can fix the interface by adding a runtime validation library like [Zod](https://zod.dev/)[^1]. This will require some initial extra typing.
+
+[^1]: Zod is my personal favourite runtime validation library for TypeScript. It has a very clean API and is very powerful. But be aware that there is [more](https://zod.dev/?id=comparison) out there.
 
 Instead of an IDE which is constantly lying to you, you will gain some new type-safe superpowers.
 
 ```typescript
-// utils.ts
 import { SafeParseReturnType } from "zod";
 
 type Response<T extends ZodSchema> =
@@ -84,10 +84,9 @@ async function fetchData<T extends ZodSchema>(
 }
 ```
 
-Instead of defining an interface, we define a schema with Zod and infer the interface from it.
+Instead of defining an interface, we define a schema with `Zod` and infer the interface from it.
 
 ```typescript
-// types.ts
 import { z } from "zod";
 
 const apiData = z.object({
@@ -95,34 +94,187 @@ const apiData = z.object({
   bar: z.number(),
 });
 
-// Not required for this example but is a direct replacement for the previous interface
+// Not required for this example but below is a
+// direct replacement for the previous interface.
 type ApiData = z.infer<typeof apiData>;
 ```
 
-Now when you call the function you are sure that the data you get is according to the schema. And if not you get proper typing for error handling for fine grained error handling.
+Now when you call the function you are sure that the data you get is according to the schema. And if not you get proper typed errors.
 
 ```typescript
-// main.ts
 const response = await fetchData("example.api.org", apiData);
 
 if (response.success) {
-  console.log(response.data);
-  //                   ^? `{ foo: string, bar: number }`
   console.log(response.error);
   //                   ^? `undefined`
+  console.log(response.data);
+  //                   ^? `ApiData`
 } else {
   console.log(response.data);
   //                   ^? `undefined`
-  console.log(response.error);
   if (response.error instanceof ZodError) {
     // The data we got from the API is not according to the schema
+    console.log(response.error);
+    //                   ^? `ZodError`
     return;
   }
 
   // The API request failed
+  console.log(response.error);
+  //                   ^? `unknown`
 }
 ```
 
+## Back to the real world
+
+In a project I was working on recently most of the data was coming from unstructured data sources. In this project the data mainly came from DynamoDB and MQTT messages from IoT devices.
+
+To work with this data the project had classes which allowed for creation of data object.
+
+```typescript
+export class ExampleFromProject {
+  id: string;
+  type: string;
+  amount: number;
+
+  constructor(id: string, type: string, amount: number) {
+    this.id = id;
+    this.type = type;
+    this.amount = amount;
+  }
+
+  static fromDynamoRecord(data: Record<string, string | number | undefined | null>) {
+    return new ExampleFromProject(
+      data.id as string,
+      data.type as string,
+      data.amount as number
+    );
+  }
+
+  // ... other methods
+}
+```
+
+For DynamoDD queries we had functions similar to:
+
+``` typescript
+function getRecord(id: string) {
+  const { Item } = await dynamoClient.send(<QUERY>);
+  //      ^? `Record<string, any>`
+
+  return ExampleFromProject.fromDynamoRecord(Item);
+}
+```
+
+For MQTT messages we made handlers which parsed data as follows:
+
+```typescript
+mqqClient.onMessage(message => {
+  const data = JSON.parse(message.payload.toString());
+  //    ^? `any`
+
+  const example = new ExampleFromProject(data.id, data.type, data.amount);
+
+  // ... do something with the data
+})
+```
+
+While most of the systems worked fine, the platform was only tested in a controlled environment with simulated devices. When we started to get actual data from the real world (read IoT devices) weird bugs started to surface. And they started to appear more frequently then with the simulated data.
+
+Some bugs were found immediately, as the services started breaking down when the wrong data was received. But some bugs were more subtle, wrongly received data was stored in the DynamoDB table and only processed later. This made the root cause of the bug harder to find.
+
+### Adding runtime validation
+
+In order to prevent services from crashing and data from being stored incorrectly, we added `zod` validation to the data objects.
+
+Because the project was quite large, had a very heavy OOP style, and the data objects were used in many places, we decided to not go full-in on _the zod way_. Instead, we added zod parsing capabilities to the existing classes.
+
+This involved some Typescript magic, but made the transition much easier. All our classes would extend the following `Parsable` class:
+
+```typescript
+import { SafeParseReturnType, ZodSchema, ZodTypeDef } from 'zod'
+
+export interface GeneratedParsable<Output = unknown, TypeDef extends ZodTypeDef = ZodTypeDef, Input = Output> {
+  schema: ZodSchema<Output, TypeDef, Input>
+  // passing `unknown` instead of `any` will beak TS
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  parse<TFinal extends new (data: any) => InstanceType<TFinal>>(this: TFinal, value: unknown): InstanceType<TFinal>
+  // passing `unknown` instead of `any` will beak TS
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  safeParse(data: unknown): SafeParseReturnType<Input, Output>
+  new (input: Input): Output
+}
+
+export function Parsable<Output = unknown, TypeDef extends ZodTypeDef = ZodTypeDef, Input = Output>(schema: ZodSchema<Output, TypeDef, Input>) {
+  const Generated = class {
+    static schema = schema
+    static parse<T extends typeof Generated>(this: T, data: unknown) {
+      return new this(data as Input)
+    }
+    static safeParse(data: unknown) {
+      const result = schema.safeParse(data)
+
+      if (!result.success) {
+        console.warn('Failed to parse data', { data, error: result.error })
+      }
+
+      return result
+    }
+
+    constructor(input: Input) {
+      const result = Generated.safeParse(input)
+
+      if (!result.success) {
+        throw result.error
+      }
+
+      Object.assign(this, result.data)
+    }
+  }
+
+  return Generated as unknown as GeneratedParsable<Output, TypeDef, Input>
+}
+```
+
+Yes, this interface took some time to made and also gave me headaches. Have a <Cookie name="zod" /> before you continue.
+
 ---
 
-I will give you a real world example on how we implemented Zod in our project.
+We can utulize the `Parsable` in our data objects to give it runtime validation capabilities.
+
+```typescript
+import { z } from 'zod'
+
+const schema = z.object({
+  id: z.string(),
+  type: z.string(),
+  amount: z.number()
+})
+
+export class ExampleFromProject extends Parsable(schema) {
+  // ... existing code
+}
+```
+
+We can now use the `parse` and `safeParse` methods to validate any unknown data.
+
+```typescript
+const input = { id: '123', type: 'foo', amount: 42 }
+
+const example = ExampleFromProject.parse(input)
+// or
+const { success, data, error } = ExampleFromProject.safeParse(input)
+```
+
+From this moment onwards we can be sure the data we are working with is in the expected format, no more need for `as LAZY_LIE`s.
+
+And on receiving faulty data, we can pin-point it better and (hopfully) handle it gracefully.
+
+
+### The aftermath
+
+After rolling out the changes a lot of services started reporting faulty data inputs. Initially, the team was not very pleased with the constant need for fixing _unnecessary errors_. Instead of adding new features the focus was on data integrity for nearly a full month.
+
+But as time went on, received data was more and more in line with the expected format. The team started to see the benefits of the changes, especially when new IoT devices came online which were still sending old data.
+
+The services are more stable, and the data is more reliable.

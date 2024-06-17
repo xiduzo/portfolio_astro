@@ -60,7 +60,7 @@ You can easily spot those lies in source code whenever you see an `as MY_LAZY_LI
 
 We can fix the interface by adding a runtime validation library like [Zod](https://zod.dev/)[^1]. This will require some initial extra typing.
 
-[^1]: Zod is my personal favourite runtime validation library for TypeScript. It has a very clean API and is very powerful. But be aware that there is [more](https://zod.dev/?id=comparison) out there.
+[^1]: Zod is my personal favourite runtime validation library for JavaScript. It has a very clean API and is very powerful. But be aware that there is [more](https://zod.dev/?id=comparison) out there.
 
 Instead of an IDE which is constantly lying to you, you will gain some new type-safe superpowers.
 
@@ -127,9 +127,11 @@ if (response.success) {
 
 ## Back to the real world
 
-In a project I was working on recently most of the data was coming from unstructured data sources. In this project the data mainly came from DynamoDB and MQTT messages from IoT devices.
+For a client, [Growy](https://www.growy.nl/), I was working on recently most of the data was coming from unstructured data sources.
 
-To work with this data the project had classes which allowed for creation of data object.
+Growy is highly automizing vertical farming and is relying on a lot of IoT devices which are sending and receiving data to and from the cloud.
+
+In the software the data comes from two sources: DynamoDB and MQTT messages. In order to work with this unstructured data the project had classes which allowed for creation of data object for static type-safety.
 
 ```typescript
 export class ExampleFromProject {
@@ -179,17 +181,39 @@ mqqClient.onMessage(message => {
 })
 ```
 
-While most of the systems worked fine, the platform was only tested in a controlled environment with simulated devices. When we started to get actual data from the real world (read IoT devices) weird bugs started to surface. And they started to appear more frequently then with the simulated data.
+But as you might have noticed, we have some little `as LAZY_LIE`s in the code.
 
-Some bugs were found immediately, as the services started breaking down when the wrong data was received. But some bugs were more subtle, wrongly received data was stored in the DynamoDB table and only processed later. This made the root cause of the bug harder to find.
+When parsing a record from the DynomoDB we are assuming that the data is always there and of the correct type.
+
+When parsing a message from MQTT we are assuming that the message payload is always a stringified JSON object **and** contains the correct data.
+
+All interfaces, and static types are correct, the runtime data could still be (and sometimes was) wrong.
+
+---
+
+While most of the systems worked fine, the platform was only tested in a controlled environment with simulated devices.
+
+When we started to get actual data from the real world (read IoT devices) bugs started to surface. And they started to appear more frequently then with the simulated data.
+
+Some bugs were found immediately, as the services started breaking down when the wrong data was received:
+
+`TypeError: Cannot read property 'foo' of undefined` or `NaN` values after calculations were not uncommon.
+
+But some bugs were more subtle, wrongly received data was stored in the DynamoDB table and only processed in later stages. This made the root cause of the bug harder to find.
 
 ### Adding runtime validation
 
-In order to prevent services from crashing and data from being stored incorrectly, we added `zod` validation to the data objects.
+In order to prevent services from crashing and data from being stored incorrectly, we added zod validation to the data objects.
 
-Because the project was quite large, had a very heavy OOP style, and the data objects were used in many places, we decided to not go full-in on _the zod way_. Instead, we added zod parsing capabilities to the existing classes.
+Because the project was already quite large when I joined, had a very heavy OOP style, and the data objects were used in many places, we decided to not go full-in on _the zod way_.
 
-This involved some Typescript magic, but made the transition much easier. All our classes would extend the following `Parsable` class:
+Instead, we added zod parsing capabilities to the existing classes. This involved some Typescript magic, but made the transition much easier.
+
+---
+
+The following code took some time to made, had its' fair share of issues while developing and also gave me headaches. Have a <Cookie name="zod" /> before you continue.
+
+All our classes would extend the following `Parsable` class:
 
 ```typescript
 import { SafeParseReturnType, ZodSchema, ZodTypeDef } from 'zod'
@@ -236,11 +260,7 @@ export function Parsable<Output = unknown, TypeDef extends ZodTypeDef = ZodTypeD
 }
 ```
 
-Yes, this interface took some time to made and also gave me headaches. Have a <Cookie name="zod" /> before you continue.
-
----
-
-We can utulize the `Parsable` in our data objects to give it runtime validation capabilities.
+We can extend the `Parsable` in our data objects to give it runtime validation capabilities.
 
 ```typescript
 import { z } from 'zod'

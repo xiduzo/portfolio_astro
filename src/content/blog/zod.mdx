@@ -5,7 +5,7 @@ pubDate: "June 17 2024"
 headerColor: "#3068B7"
 contrastColor: "#41B983"
 heroImage: "/blog/zod/header-icon.svg"
-shareImage: "/blog/zod/header.webp"
+shareImage: "/blog/zod/header.png"
 ---
 
 import Cookie from '../../components/Cookie.astro'
@@ -127,9 +127,9 @@ if (response.success) {
 
 ## Back to the real world
 
-For a client, [Growy](https://www.growy.nl/), I was working on recently most of the data was coming from unstructured data sources.
+For a client I am working for, [Growy](https://www.growy.nl/), most of the data is coming from unstructured data sources.
 
-Growy is highly automizing vertical farming and is relying on a lot of IoT devices which are sending and receiving data to and from the cloud.
+Growy is highly automizing vertical farming and is relying on a hundreds of IoT devices which are sending and receiving data to and from the cloud.
 
 In the software the data comes from two sources: DynamoDB and MQTT messages. In order to work with this unstructured data the project had classes which allowed for creation of data object for static type-safety.
 
@@ -191,9 +191,9 @@ While all interfaces, and static types are correct, the runtime data could still
 
 ![IoT devices](/blog/zod/iot-devices.png "IoT devices slowly being added to the platform")
 
-While most of the systems worked fine, the platform was only tested in a controlled environment with simulated devices.
+While most of the systems worked fine, the platform was only tested in a controlled environment with simulated IoT devices.
 
-When we started to get actual data from the real world (read IoT devices) bugs started to surface. And they started to appear more frequently then with the simulated data.
+When we started to get actual data from the real world bugs started to surface. The data we were expecting and worked with in our simulated environment was not always the correct data. The interfaces from _"the hardware team"_ and _"the software team"_ were not always in sync.
 
 Some bugs were found immediately, as the services started breaking down when the wrong data was received:
 
@@ -203,7 +203,7 @@ But some bugs were more subtle, wrongly received data was stored in the DynamoDB
 
 ### Adding runtime validation
 
-In order to prevent services from crashing and data from being stored incorrectly, we added zod validation to the data objects.
+In order to prevent services from crashing and data from being stored incorrectly, we added runtime validation to the data objects.
 
 Because the project was already quite large when I joined, had a very heavy OOP style, and the data objects were used in many places, we decided to not go full-in on _the zod way_.
 
@@ -212,6 +212,8 @@ Instead, we added zod parsing capabilities to the existing classes. This involve
 ---
 
 The following code took some time to made, had its' fair share of issues while developing and also gave me some headaches. Have a <Cookie name="zod" /> before you continue.
+
+---
 
 All our classes would extend the following `Parsable` class:
 
@@ -297,6 +299,6 @@ And on receiving faulty data, we can pin-point it better and (hopfully) handle i
 
 After rolling out the changes a lot of services started reporting faulty data inputs. Initially, the team was not very pleased with the constant need for fixing _unnecessary errors_. Instead of adding new features the focus was on data integrity for nearly a full month.
 
-But as time went on, received data was more and more in line with the expected format. The team started to see the benefits of the changes, especially when new IoT devices came online which were still sending old data.
+But as time went on, received data was more and more in line with the expected format. We have better discussions between the teams about the data format and the interfaces as faulty data will not be accepted anymore.
 
-The services are more stable, and the data is more reliable.
+The platform is more stable, and the data is more reliable.

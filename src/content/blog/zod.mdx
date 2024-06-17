@@ -1,11 +1,11 @@
 ---
 title: "Zod"
 description: "Stronger interfaces, cleaner code, fewer bugs"
-pubDate: "May 15 2024"
+pubDate: "June 17 2024"
 headerColor: "#3068B7"
 contrastColor: "#41B983"
 heroImage: "/blog/zod/header-icon.svg"
-shareImage: "/blog/zod/bridge.png"
+shareImage: "/blog/zod/header.webp"
 ---
 
 import Cookie from '../../components/Cookie.astro'
@@ -54,7 +54,7 @@ But there are at least 2 lies with this inferface:
 1. The return type is a lie. The function can return anything, not just `ApiData`.
 2. The function can throw an error, but you don't know that from the interface.
 
-You can easily spot those lies in source code whenever you see an `as MY_LAZY_LIE`.
+You can easily spot those lies in source code whenever you see an `as LAZY_LIE`.
 
 ---
 
@@ -157,7 +157,7 @@ export class ExampleFromProject {
 }
 ```
 
-For DynamoDD queries we had functions similar to:
+For DynamoDB queries we had functions similar to:
 
 ``` typescript
 function getRecord(id: string) {
@@ -187,9 +187,9 @@ When parsing a record from the DynomoDB we are assuming that the data is always 
 
 When parsing a message from MQTT we are assuming that the message payload is always a stringified JSON object **and** contains the correct data.
 
-All interfaces, and static types are correct, the runtime data could still be (and sometimes was) wrong.
+While all interfaces, and static types are correct, the runtime data could still be (and sometimes was) wrong.
 
----
+![IoT devices](/blog/zod/iot-devices.png "IoT devices slowly being added to the platform")
 
 While most of the systems worked fine, the platform was only tested in a controlled environment with simulated devices.
 
@@ -211,7 +211,7 @@ Instead, we added zod parsing capabilities to the existing classes. This involve
 
 ---
 
-The following code took some time to made, had its' fair share of issues while developing and also gave me headaches. Have a <Cookie name="zod" /> before you continue.
+The following code took some time to made, had its' fair share of issues while developing and also gave me some headaches. Have a <Cookie name="zod" /> before you continue.
 
 All our classes would extend the following `Parsable` class:
 
@@ -289,6 +289,8 @@ const { success, data, error } = ExampleFromProject.safeParse(input)
 From this moment onwards we can be sure the data we are working with is in the expected format, no more need for `as LAZY_LIE`s.
 
 And on receiving faulty data, we can pin-point it better and (hopfully) handle it gracefully.
+
+![IoT devices](/blog/zod/parse-failures.png "Monitoring receiving of faulty data")
 
 
 ### The aftermath

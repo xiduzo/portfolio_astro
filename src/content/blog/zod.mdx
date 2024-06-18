@@ -1,7 +1,7 @@
 ---
 title: "Zod"
 description: "Stronger interfaces, cleaner code, fewer bugs"
-pubDate: "June 17 2024"
+pubDate: "June 18 2024"
 headerColor: "#3068B7"
 contrastColor: "#41B983"
 heroImage: "/blog/zod/header-icon.svg"
@@ -62,7 +62,7 @@ You can easily spot those lies in source code whenever you see an `as LAZY_LIE`.
 
 We can enhance the interface by adding a runtime validation library like [Zod](https://zod.dev/)[^1]. This requires some initial extra typing, but it pays off in terms of safer code and new type-safe superpowers inside your IDE.
 
-[^1]: Zod is my personal favourite runtime validation library for JavaScript. It has a very clean API and is very powerful. But be aware that there is [more](https://zod.dev/?id=comparison) out there.
+[^1]: Zod is my personal go-to runtime validation library for JavaScript. But be aware that there is [more](https://zod.dev/?id=comparison) out there.
 
 ```typescript
 import { SafeParseReturnType } from 'zod';
@@ -303,3 +303,43 @@ After implementing runtime validation, our services started reporting a lot more
 However, as time passed, received data became increasingly in line with the expected format. This led to better discussions between teams about data formats and interfaces, as faulty data would no longer be accepted.
 
 As a result, our platform is now more stable, and the reliability of our data has improved significantly.
+
+#### Room for improvement
+
+While the hybrid approach worked well for this project, it's not perfect. For instance, it does not work with more complex types like like [unions](https://zod.dev/?id=unions) and [intersections](https://zod.dev/?id=intersections).
+
+When starting a new project, I would personally be going full-in on _the zod way_. This would remove the need for the `Parsable` entirely.
+
+```typescript
+import { z } from "zod";
+
+export const GrowthCycle = z.object({
+  id: z.string(),
+  type: z.string(),
+  amount: z.number()
+});
+
+export type GrowthCycle = z.infer<typeof GrowthCycle>;
+```
+
+You could then use the `GrowthCycle` type when only type information is needed.
+
+```typescript
+import type { GrowthCycle } from "./GrowthCycle";
+
+function handler(growthCycle: GrowthCycle) { /* ... */ }
+```
+
+Or pass the `GrowthCycle` zod object when data validation is required.
+
+```typescript
+import { GrowthCycle } from "./GrowthCycle";
+
+export class Handler {
+  handle(data: unkown) {
+    const { success, data, error} = GrowthCycle.safeParse(data);
+
+    // ... handle the result
+  }
+}
+```

@@ -12,9 +12,9 @@ import Cookie from '../../components/Cookie.astro'
 
 I am a big fan of TypeScript, but one thing that is lacking compared to _real_ strongly type languages: the runtime validation of the data.
 
-While our static type checker has validated everything _works_, eventually we have to interact with the scary outside world.
+While a static type checker esnures everything _works_, eventually we have to interact with the scary outside world.
 
-This can be user input, a response from an API, streamed data, reading data from disk or even loading environment variables.
+This can include user input, API responses, streamed data, reading data from disk or even loading environment variables.
 
 ## Lying interfaces
 
@@ -34,7 +34,7 @@ async function fetchData<T>(url: string): Promise<T> {
 You have properly declared an interface for the data you expect:
 
 ```typescript
-interface ApiData {
+type ApiData = {
   foo: string;
   bar: number;
 }
@@ -49,32 +49,29 @@ const response = await fetchData<ApiData>("example.api.org");
 
 At first glance the interface looks fine, the function has explicit type inputs and outputs.
 
-But there are at least 2 lies with this inferface:
+But theres a catch -- or rather 2 lies:
 
 1. The return type is a lie. The function can return anything, not just `ApiData`.
-2. The function can throw an error, but you don't know that from the interface.
+2. The function can throw an error, but you don't know that from the interface. You're left in the dark about what could go wrong.
 
 You can easily spot those lies in source code whenever you see an `as LAZY_LIE`.
 
 ---
 
-We can fix the interface by adding a runtime validation library like [Zod](https://zod.dev/)[^1]. This will require some initial extra typing.
+### Removing the lies
+
+We can enhance the interface by adding a runtime validation library like [Zod](https://zod.dev/)[^1]. This requires some initial extra typing, but it pays off in terms of safer code and new type-safe superpowers inside your IDE.
 
 [^1]: Zod is my personal favourite runtime validation library for JavaScript. It has a very clean API and is very powerful. But be aware that there is [more](https://zod.dev/?id=comparison) out there.
 
-Instead of an IDE which is constantly lying to you, you will gain some new type-safe superpowers.
-
 ```typescript
-import { SafeParseReturnType } from "zod";
+import { SafeParseReturnType } from 'zod';
 
 type Response<T extends ZodSchema> =
   | SafeParseReturnType<T, z.output<T>>
   | { success: false; error: unknown };
 
-async function fetchData<T extends ZodSchema>(
-  url: string,
-  schema: T
-): Promise<Response<T>> {
+async function fetchData<T extends ZodSchema>(url: string, schema: T): Promise<Response<T>> {
   try {
     const response = await fetch(url);
     return schema.safeParse(response);
@@ -84,7 +81,7 @@ async function fetchData<T extends ZodSchema>(
 }
 ```
 
-Instead of defining an interface, we define a schema with `Zod` and infer the interface from it.
+Instead of defining a type, we define a schema with `Zod` and infer the interface from it.
 
 ```typescript
 import { z } from "zod";
@@ -94,47 +91,49 @@ const apiData = z.object({
   bar: z.number(),
 });
 
-// Not required for this example but below is a
-// direct replacement for the previous interface.
+// Direct replacement for the previous type
 type ApiData = z.infer<typeof apiData>;
 ```
 
-Now when you call the function you are sure that the data you get is according to the schema. And if not you get proper typed errors.
+Now, when we call the function, we're sure that the data we get is according to the schema. And if not, we get proper typed errors.
 
 ```typescript
-const response = await fetchData("example.api.org", apiData);
+export function getData(): ApiData | null {
+  const response = await fetchData("example.api.org", apiData);
 
-if (response.success) {
-  console.log(response.error);
-  //                   ^? `undefined`
-  console.log(response.data);
-  //                   ^? `ApiData`
-} else {
-  console.log(response.data);
-  //                   ^? `undefined`
-  if (response.error instanceof ZodError) {
-    // The data we got from the API is not according to the schema
+  if (!response.success) {
+    console.log(response.data);
+    //                   ^? `undefined`
+    if (response.error instanceof ZodError) {
+      // The data we got from the API is not according to the schema
+      console.log(response.error);
+      //                   ^? `ZodError`
+      return null;
+    }
+
+    // The API request failed
     console.log(response.error);
-    //                   ^? `ZodError`
-    return;
+    //                   ^? `unknown`
+    return null;
   }
 
-  // The API request failed
   console.log(response.error);
-  //                   ^? `unknown`
+  //                   ^? `undefined`
+  return response.data;
+  //              ^? `ApiData`
 }
 ```
 
 ## Back to the real world
 
-For a client I am working for, [Growy](https://www.growy.nl/), most of the data is coming from unstructured data sources.
+For my client, [Growy](https://www.growy.nl/), we're dealing with unstructured data from various sources.
 
-Growy is highly automizing vertical farming and is relying on a hundreds of IoT devices which are sending and receiving data to and from the cloud.
+Growy is revolutionizing vertical farming by heavily relying on (hundreds of) IoT devices sending and receiving data to/from the cloud. We receive data from two primary sources: DynamoDB and MQTT messages.
 
-In the software the data comes from two sources: DynamoDB and MQTT messages. In order to work with this unstructured data the project had classes which allowed for creation of data object for static type-safety.
+In our software, we've developed classes that allow for creating data objects for static type-safety.
 
 ```typescript
-export class ExampleFromProject {
+export class GrowthCycle {
   id: string;
   type: string;
   amount: number;
@@ -146,7 +145,7 @@ export class ExampleFromProject {
   }
 
   static fromDynamoRecord(data: Record<string, string | number | undefined | null>) {
-    return new ExampleFromProject(
+    return new GrowthCycle(
       data.id as string,
       data.type as string,
       data.amount as number
@@ -157,41 +156,43 @@ export class ExampleFromProject {
 }
 ```
 
-For DynamoDB queries we had functions similar to:
+For DynamoDB queries, we have functions like:
 
 ``` typescript
 function getRecord(id: string) {
   const { Item } = await dynamoClient.send(<QUERY>);
   //      ^? `Record<string, any>`
 
-  return ExampleFromProject.fromDynamoRecord(Item);
+  return GrowthCycle.fromDynamoRecord(Item);
 }
 ```
 
-For MQTT messages we made handlers which parsed data as follows:
+And for MQTT messages, we've created handlers that parse data as follows:
 
 ```typescript
 mqqClient.onMessage(message => {
   const data = JSON.parse(message.payload.toString());
   //    ^? `any`
 
-  const example = new ExampleFromProject(data.id, data.type, data.amount);
+  const example = new GrowthCycle(data.id, data.type, data.amount);
 
   // ... do something with the data
 })
 ```
 
-But as you might have noticed, we have some little `as LAZY_LIE`s in the code.
+But, you might have noticed some `as LAZY_LIE`s in the code.
 
-When parsing a record from the DynomoDB we are assuming that the data is always there and of the correct type.
+When parsing a record from DynamoDB, we're assuming that the data is always there and of the correct type. Similarly, when parsing an MQTT message, we're assuming that the payload is always a stringified JSON object containing the correct data.
 
-When parsing a message from MQTT we are assuming that the message payload is always a stringified JSON object **and** contains the correct data.
-
-While all interfaces, and static types are correct, the runtime data could still be (and sometimes was) wrong.
+While all interfaces and static types are correct, runtime data could still be (and sometimes was) wrong.
 
 ![IoT devices](/blog/zod/iot-devices.png "IoT devices slowly being added to the platform")
 
-While most of the systems worked fine, the platform was only tested in a controlled environment with simulated IoT devices.
+---
+
+### The problem
+
+As we tested our platform with simulated (IoT) devices, everything seemed to work smoothly. But when the simulated devices were being replaced by their actual real-world counterparts, that's when things got interesting.
 
 When we started to get actual data from the real world bugs started to surface. The data we were expecting and worked with in our simulated environment was not always the correct data. The interfaces from _"the hardware team"_ and _"the software team"_ were not always in sync.
 
@@ -199,15 +200,15 @@ Some bugs were found immediately, as the services started breaking down when the
 
 `TypeError: Cannot read property 'foo' of undefined` or `NaN` values after calculations were not uncommon.
 
-But some bugs were more subtle, wrongly received data was stored in the DynamoDB table and only processed in later stages. This made the root cause of the bug harder to find.
+But some bugs were more subtle. Wrongly received data was stored in the DynamoDB table and only processed in later stages, making it harder to identify the root cause.
 
 ### Adding runtime validation
 
-In order to prevent services from crashing and data from being stored incorrectly, we added runtime validation to the data objects.
+To prevent services from crashing and data from being stored incorrectly, we introduced runtime validation to our data objects.
 
-Because the project was already quite large when I joined, had a very heavy OOP style, and the data objects were used in many places, we decided to not go full-in on _the zod way_.
+When I joined the project, which was already quite large, it had adopted a heavy Object-Oriented Programming (OOP) style. The data objects were used exetensively throughout the codebase. As a result, we decided to not go full-in on _the zod way_.
 
-Instead, we added zod parsing capabilities to the existing classes. This involved some Typescript magic, but made the transition much easier.
+Instead, we opted for a hybrid approach, adding zod parsing capabilities to the existing classes. This involved some TypeScript magic, but allowed us to leverage the benefits of runtime validation without disrupting the overall codebase structure.
 
 ---
 
@@ -215,7 +216,7 @@ The following code took some time to made, had its' fair share of issues while d
 
 ---
 
-All our classes would extend the following `Parsable` class:
+The following `Parsable` class serves as the foundation for our runtime validation framework:
 
 ```typescript
 import { SafeParseReturnType, ZodSchema, ZodTypeDef } from 'zod'
@@ -273,32 +274,32 @@ const schema = z.object({
   amount: z.number()
 })
 
-export class ExampleFromProject extends Parsable(schema) {
+export class GrowthCycle extends Parsable(schema) {
   // ... existing code
 }
 ```
 
-We can now use the `parse` and `safeParse` methods to validate any unknown data.
+With this setup, we can now use the `parse` and `safeParse` methods to validate any unknown data.
 
 ```typescript
 const input = { id: '123', type: 'foo', amount: 42 }
 
-const example = ExampleFromProject.parse(input)
+const example = GrowthCycle.parse(input)
 // or
-const { success, data, error } = ExampleFromProject.safeParse(input)
+const { success, data, error } = GrowthCycle.safeParse(input)
 ```
 
 From this moment onwards we can be sure the data we are working with is in the expected format, no more need for `as LAZY_LIE`s.
 
-And on receiving faulty data, we can pin-point it better and (hopfully) handle it gracefully.
+When receiving faulty data, we'll be better equipped to pinpoint and (hopefully) handle it gracefully.
 
 ![IoT devices](/blog/zod/parse-failures.png "Monitoring receiving of faulty data")
 
 
 ### The aftermath
 
-After rolling out the changes a lot of services started reporting faulty data inputs. Initially, the team was not very pleased with the constant need for fixing _unnecessary errors_. Instead of adding new features the focus was on data integrity for nearly a full month.
+After implementing runtime validation, our services started reporting a lot more faulty data inputs. Initially, the team was not very pleased with the constant need for fixing _unnecessary errors_. Instead of adding new features the focus was on data integrity for nearly a full month.
 
-But as time went on, received data was more and more in line with the expected format. We have better discussions between the teams about the data format and the interfaces as faulty data will not be accepted anymore.
+However, as time passed, received data became increasingly in line with the expected format. This led to better discussions between teams about data formats and interfaces, as faulty data would no longer be accepted.
 
-The platform is more stable, and the data is more reliable.
+As a result, our platform is now more stable, and the reliability of our data has improved significantly.

@@ -293,19 +293,22 @@ export class GrowthCycle extends Parsable(schema) {
 With this setup, we can now use the `parse` and `safeParse` methods to validate any unknown data.
 
 ```typescript
-const input = { id: '123', type: false, amount: 42 }
+const validInput = { id: '123', type: "foo", amount: 42 }
+const invalidInput = { id: '123', type: false, amount: 42 } // type should be a string
 
-const example = GrowthCycle.parse(input) // Throws a `ZodError`
+GrowthCycle.parse(validInput) // GrowthCycle
+GrowthCycle.parse(invalidInput) // Throws a `ZodError`
 // or
-const { success, data, error } = GrowthCycle.safeParse(input) // Returns a `ZodError`
+GrowthCycle.safeParse(validInput) // Returns a `GrowthCycle`
+GrowthCycle.safeParse(input) // Gracefully returns a `ZodError`
 ```
 
 On top of this, even _new_ instances of any `Parsable` class will be validated using the schema and giving type-hints in the IDE. Adding some extra static type checking magic to the mix.
 
 ```typescript
-const input = { id: '123', type: false, amount: 42 }
+const invalidInput = { id: '123', type: false, amount: 42 }
 
-const example = new GrowthCycle(input) // [!code error]
+const example = new GrowthCycle(invalidInput) // [!code error]
 // Argument of type '{ id: string; type: boolean; amount: number; }' is not assignable to parameter of type '{ type: string; id: string; amount: number; }'.
 //  Types of property 'type' are incompatible.
 //    Type 'boolean' is not assignable to type 'string'.

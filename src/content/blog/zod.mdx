@@ -44,7 +44,6 @@ And when you call the function you expect to get the data you want:
 
 ```typescript
 const response = await fetchData<ApiData>("example.api.org");
-//    ^? `ApiData`
 ```
 
 At first glance the interface looks fine, the function has explicit type inputs and outputs.
@@ -54,7 +53,7 @@ But theres a catch -- or rather 2 lies:
 1. The return type is a lie. The function can return anything, not just `ApiData`.
 2. The function can throw an error, but you don't know that from the interface. You're left in the dark about what could go wrong.
 
-You can easily spot those lies in source code whenever you see an `as LAZY_LIE`.
+You can easily spot those lies in source code whenever you see an `as T` (which can be read as `as LIE`).
 
 ---
 
@@ -98,29 +97,24 @@ type ApiData = z.infer<typeof apiData>;
 Now, when we call the function, we're sure that the data we get is according to the schema. And if not, we get proper typed errors.
 
 ```typescript
-export function getData(): ApiData | null {
+export async function getData() {
   const response = await fetchData("example.api.org", apiData);
 
   if (!response.success) {
-    console.log(response.data);
-    //                   ^? `undefined`
+    console.log(response.data); // undefined
     if (response.error instanceof ZodError) {
       // The data we got from the API is not according to the schema
-      console.log(response.error);
-      //                   ^? `ZodError`
+      console.log(response.error); // ZodError
       return null;
     }
 
     // The API request failed
-    console.log(response.error);
-    //                   ^? `unknown`
+    console.log(response.error); // unknown
     return null;
   }
 
-  console.log(response.error);
-  //                   ^? `undefined`
-  return response.data;
-  //              ^? `ApiData`
+  console.log(response.error); // undefined
+  return response.data; // ApiData
 }
 ```
 
@@ -160,27 +154,28 @@ For DynamoDB queries, we have functions like:
 
 ``` typescript
 function getRecord(id: string) {
-  const { Item } = await dynamoClient.send(<QUERY>);
-  //      ^? `Record<string, any>`
+  const response = await dynamoClient.send(<QUERY>);
+  const Item = response.Item; // Record<string, any>
 
-  return GrowthCycle.fromDynamoRecord(Item);
+  return GrowthCycle.fromDynamoRecord(Item); // GrowthCycle
 }
 ```
 
-And for MQTT messages, we've created handlers that parse data as follows:
+And for MQTT messages, we've created handlers that parse data[^2] as follows:
+
+[^2]: For better `JSON.parse` type safety, check out [ts-reset](https://github.com/total-typescript/ts-reset)
 
 ```typescript
 mqqClient.onMessage(message => {
-  const data = JSON.parse(message.payload.toString());
-  //    ^? `any`
+  const data = JSON.parse(message.payload.toString()); // any
 
-  const example = new GrowthCycle(data.id, data.type, data.amount);
+  const example = new GrowthCycle(data.id, data.type, data.amount); // GrowthCycle
 
   // ... do something with the data
 })
 ```
 
-But, you might have noticed some `as LAZY_LIE`s in the code.
+But, you might have noticed some `as LIE`s in the code.
 
 When parsing a record from DynamoDB, we're assuming that the data is always there and of the correct type. Similarly, when parsing an MQTT message, we're assuming that the payload is always a stringified JSON object containing the correct data.
 
@@ -194,7 +189,7 @@ While all interfaces and static types are correct, runtime data could still be (
 
 As we tested our platform with simulated (IoT) devices, everything seemed to work smoothly. But when the simulated devices were being replaced by their actual real-world counterparts, that's when things got interesting.
 
-When we started to get actual data from the real world bugs started to surface. The data we were expecting and worked with in our simulated environment was not always the correct data. The interfaces from _"the hardware team"_ and _"the software team"_ were not always in sync.
+When we started to get actual data from the real world, bugs started to surface. The data we were expecting and worked with in our simulated environment was not always the correct data. The interfaces from _"the hardware team"_ and _"the software team"_ were not always in sync.
 
 Some bugs were found immediately, as the services started breaking down when the wrong data was received:
 
@@ -263,7 +258,23 @@ export function Parsable<Output = unknown, TypeDef extends ZodTypeDef = ZodTypeD
 }
 ```
 
-We can extend the `Parsable` in our data objects to give it runtime validation capabilities.
+Okay, busted. In our code we also use some `as LIE`s, but let's break it down.
+
+<br/>`data as Input`<br/>
+Our constructor requires an `Input` type and does not allow the `unknown` data we pass to the `parse` method.
+
+By doing this, instead of allowing `constructor(input: Input | unknown)` we get enhanced type hints in the IDE when constructing data objects. More on this later.
+
+<br/>`as unknown as GeneratedParsable<Output, TypeDef, Input>`<br/>
+A double `LIE`! To make your IDE happy we need to return any form of our `GeneratedParsable` interface.
+
+As the _shape_ of the schema can be (almost) anything, typescript will infer everything from the generics `Output`, `TypeDef` and `Input` and use them in the `GeneratedParsable` interface.
+
+We first need to tell typescript `Generated` is `unknown` before we tell it that it is actually a `GeneratedParsable`.
+
+---
+
+Luckely, all of the above happens behind the scenes and we can extend the `Parsable` in our data objects to give it runtime validation capabilities.
 
 ```typescript
 import { z } from 'zod'
@@ -282,14 +293,25 @@ export class GrowthCycle extends Parsable(schema) {
 With this setup, we can now use the `parse` and `safeParse` methods to validate any unknown data.
 
 ```typescript
-const input = { id: '123', type: 'foo', amount: 42 }
+const input = { id: '123', type: false, amount: 42 }
 
-const example = GrowthCycle.parse(input)
+const example = GrowthCycle.parse(input) // Throws a `ZodError`
 // or
-const { success, data, error } = GrowthCycle.safeParse(input)
+const { success, data, error } = GrowthCycle.safeParse(input) // Returns a `ZodError`
 ```
 
-From this moment onwards we can be sure the data we are working with is in the expected format, no more need for `as LAZY_LIE`s.
+On top of this, even _new_ instances of any `Parsable` class will be validated using the schema and giving type-hints in the IDE. Adding some extra static type checking magic to the mix.
+
+```typescript
+const input = { id: '123', type: false, amount: 42 }
+
+const example = new GrowthCycle(input) // [!code error]
+// Argument of type '{ id: string; type: boolean; amount: number; }' is not assignable to parameter of type '{ type: string; id: string; amount: number; }'.
+//  Types of property 'type' are incompatible.
+//    Type 'boolean' is not assignable to type 'string'.
+```
+
+From this moment onwards we can be sure the data we are working with is in the expected format, no more need for `as LIE`s.
 
 When receiving faulty data, we'll be better equipped to pinpoint and (hopefully) handle it gracefully.
 

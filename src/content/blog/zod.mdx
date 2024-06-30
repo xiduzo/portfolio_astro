@@ -260,7 +260,7 @@ export function Parsable<Output = unknown, TypeDef extends ZodTypeDef = ZodTypeD
 }
 ```
 
-Okay, busted. In our code we also use **two** `as LIE`s, but let's break it down.
+Okay, busted. In our code we also use some `as LIE`s, but let's break it down.
 
 <br/>`data as Input`<br/>
 Our constructor requires an `Input` type and does not allow the `unknown` data we pass to the `parse` method.

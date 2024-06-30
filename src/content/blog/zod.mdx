@@ -1,7 +1,7 @@
 ---
 title: "Zod"
 description: "Stronger interfaces, cleaner code, fewer bugs"
-pubDate: "June 18 2024"
+pubDate: "June 30 2024"
 headerColor: "#3068B7"
 contrastColor: "#41B983"
 heroImage: "/blog/zod/header-icon.svg"
@@ -10,7 +10,7 @@ shareImage: "/blog/zod/header.png"
 
 import Cookie from '../../components/Cookie.astro'
 
-I am a big fan of TypeScript, but one thing that is lacking compared to _real_ strongly type languages: the runtime validation of the data.
+I am a big fan of TypeScript, but one thing that I still find lacking compared to a _real_ strongly type language: the runtime validation of the data.
 
 While a static type checker esnures everything _works_, eventually we have to interact with the scary outside world.
 
@@ -43,14 +43,14 @@ type ApiData = {
 And when you call the function you expect to get the data you want:
 
 ```typescript
-const response = await fetchData<ApiData>("example.api.org");
+const response = await fetchData<ApiData>("example.api.org"); // ApiData
 ```
 
 At first glance the interface looks fine, the function has explicit type inputs and outputs.
 
 But theres a catch -- or rather 2 lies:
 
-1. The return type is a lie. The function can return anything, not just `ApiData`.
+1. The function can return anything, not just `ApiData`.
 2. The function can throw an error, but you don't know that from the interface. You're left in the dark about what could go wrong.
 
 You can easily spot those lies in source code whenever you see an `as T` (which can be read as `as LIE`).
@@ -59,7 +59,7 @@ You can easily spot those lies in source code whenever you see an `as T` (which 
 
 ### Removing the lies
 
-We can enhance the interface by adding a runtime validation library like [Zod](https://zod.dev/)[^1]. This requires some initial extra typing, but it pays off in terms of safer code and new type-safe superpowers inside your IDE.
+We can enhance the interface by adding a runtime validation library like [Zod](https://zod.dev/)[^1]. This requires some initial extra typing, but it pays off in terms of new type-safe superpowers inside your IDE.
 
 [^1]: Zod is my personal go-to runtime validation library for JavaScript. But be aware that there is [more](https://zod.dev/?id=comparison) out there.
 
@@ -80,7 +80,7 @@ async function fetchData<T extends ZodSchema>(url: string, schema: T): Promise<R
 }
 ```
 
-Instead of defining a type, we define a schema with `Zod` and infer the interface from it.
+Instead of defining a type directly, we define a schema with `Zod` and infer the type from it.
 
 ```typescript
 import { z } from "zod";
@@ -122,7 +122,9 @@ export async function getData() {
 
 For my client, [Growy](https://www.growy.nl/), we're dealing with unstructured data from various sources.
 
-Growy is revolutionizing vertical farming by heavily relying on (hundreds of) IoT devices sending and receiving data to/from the cloud. We receive data from two primary sources: DynamoDB and MQTT messages.
+Growy is revolutionizing vertical farming by heavily relying on (hundreds of) IoT devices sending and receiving data to/from the cloud.
+
+Our software is handling data from two primary sources: DynamoDB and MQTT messages.
 
 In our software, we've developed classes that allow for creating data objects for static type-safety.
 
@@ -258,7 +260,7 @@ export function Parsable<Output = unknown, TypeDef extends ZodTypeDef = ZodTypeD
 }
 ```
 
-Okay, busted. In our code we also use some `as LIE`s, but let's break it down.
+Okay, busted. In our code we also use **two** `as LIE`s, but let's break it down.
 
 <br/>`data as Input`<br/>
 Our constructor requires an `Input` type and does not allow the `unknown` data we pass to the `parse` method.

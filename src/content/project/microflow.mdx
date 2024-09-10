@@ -1,0 +1,301 @@
+---
+title: "Microflow"
+description: "Microcontrollers made simple"
+pubDate: "Sep 14 2024"
+headerColor: "#EAB308"
+contrastColor: "#3B82F6"
+heroImage: "/project/microflow/header-icon.svg"
+---
+
+import Cookie from '../../components/Cookie.astro'
+
+## Interactivity
+
+After helping around the [Master Digital Design](https://www.masterdigitaldesign.com/) for a while, I noticed that a lot of students were struggling with the same thing: microcontrollers.
+
+The students want to create interactive prototypes, but the learning curve is too steep for most designers whom never touched code before.
+
+And I do have to agree, I've been working with microcontrollers for some years now and switching from my usual JavaScript environment to the `Arduino IDE` is quite rhoug still.
+
+## Rapid prototyping
+While there are some tools out there that make it easier to work with microcontrollers, like [Johnny Five](http://johnny-five.io/) where you can write JavaScript to programm the microcontroller, it still requires staters to write code.
+
+And that's where Microflow comes in.
+
+Microflow is a set of tools to make it easier to start prototyping for interactivity where you don't worry about low-level coding, or coding at all for that matter!
+
+---
+Microflow consists of 2 tools so far:
+
+1. **Microflow hardware bridge**, A Figma plugin that allows you to interact with your Figma variables using MQTT.
+2. **Microflow studio**, A desktop application that allows you to create interactive prototypes using a visual, flow-based, interface.
+
+![Microflow hardware bridge](/project/microflow/figma-hardware-bridge.png "Microflow hardware bridge")
+
+
+## Microflow hardware bridge
+I think Figma is an awesome tool. After the introduction of _variables_ you can make some pretty nifty prototypes and fool any stakeholder into thinking it's already real application.
+
+> Figproxy enables rapid prototyping of tangible user experiences by allowing Figma prototypes to talk to the external world.
+> <cite>[figproxy](https://edges.ideo.com/posts/figproxy)</cite>
+
+
+After seeing a post on figproxy I wanted to create a similar tool. But instead of still having to write code, I wanted to make it even easier.
+
+Besides, I do not like how you need to set serveral permissions to use figproxy, and how it acts as a proxy for your brower.
+
+### MQTT
+Microflow hardware bridge relies on MQTT to communicate from and to the Figma plugin.
+
+Any client can send and receive messages from Microflow hardware bridge. This could be from your browser, a mobile app, a microcontroller or even your fridge -- if it sends the correct data.
+
+The brains for all this message handling is the following react component:
+
+```typescript
+import { useMqtt } from '@microflow/mqtt-provider/client';
+import { useEffect, useRef } from 'react';
+import { MESSAGE_TYPE, SetLocalValiable } from '../../common/types/Message';
+import { sendMessageToFigma } from '../utils/sendMessageToFigma';
+
+type KnownVariable = Pick<Variable, 'name' | 'resolvedType' | 'id'>;
+
+export function MqttVariableMessenger() {
+	const { publish, subscribe, uniqueId } = useMqtt();
+	const publishedVariableValues = useRef<Map<string, any | undefined>>(new Map());
+	const knownVariables = useRef<Record<string, KnownVariable>>({});
+
+	async function publishVariables(newVariables?: Variable[]) {
+		const newVariablesAsJson = JSON.stringify(newVariables);
+		if (newVariablesAsJson !== JSON.stringify(knownVariables.current)) {
+			await publish(`microflow/v1/${uniqueId}/plugin/variables`, newVariablesAsJson);
+		}
+
+		knownVariables.current = newVariables;
+
+		variables?.forEach(async variable => {
+			const current = publishedVariableValues.current.get(variable.id);
+			const value = Object.values(variable.valuesByMode)[0];
+			const valueAsJson = JSON.stringify(value);
+			if (current === valueAsJson) {
+				return;
+			}
+
+			await publish(
+				`microflow/v1/${uniqueId}/plugin/variable/${variable.id}`,
+				JSON.stringify(value),
+			);
+			publishedVariableValues.current.set(variable.id, valueAsJson);
+		});
+	}
+
+	useEffect(() => {
+		subscribe(`microflow/v1/${uniqueId}/+/variables/request`, topic => {
+			const app = topic.split('/')[3];
+			publish(
+				`microflow/v1/${uniqueId}/${app}/variables/response`,
+				JSON.stringify(knownVariables.current),
+			);
+			publishedVariableValues.current.forEach((value, id) => {
+				publish(`microflow/v1/${uniqueId}/${app}/variable/${id}`, value);
+			});
+		});
+
+		subscribe(`microflow/v1/${uniqueId}/+/variable/+/set`, async (topic, message) => {
+			const [, , , app, , variableId] = topic.split('/');
+			const value = JSON.parse(message.toString());
+
+			sendMessageToFigma(SetLocalValiable(variableId, value as VariableValue));
+		});
+	}, [subscribe, publish, uniqueId]);
+
+	return null;
+}
+```
+
+Some more sorcery is happening in the `sendMessageToFigma` and `useMqtt`, but I'll leave that up to your imagination.
+
+Or [check the code](https://github.com/xiduzo/microflow/tree/main/apps/figma-plugin) if you are a nerd like me who likes to know how things work.
+
+---
+
+![Microflow studio with some hardware components](/project/microflow/hardware.png "Microflow studio")
+
+## Microflow studio
+This tool was build to make working with microcontrollers _plug-and-play_. In order to make this happen, there is some magic happening behind the scenes.
+
+### Flashing firmware
+Firstly, when connecting a supported microcontroller Microflow studio will automatically detect the board and flash it with the correct [firmata firmware](https://docs.arduino.cc/retired/hacking/software/FirmataLibrary).
+
+To make this work with [electron](https://www.electronjs.org/), the backbone of the application, I stole the good parts of [avrgirl-arduino](https://github.com/noopkat/avrgirl-arduino) and gave it some TS-love.
+
+```typescript
+import { Board, BoardName, BOARDS } from './constants';
+import { SerialConnection } from './SerialConnection';
+
+export class Flasher {
+	private readonly connection: SerialConnection;
+	private readonly board: Board;
+
+	constructor(boardName: BoardName, usbPortPath: string) {
+		const board = BOARDS.find(board => board.name === boardName);
+
+		if (!board) {
+			throw new Error(`Board ${boardName} is not a know board`);
+		}
+
+		this.board = board;
+		this.connection = new SerialConnection(board.baudRate, usbPortPath);
+	}
+
+	async flash(filePath: string) {
+		try {
+			const protocol = new this.board.protocol(this.connection, this.board);
+			await protocol.flash(filePath);
+		} catch (error) {
+			throw error; // This is important to rethrow the error so the caller can handle it
+		} finally {
+			await this.connection.close(); // Always close the port again
+		}
+	}
+}
+```
+
+### Code to generate code
+Secondly, the application provides a visual flow-based interface to connect components and create interactions.
+
+For this I utulized [react-flow](https://reactflow.dev/), from which custom code is generated for the microcontroller based on the `nodes` and `edges` and how the user connected them.
+
+```typescript
+import type { Edge, Node } from '@xyflow/react';
+
+export function generateCode(nodes: Node[], edges: Edge[]) {
+	let code = `const MicroflowComponents = require("@microflow/components");`;
+
+	code += `const nodes = new Map();`;
+
+	code += `const port = process.argv.at(-1);`
+	code += `new MicroflowComponents.Board({ port: port });`;
+
+	nodes.forEach(node => {
+		code += `const ${node.type}_${node.id} = new MicroflowComponents.${node.type}(${JSON.stringify(node.data)});`;
+		code += `nodes.set("${node.id}", ${node.type}_${node.id});`;
+	});
+
+	const nodesWithActionListener = nodes.filter(node => edges.some(edge => edge.source === node.id));
+
+	nodesWithActionListener.forEach(node => {
+		const actions = edges.filter(edge => edge.source === node.id);
+
+		const actionsGroupedByHandle = actions.reduce(
+			(acc, action) => {
+				if (!acc[action.sourceHandle]) {
+					acc[action.sourceHandle] = [];
+				}
+
+				acc[action.sourceHandle].push(action);
+
+				return acc;
+			},
+			{} as Record<string, Edge[]>,
+		);
+
+		Object.entries(actionsGroupedByHandle).forEach(([action, edges]) => {
+			code += `${node.type}_${node.id}.on("${action}", () => {`;
+
+			edges.forEach(edge => {
+				const targetNode = nodes.find(node => node.id === edge.target);
+				const valueTriggers = [
+					'set', 'check', 'show', 'rotate',
+					'red', 'green', 'blue', 'opacity',
+					'from', 'to', 'publish',
+				];
+
+				const shouldSetValue = valueTriggers.includes(edge.targetHandle);
+				let value = shouldSetValue ? `${node.type}_${node.id}.value` : undefined;
+
+				if (node.type === 'RangeMap' && shouldSetValue) {
+					value = `${node.type}_${node.id}.value[1]`;
+				}
+
+				code += `${targetNode?.type}_${targetNode?.id}.${edge.targetHandle}(${value});`;
+			});
+
+			code += `}); // ${node.type}_${node.id} - ${action}`;
+		});
+	});
+
+	return code;
+}
+```
+
+Which is a whole lot of code, even after some simplifications, to generate the following few lines of code for the microcontroller:
+
+```typescript
+const MicroflowComponents = require("@microflow/components");
+
+const nodes = new Map();
+
+const port = process.argv.at(-1);
+new MicroflowComponents.Board({ port: port });
+
+const Led_zuhhq2 = new MicroflowComponents.Led({"pin":13,"value":0,"id":"zuhhq2"});
+nodes.set("zuhhq2", Led_zuhhq2);
+const Interval_4aeu4a = new MicroflowComponents.Interval({"interval":500,"value":0,"id":"4aeu4a"});
+nodes.set("4aeu4a", Interval_4aeu4a);
+
+Interval_4aeu4a.on("change", () => {
+  Led_zuhhq2.toggle(undefined);
+}); // Interval_4aeu4a - change
+```
+
+### A wrapper around a wrapper around a wrapper
+In order to communicate with the firmata firmware we've flashed on the microcontroller, all `MicroflowComponents` are wrappers around the [johnny-five](http://johnny-five.io/) library -- which is a wrapper around the [firmata.js](https://github.com/firmata/firmata.js) library.
+
+
+```typescript
+import JohnnyFive, { LedOption } from 'johnny-five';
+import { BaseComponent, BaseComponentOptions } from './BaseComponent';
+
+export type LedData = Omit<LedOption, 'board'>;
+export type LedValueType = number;
+
+type LedOptions = BaseComponentOptions & LedData;
+
+export class Led extends BaseComponent<LedValueType> {
+	private readonly component: JohnnyFive.Led;
+
+	constructor(private readonly options: LedOptions) {
+		super(options);
+		this.component = new JohnnyFive.Led(options);
+	}
+
+	on(action: string, callback: (...args: any[]) => void) {
+		if (action) {
+			this.eventEmitter.on(action, callback);
+			return;
+		}
+
+		this.component.on();
+		this.value = 1;
+	}
+
+	off() {
+		this.component.off();
+		this.value = 0;
+	}
+
+	toggle() {
+		this.component.toggle();
+		this.value = this.value === 0 ? 1 : 0;
+	}
+}
+```
+
+That's about 2 months of work boiled down in 3 code snippets.
+
+And you've read through it all, have a <Cookie name="microflow" />!
+
+## References
+- [Get Microflow hardware bridge](https://www.figma.com/community/plugin/1373258770799080545)
+- [Get Microflow studio](https://microflow.vercel.app/)
+- [See all code](https://github.com/xiduzo/microflow)

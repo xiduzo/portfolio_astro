@@ -23,7 +23,7 @@ As I am always looking for an excuse to start a new pet-project to learn and exp
 ## Requirements
 Before starting the project we set some ground rules:
 
-1. Fissa should be available on both iOS and Android
+1. Fissa should be available on both iOS and Android, everyone can be the DJ
 2. No onboarding! Like jokes, apps lose their charm when you have to explain them
 3. A fissa never stops, there is always music playing
 4. Have some fun, this is not work
@@ -155,7 +155,7 @@ Therefore we put our focus on managing a collaborative playlist and utilize Spot
 Do one thing, and do it well.
 
 ### Group session
-While building Fissa, we noticed Spotify introduced the [remote group session](https://support.spotify.com/us/article/remote-group-session/). 
+While building Fissa, we noticed Spotify introduced the [remote group session](https://support.spotify.com/us/article/remote-group-session/).
 
 This is still a hidden feature, changes constantly and does not seem to have any focus from Spotify.
 
@@ -167,10 +167,10 @@ Before I lose you in the details, I would like to invite you to experience Fissa
 
 Make a Fissa and enjoy the tunes while you read the rest of the article.
 - [in the apple app store](https://apps.apple.com/nl/app/fissa-houseparty/id1632218985)
-- [in de google play store](https://play.google.com/store/apps/details?id=com.fissa.app)
+- [in the google play store](https://play.google.com/store/apps/details?id=com.fissa.app)
 
 ## Free with limits
-Spotify provides us with an [awesome API](https://developer.spotify.com/documentation/web-api). Unfortunately, and understandably, it is [rate limited](https://developer.spotify.com/documentation/web-api/concepts/rate-limits).
+Spotify provides us with an [awesome API](https://developer.spotify.com/documentation/web-api). Unfortunately --and understandably-- it is [rate limited](https://developer.spotify.com/documentation/web-api/concepts/rate-limits).
 
 Users need to be signed in to their Spotify account to use Fissa, therefore we can utilize the unlimited API calls from personal accounts. Everything which is not related to the Fissa itself, like searching for songs, is done via the Fissa app and stored using [zustand](https://github.com/pmndrs/zustand).
 
@@ -259,6 +259,8 @@ As the Fissa is a collaborative playlist, users determine the order of the songs
 
 Strap-on your seatbelt, the next part will contain a lot of nerd info.
 
+---
+
 Initially we stored the index of the songs directly into the database. This way we put an unique index on the track for data integrity, and we could easily sort the tracks by their index.
 
 ```prisma
@@ -268,7 +270,7 @@ model Track {
 
     fissa Fissa @relation(fields: [pin], references: [pin], onDelete: Cascade)
     pin String @db.VarChar(4)
-    
+
     @@id([pin, trackId])
     @@unique([pin, index])
     @@map("tracks")

@@ -1,21 +1,22 @@
-import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel/static";
 import compress from "astro-compress";
+import { defineConfig } from "astro/config";
 import { remarkReadingTime } from './lib/remark-reading-time.mjs';
 
 // @shikijs/transformers is broken - for now
 // https://www.reddit.com/r/astrojs/comments/1atheyx/integrating_shiki_transformers_with_astrojs/
 import {
-  transformerNotationHighlight,
-  transformerNotationDiff,
-  transformerNotationWordHighlight,
-  transformerNotationFocus,
-  transformerNotationErrorLevel
-  // transformerMetaWordHighlight, // Not working
-  // transformerMetaHighlight // Not working
+    transformerNotationDiff,
+    transformerNotationErrorLevel
+    // transformerMetaWordHighlight, // Not working
+    // transformerMetaHighlight // Not working
+    ,
+    transformerNotationFocus,
+    transformerNotationHighlight,
+    transformerNotationWordHighlight
 } from 'shikiji-transformers';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -71,7 +72,6 @@ export default defineConfig({
     defaultStrategy: 'viewport',
   },
   experimental: {
-    optimizeHoistedScript: true,
     clientPrerender: true,
   },
   adapter: vercel({

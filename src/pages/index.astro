@@ -10,6 +10,7 @@ const projects = (await getCollection("project"))
       new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
     );
   });
+console.log(projects);
 ---
 
 <BaseLayout title="Projects">

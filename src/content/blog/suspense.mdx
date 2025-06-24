@@ -4,7 +4,7 @@ description: "Unravelling the magic from React"
 pubDate: "Nov 21 2023"
 headerColor: "#5DD4F4"
 contrastColor: "#262626"
-heroImage: "/blog/suspense/header-icon.svg"
+openMoji: '23F1'
 ---
 
 import Cookie from '../../components/Cookie.astro'
@@ -39,13 +39,7 @@ But I don't like magic code, so let's find out how it works
 `Suspense` will <i>`try`</i> to render your component and whenever a `Promise` is being thrown it will <i>`catch`</i> it and render the fallback component until the promise resolves.
 
 ```jsx
-<Suspense
-  fallback={
-    {
-      /* Catch */
-    }
-  }
->
+<Suspense fallback={{ /* Catch */ }} >
   {/* Try */}
 </Suspense>
 ```

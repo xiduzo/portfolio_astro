@@ -7,8 +7,8 @@ import ScrollingText from "../components/ScrollingText.astro";
 import PageProgress from "../components/PageProgress.astro";
 import PageTransition from "../components/PageTransition.astro";
 import OtherProjects from "../components/OtherProjects.astro";
-import Image from "../components/elements/Image.astro";
 import FormattedDate from "../components/FormattedDate.astro";
+import Image from "../components/elements/Image.astro";
 
 type Props = CollectionEntry<ContentCollectionKey>["data"] & {
   showDates?: boolean;
@@ -19,23 +19,33 @@ const {
   pubDate,
   updatedDate,
   description,
-  heroImage,
+  openMoji,
   shareImage,
   headerColor,
   contrastColor,
-  showDates,
   minutesRead,
+  heroImage,
 } = Astro.props;
 ---
 
-<BaseLayout
-  title={title}
-  description={description}
-  image={shareImage ?? heroImage}
->
+<BaseLayout title={title} description={description} image={shareImage ?? ""}>
   <PageTransition background={headerColor} />
-  <ScrollingText text={title} background={headerColor} />
-  <article>
+  <article class="-mt-14">
+    {
+      openMoji && (
+        <section
+          aria-hidden="true"
+          class="relative flex justify-center"
+          style={{ background: headerColor }}
+        >
+          <ScrollingText text={title} />
+          <div
+            class="open-moji transition-all text-[240px] translate-y-44 md:text-[420px] md:translate-y-8 absolute"
+            set:html={`&#x${openMoji};`}
+          />
+        </section>
+      )
+    }
     {
       heroImage && (
         <section
@@ -57,22 +67,22 @@ const {
 
     <h1 class="sr-only">{title}</h1>
 
-    {
-      showDates && (
-        <section class="pt-12 text-center">
-          Publised on <FormattedDate date={pubDate} />
-          {updatedDate && (
-            <>
-              , last updated on <FormattedDate date={updatedDate} />
-            </>
-          )}
-        </section>
-      )
-    }
+    <section class="pt-48 text-center">
+      Publised on <FormattedDate date={pubDate} />
+      {
+        updatedDate && (
+          <div class="opacity-50 italic text-sm">
+            last updated on <FormattedDate date={updatedDate} />
+          </div>
+        )
+      }
+    </section>
 
     {
       minutesRead && (
-        <section class="pt-12 text-center opacity-50">{minutesRead}</section>
+        <section class="pt-8 text-center opacity-60 text-lg">
+          {minutesRead}
+        </section>
       )
     }
 
@@ -89,8 +99,8 @@ const {
     </section>
   </article>
   <ScrollingText text="More work" direction="right" />
-  <OtherProjects currentProject={title} background={headerColor} />
-  <PageProgress color={headerColor} />
+  <OtherProjects currentProject={title} background={contrastColor} />
+  <PageProgress color={contrastColor} />
 </BaseLayout>
 
 <script>

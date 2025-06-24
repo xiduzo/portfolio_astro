@@ -1,6 +1,5 @@
 ---
 import { getCollection } from "astro:content";
-import Image from "./elements/Image.astro";
 
 type Props = {
   currentProject: string;
@@ -31,19 +30,17 @@ const projects = (await getCollection("project"))
         >
           <a class="w-full" href={`/project/${project.slug}`}>
             <section
-              class="w-full"
+              class="w-full h-96 flex items-center justify-end"
               style={{
                 background: project.data.contrastColor,
               }}
             >
-              <Image
-                src={project.data.heroImage}
-                alt={project.data.description}
-                aria-hidden="true"
-                class={`${project.data.contrastColor ? "max-w-xs md:max-w-sm mx-auto translate-y-12 px-3 md:px-0" : ""}`}
+              <div
+                class="open-moji text-[400px] mx-auto translate-y-24 px-3 md:px-0"
+                set:html={`&#x${project.data.openMoji};`}
               />
             </section>
-            <div class="mt-24 text-xl font-extrabold text-slate-900 dark:text-slate-900">
+            <div class="mt-36 text-xl font-extrabold text-slate-900 dark:text-slate-900">
               {project.data.title}
               <span class="font-light description text-slate-900 dark:text-slate-900">
                 {project.data.description}

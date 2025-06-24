@@ -13,7 +13,7 @@
   } from "unique-names-generator";
   import { Buffer } from "buffer";
 
-  type State = {
+  type MouseState = {
     x: number;
     y: number;
     width: number;
@@ -31,25 +31,15 @@
 
   // https://www.rapidtables.com/web/css/css-color.html
   const cssColorNames = [
-    // Red
     "lightsalmon",
-    // Orange
     "coral",
-    // Yellow
     "moccasin",
-    // Green
     "limegreen",
-    // Cyan
     "paleturquoise",
-    // Blue
     "deepskyblue",
-    // Purple
     "violet",
-    // Pink
     "hotpink",
-    // White
     "antiquewhite",
-    // Brown
     "burlywood",
   ];
 
@@ -59,7 +49,7 @@
       dictionaries: [cssColorNames, names, ["the"], adjectives, animals],
       separator: " ",
     });
-  // localStorage.setItem("bound-name", name);
+  localStorage.setItem("bound-name", name);
 
   const pageTopic = window.location.host + window.location.pathname;
   const endTopic = pageTopic + "/end";
@@ -117,51 +107,53 @@
     }
   });
 
-  const cursor = document.querySelector("#my-cursor") as HTMLElement;
+  let cursor = document.querySelector("#my-cursor") as HTMLElement;
   const header = document.querySelector("header") as HTMLElement;
 
   let onElement: Element | null = null;
-  let prevEvent: MouseEvent | null = null;
+  let lastMouseEvent: MouseEvent | null = null;
 
-  const createState = (e: MouseEvent | Event): State => {
-    const defaultState: State = {
-      x: e instanceof MouseEvent ? e.clientX : prevEvent?.clientX ?? 0,
-      y: e instanceof MouseEvent ? e.clientY : prevEvent?.clientY ?? 0,
+  const createState = (event: MouseEvent | Event): MouseState => {
+    const state: MouseState = {
+      x:
+        event instanceof MouseEvent
+          ? event.clientX
+          : (lastMouseEvent?.clientX ?? 0),
+      y:
+        event instanceof MouseEvent
+          ? event.clientY
+          : (lastMouseEvent?.clientY ?? 0),
       width: CUSTOM_CURSOR_BASE_SIZE,
       height: CUSTOM_CURSOR_BASE_SIZE,
       radius: "100px",
     };
 
-    if (e instanceof MouseEvent) prevEvent = e;
+    if (event instanceof MouseEvent) lastMouseEvent = event;
 
-    const computedState: Partial<State> = {};
-
-    if (onElement != null) {
+    if (onElement != null && document.body.contains(onElement)) {
       cursor.classList.add("duration-100");
       const { top, left, width, height } = onElement.getBoundingClientRect();
-      const radius = window.getComputedStyle(onElement).borderTopLeftRadius;
+      const radius =
+        window.getComputedStyle(onElement).borderTopLeftRadius || "0px";
 
-      computedState.x = left + width / 2;
-      computedState.y = top + height / 2;
-      computedState.width = width;
-      computedState.height = height;
-      computedState.radius = radius;
+      state.x = left + width / 2;
+      state.y = top + height / 2;
+      state.width = width;
+      state.height = height;
+      state.radius = radius;
     } else {
       setTimeout(() => cursor.classList.remove("duration-100"), 80);
     }
 
-    return {
-      ...defaultState,
-      ...computedState,
-    };
+    return state;
   };
 
-  const updateProperties = (elem: HTMLElement, state: State) => {
-    elem.style.setProperty("--x", `${state.x}px`);
-    elem.style.setProperty("--y", `${state.y}px`);
-    elem.style.setProperty("--width", `${state.width}px`);
-    elem.style.setProperty("--height", `${state.height}px`);
-    elem.style.setProperty("--radius", state.radius);
+  const updateProperties = (element: HTMLElement, state: MouseState) => {
+    element.style.setProperty("--x", `${state.x}px`);
+    element.style.setProperty("--y", `${state.y}px`);
+    element.style.setProperty("--width", `${state.width}px`);
+    element.style.setProperty("--height", `${state.height}px`);
+    element.style.setProperty("--radius", state.radius);
   };
 
   const smoothScrollTo = (href: string, element: HTMLAnchorElement) => {
@@ -260,7 +252,8 @@
   document.addEventListener("mousemove", updateState);
   document.addEventListener("scroll", updateState);
 
-  document.onreadystatechange = () => {
+  document.addEventListener("astro:page-load", () => {
+    cursor = document.querySelector("#my-cursor") as HTMLElement;
     if (document.readyState !== "complete") return;
 
     document.querySelectorAll("a, button").forEach((elem) => {
@@ -274,7 +267,7 @@
         audioTimeout && clearTimeout(audioTimeout);
       });
     });
-  };
+  });
 </script>
 
 <style>

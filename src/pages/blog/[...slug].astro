@@ -25,7 +25,7 @@ const { data, render } = Astro.props;
 const { Content, remarkPluginFrontmatter } = await render();
 ---
 
-<MarkdownContent {...data} {...remarkPluginFrontmatter} showDates>
+<MarkdownContent {...data} {...remarkPluginFrontmatter}>
   <Content
     components={{
       img: ImageWithTitle,

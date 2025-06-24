@@ -1,21 +1,19 @@
 ---
 export interface Props {
-  background?: string;
   text: string;
   direction?: "left" | "right";
 }
 
-const { background, text, direction } = Astro.props;
+const { text, direction } = Astro.props;
 ---
 
 <scrolling-text
   aria-hidden="true"
-  class="flex items-end w-full -mt-20 overflow-hidden uppercase h-96"
-  style={{ background }}
+  class="flex items-end w-full overflow-hidden uppercase h-96"
   data-direction={direction}
 >
   <div
-    class="relative whitespace-nowrap text-9xl -mb-10 lg:text-[256px] font-extrabold tracking-widest lg:-mb-20 space-x-32"
+    class="relative whitespace-nowrap text-9xl lg:text-[256px] font-extrabold tracking-widest lg:-mb-20 space-x-32"
   >
     {Array.from({ length: 15 }).map(() => <span>{text}</span>)}
   </div>

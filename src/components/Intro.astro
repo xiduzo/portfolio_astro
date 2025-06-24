@@ -21,8 +21,8 @@
 </div>
 
 <script>
-  const body = document.querySelector("body");
-  const wrapper = document.getElementById("wrapper");
+  let body = document.querySelector("body");
+  let wrapper = document.getElementById("wrapper");
   let isIntroDone = false;
 
   const closeIntro = () => {
@@ -131,18 +131,24 @@
     });
   };
 
-  const lastVisit = localStorage.getItem("lastVisit");
-  if (lastVisit) {
-    const date1 = new Date(lastVisit).valueOf();
-    const date2 = new Date().valueOf();
-    const timeDifference = Math.abs(date2 - date1);
-    const differenceInHours = Math.ceil(timeDifference / (1000 * 60 * 60));
+  document.addEventListener("astro:page-load", () => {
+    body = document.querySelector("body");
+    wrapper = document.getElementById("wrapper");
+    const lastVisit = localStorage.getItem("lastVisit");
+    if (lastVisit) {
+      const date1 = new Date(lastVisit).valueOf();
+      const date2 = new Date().valueOf();
+      const timeDifference = Math.abs(date2 - date1);
+      const differenceInHours = Math.ceil(timeDifference / (1000 * 60 * 60));
 
-    if (differenceInHours > 6) showIntro();
-    else wrapper.remove();
-  } else {
-    showIntro();
-  }
+      console.log(wrapper, differenceInHours);
+
+      if (differenceInHours > 6) showIntro();
+      else wrapper?.remove();
+    } else {
+      showIntro();
+    }
+  });
 </script>
 
 <style is:inline>

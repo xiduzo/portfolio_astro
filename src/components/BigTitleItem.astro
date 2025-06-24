@@ -1,6 +1,5 @@
 ---
 import { type CollectionEntry, type ContentCollectionKey } from "astro:content";
-import Image from "./elements/Image.astro";
 import FormattedDate from "./FormattedDate.astro";
 
 type Props = Pick<CollectionEntry<ContentCollectionKey>, "data" | "slug"> & {
@@ -8,7 +7,7 @@ type Props = Pick<CollectionEntry<ContentCollectionKey>, "data" | "slug"> & {
 };
 
 const { slug, data, baseHref } = Astro.props;
-const { title, description, heroImage, pubDate, headerColor, contrastColor } =
+const { title, description, openMoji, pubDate, headerColor, contrastColor } =
   data;
 ---
 
@@ -20,21 +19,19 @@ const { title, description, heroImage, pubDate, headerColor, contrastColor } =
   >
     <div
       aria-hidden="true"
-      class="block shadow-md sm:rounded-2xl transition-all lg:blur-3xl group-hover:blur-none mb-12 lg:mb-0 opacity-100 lg:w-[1280px] lg:h-[480px] pointer-events-none lg:max-w-screen-md lg:absolute lg:-translate-x-20 lg:opacity-20 dark:lg:opacity-10 group-hover:opacity-100 lg:group-hover:translate-x-20 lg:motion-reduce:translate-x-20 lg:motion-reduce:blur-xl lg:-mt-52"
+      class="block text-center min-h-96 shadow-md sm:rounded-2xl transition-all lg:blur-3xl group-hover:blur-none mb-12 lg:mb-0 opacity-100 lg:w-[1280px] lg:h-[480px] pointer-events-none lg:max-w-screen-md lg:absolute lg:-translate-x-20 lg:opacity-20 dark:lg:opacity-10 group-hover:opacity-100 lg:group-hover:translate-x-20 lg:motion-reduce:translate-x-20 lg:motion-reduce:blur-xl lg:-mt-52"
       style={{
-        background: contrastColor,
+        background: headerColor,
       }}
     >
-      <Image
-        src={heroImage}
-        alt={description}
-        loading="eager"
-        class={`${contrastColor ? "px-12 max-w-sm mx-auto translate-y-12 lg:max-w-lg lg:translate-y-24" : ""}`}
+      <div
+        class="open-moji transition-all lg:text-[420px] text-[360px] lg:translate-y-96 translate-y-72"
+        set:html={`&#x${openMoji};`}
       />
     </div>
     <h2
       class="mb-4 mt-12 lg:mt-0 text-6xl break-word font-extrabold tracking-widest text-center lg:text-start lg:text-9xl mix-blend-multiply dark:mix-blend-difference group-focus:text-slate-900 max-w-5xl"
-      style={{ color: headerColor }}
+      style={{ color: contrastColor }}
     >
       {title}
     </h2>

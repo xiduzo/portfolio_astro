@@ -16,7 +16,7 @@ const type = {
       .string()
       .optional()
       .transform((str) => (str ? new Date(str) : undefined)),
-    heroImage: z.string(),
+    openMoji: z.string().optional(),
     shareImage: z.string().optional(),
   }),
 };

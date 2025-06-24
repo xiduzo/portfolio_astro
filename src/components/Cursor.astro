@@ -108,7 +108,7 @@
   });
 
   let cursor = document.querySelector("#my-cursor") as HTMLElement;
-  const header = document.querySelector("header") as HTMLElement;
+  let header = document.querySelector("header") as HTMLElement;
 
   let onElement: Element | null = null;
   let lastMouseEvent: MouseEvent | null = null;
@@ -254,6 +254,7 @@
 
   document.addEventListener("astro:page-load", () => {
     cursor = document.querySelector("#my-cursor") as HTMLElement;
+    header = document.querySelector("header") as HTMLElement;
     if (document.readyState !== "complete") return;
 
     document.querySelectorAll("a, button").forEach((elem) => {

@@ -227,11 +227,10 @@
   };
 
   let audioTimeout: NodeJS.Timeout | null = null;
-  const playRandomHoverSound = (elem: HTMLAnchorElement) => {
+  const playRandomHoverSound = (element: HTMLAnchorElement) => {
     // Check if element is inside of an <article>
-    if (elem.closest("article") == null) return;
-
-    if (elem.parentElement?.tagName !== "LI") return;
+    if (element.closest("article") == null) return;
+    if (element.parentElement?.tagName !== "LI") return;
 
     const audios = [
       "/sound/bloop-1-184019.mp3",
@@ -255,7 +254,6 @@
   document.addEventListener("astro:page-load", () => {
     cursor = document.querySelector("#my-cursor") as HTMLElement;
     header = document.querySelector("header") as HTMLElement;
-    if (document.readyState !== "complete") return;
 
     document.querySelectorAll("a, button").forEach((elem) => {
       addPropertiesBasedOnHref(elem as HTMLAnchorElement);

@@ -50,16 +50,16 @@ const {
       heroImage && (
         <section
           aria-hidden="true"
-          class={`${contrastColor ? "mb-36" : ""}`}
+          class={`${headerColor ? "mb-36" : ""}`}
           style={{
-            background: contrastColor,
+            background: headerColor,
           }}
         >
           <Image
             src={heroImage}
             alt={description}
             loading="eager"
-            class={`${contrastColor ? "mx-auto max-w-5xl translate-y-24 px-5" : ""}`}
+            class={`${headerColor ? "mx-auto max-w-5xl translate-y-24 px-5" : ""}`}
           />
         </section>
       )

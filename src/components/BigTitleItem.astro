@@ -49,20 +49,22 @@ const { title, description, openMoji, pubDate, headerColor, contrastColor } =
 </li>
 
 <script>
-  const items = document.querySelectorAll("[data-big-title-item]");
+  document.addEventListener("astro:page-load", () => {
+    const items = document.querySelectorAll("[data-big-title-item]");
 
-  items.forEach((item) => {
-    item.addEventListener("mouseenter", () => {
-      const audios = [
-        "/sound/happy-pop-1-185286.mp3",
-        "/sound/happy-pop-2-185287.mp3",
-        "/sound/happy-pop-3-185288.mp3",
-      ];
-      const audio = new Audio(
-        audios[Math.floor(Math.random() * audios.length)]
-      );
-      audio.volume = 0.3;
-      audio.play();
+    items.forEach((item) => {
+      item.addEventListener("mouseenter", () => {
+        const audios = [
+          "/sound/happy-pop-1-185286.mp3",
+          "/sound/happy-pop-2-185287.mp3",
+          "/sound/happy-pop-3-185288.mp3",
+        ];
+        const audio = new Audio(
+          audios[Math.floor(Math.random() * audios.length)]
+        );
+        audio.volume = 0.3;
+        audio.play();
+      });
     });
   });
 </script>

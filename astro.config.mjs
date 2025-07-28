@@ -4,27 +4,26 @@ import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel/static";
 import compress from "astro-compress";
 import { defineConfig } from "astro/config";
-import { remarkReadingTime } from './lib/remark-reading-time.mjs';
+import { remarkReadingTime } from "./lib/remark-reading-time.mjs";
 
 // @shikijs/transformers is broken - for now
 // https://www.reddit.com/r/astrojs/comments/1atheyx/integrating_shiki_transformers_with_astrojs/
 import {
-    transformerNotationDiff,
-    transformerNotationErrorLevel
-    // transformerMetaWordHighlight, // Not working
-    // transformerMetaHighlight // Not working
-    ,
-    transformerNotationFocus,
-    transformerNotationHighlight,
-    transformerNotationWordHighlight
-} from 'shikiji-transformers';
+  transformerNotationDiff,
+  transformerNotationErrorLevel,
+  // transformerMetaWordHighlight, // Not working
+  // transformerMetaHighlight // Not working
+  transformerNotationFocus,
+  transformerNotationHighlight,
+  transformerNotationWordHighlight,
+} from "shikiji-transformers";
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === "production";
 
 const imageSettings = {
-    domains: ['astro.build'],
-    remotePatterns: []
-  }
+  domains: ["astro.build"],
+  remotePatterns: [],
+};
 // https://astro.build/config
 export default defineConfig({
   site: "https://www.sanderboer.nl/",
@@ -42,7 +41,7 @@ export default defineConfig({
         transformerNotationErrorLevel(),
         transformerNotationHighlight(),
       ],
-      theme: 'github-dark',
+      theme: "github-dark",
       // experimentalThemes: {
       //   light: 'github-dark',
       //   dark: 'github-light'
@@ -66,10 +65,9 @@ export default defineConfig({
     }),
   ],
   output: "static",
-  outDir: "./.vercel/output/static",
   prefetch: {
     prefetchAll: true,
-    defaultStrategy: 'viewport',
+    defaultStrategy: "viewport",
   },
   experimental: {
     clientPrerender: true,
@@ -83,5 +81,5 @@ export default defineConfig({
       sizes: [320, 640, 1280, 1920],
     },
     imageService: isProduction,
-  })
+  }),
 });

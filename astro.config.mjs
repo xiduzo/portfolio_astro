@@ -27,6 +27,10 @@ const imageSettings = {
 export default defineConfig({
   site: "https://www.sanderboer.nl/",
   image: imageSettings,
+  server: {
+    port: 3000,
+    host: true,
+  },
   markdown: {
     syntaxHighlight: "shiki",
     remarkPlugins: [remarkReadingTime],

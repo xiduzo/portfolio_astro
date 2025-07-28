@@ -1,7 +1,6 @@
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
-import vercel from "@astrojs/vercel/static";
 import compress from "astro-compress";
 import { defineConfig } from "astro/config";
 import { remarkReadingTime } from "./lib/remark-reading-time.mjs";
@@ -72,14 +71,14 @@ export default defineConfig({
   experimental: {
     clientPrerender: true,
   },
-  adapter: vercel({
-    webAnalytics: {
-      enabled: isProduction,
-    },
-    imagesConfig: {
-      ...imageSettings,
-      sizes: [320, 640, 1280, 1920],
-    },
-    imageService: isProduction,
-  }),
+  // adapter: vercel({
+  //   webAnalytics: {
+  //     enabled: isProduction,
+  //   },
+  //   imagesConfig: {
+  //     ...imageSettings,
+  //     sizes: [320, 640, 1280, 1920],
+  //   },
+  //   imageService: isProduction,
+  // }),
 });

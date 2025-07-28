@@ -8,7 +8,7 @@ cmds = ["npm ci"]
 cmds = ["npm run build"]
 
 [start]
-cmd = "npm run preview"
+cmd = "npx serve dist -s -l 3000"
 
 [variables]
 NODE_ENV = "production" 

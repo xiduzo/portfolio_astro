@@ -34,13 +34,15 @@
       this.observer.unobserve(this);
       this.classList.remove("opacity-0");
 
+      const text = this.innerHTML.replace(/\s+/g, " ").trim();
       new Typewriter(this, {
         autoStart: true,
         delay: 65,
-        strings: this.innerHTML,
+        strings: text,
         loop: false,
         cursor: "",
       });
+      this.ariaLabel = text;
     }
   }
 

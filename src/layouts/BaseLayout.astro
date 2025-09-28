@@ -37,7 +37,8 @@ const { title, description, image } = Astro.props;
       href="#main-content">Jump to content</a
     >
     <Header />
-    <main id="main-content" class="z-10 mb-[100vh] shadow-xl">
+    <main class="z-10 mb-[100vh] shadow-xl">
+      <a name="main-content" tabindex="-1" class="sr-only"></a>
       <slot />
       <Cursor />
     </main>

@@ -68,7 +68,8 @@ const {
     <h1 class="sr-only">{title}</h1>
 
     <section class="pt-48 text-center">
-      Publised on <FormattedDate date={pubDate} />
+      <span aria-hidden="true">Publised on</span>
+      <FormattedDate date={pubDate} />
       {
         updatedDate && (
           <div class="opacity-50 italic text-sm">

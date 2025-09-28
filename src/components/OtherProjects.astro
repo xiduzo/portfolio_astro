@@ -25,7 +25,6 @@ const projects = (await getCollection("project"))
       projects.map((project) => (
         <li
           class="snap-always snap-center md:snap-end relative shrink-0 w-[80vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] 2xl:w-[40vw]"
-          aria-label={`${project.data.title},${project.data.description}`}
           data-other-project
         >
           <a class="w-full" href={`/project/${project.slug}`}>
@@ -38,6 +37,7 @@ const projects = (await getCollection("project"))
               <div
                 class="open-moji text-[400px] mx-auto translate-y-24 px-3 md:px-0"
                 set:html={`&#x${project.data.openMoji};`}
+                aria-hidden="true"
               />
             </section>
             <div class="mt-36 text-xl font-extrabold text-slate-900 dark:text-slate-900">

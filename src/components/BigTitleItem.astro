@@ -11,7 +11,7 @@ const { title, description, openMoji, pubDate, headerColor, contrastColor } =
   data;
 ---
 
-<li aria-label={`${title}, ${description}`}>
+<li>
   <a
     href={`/${baseHref}/${slug}/`}
     class="flex flex-col lg:space-x-4 stroke-white group lg:flex-row group"
@@ -34,11 +34,13 @@ const { title, description, openMoji, pubDate, headerColor, contrastColor } =
       style={{ color: contrastColor }}
     >
       {title}
+      <span class="sr-only">—</span>
     </h2>
     <section
       class="lg:max-w-xs text-xl transition-all text-center lg:text-start lg:group-hover:opacity-10 group-focus:text-slate-900"
     >
       {description}
+      <span class="sr-only">—</span>
       <FormattedDate
         class="block opacity-60 group-focus:text-slate-900"
         date={pubDate}

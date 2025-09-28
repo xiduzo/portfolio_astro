@@ -135,13 +135,16 @@
     body = document.querySelector("body");
     wrapper = document.getElementById("wrapper");
     const lastVisit = localStorage.getItem("lastVisit");
+    localStorage.setItem("lastVisit", new Date().toString());
     if (lastVisit) {
       const date1 = new Date(lastVisit).valueOf();
       const date2 = new Date().valueOf();
       const timeDifference = Math.abs(date2 - date1);
       const differenceInHours = Math.ceil(timeDifference / (1000 * 60 * 60));
-
+      const differenceInSeconds = Math.ceil(timeDifference / 1000);
+      console.log(differenceInHours, differenceInSeconds);
       if (differenceInHours > 6) showIntro();
+      else if (differenceInSeconds < 10) showIntro();
       else wrapper?.remove();
     } else {
       showIntro();
